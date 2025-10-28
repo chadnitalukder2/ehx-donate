@@ -1,0 +1,129 @@
+:root {
+  --el-color-primary: #253241;
+  --fraise-primary-color: #253241;
+  --fraise-secondary-color: #6B3CEB;
+  --fraise-success-color: #189877;
+  --fraise-warning-color: #F58E07;
+  --fraise-danger-color: #EF4444;
+  --fraise-info-color: #017EF3;
+  --fraise-dark-color: #253241;
+  --fraise-light-color: #F8F9FC;
+  --fraise-white-color: #fff;
+  --fraise-black-color: #000;
+  --fraise-gray-color: #98A2B3;
+  --fraise-gray-dark-color: #758195;
+  --fraise-border-color: #C0C2C4;
+  --fraise-border-radius: 12px;
+  --fraise-text-primary: #11171D;
+  --fraise-text-secondary: #8E99AA;
+  --fraise-text-muted: #98A2B3;
+  --fraise-text-disabled: #ADB5C2;
+  --fraise-bg-primary: #fff;
+  --fraise-bg-secondary: #F5F6F7;
+  --fraise-bg-muted: #F9FAFB;
+  --fraise-border-light: #D6DAE1;
+  --fraise-border-medium: #C1C7D1;
+  --fraise-border-strong: #ADB5C2;
+  --fraise-blue-500: #017EF3;
+  --fraise-orange-500: #F97316;
+  --fraise-red-500: #EF4444;
+  --fraise-green-500: #22C55E;
+  --fraise-green-200: #166534;
+  --fraise-green-700: #15803D;
+  --fraise-yellow-500: #F59E0B;
+  --fraise-purple-500: #A855F7;
+  --fraise-sky-500: #0EA5E9;
+  --fraise-pink-500: #EC4899;
+  --fraise-teal-500: #14B8A6;
+}
+
+.fraise_navbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background-color: var(--fraise-white-color);
+  padding: 0.75rem 1.5rem;
+  border-bottom: 1px solid var(--fraise-border-light);
+}
+
+.fraise_navbar-left {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+.fraise_navbar-left .fraise_navbar-logo {
+  width: 32px;
+  height: 32px;
+}
+.fraise_navbar-left .fraise_navbar-brand {
+  font-size: 1.125rem;
+  font-weight: 400;
+  color: var(--fraise-text-primary);
+}
+.fraise_navbar-left .fraise_navbar-brand .brand-bold {
+  font-weight: 600;
+}
+
+.fraise_navbar-menu {
+  flex: 1;
+  margin-left: 2rem;
+}
+.fraise_navbar-menu .fraise_navbar-links {
+  display: flex;
+  gap: 1.5rem;
+  list-style: none;
+}
+.fraise_navbar-menu .fraise_navbar-links .fraise_navbar-link a {
+  text-decoration: none;
+}
+.fraise_navbar-menu .fraise_navbar-links .fraise_navbar-link a:focus {
+  box-shadow: none;
+}
+.fraise_navbar-menu .fraise_navbar-links .fraise_navbar-link a.router-link-active li {
+  color: var(--fraise-primary-color);
+  background-color: var(--fraise-bg-muted);
+}
+.fraise_navbar-menu .fraise_navbar-links li {
+  font-weight: 500;
+  color: var(--fraise-text-primary);
+  font-size: 0.95rem;
+  padding: 0.5rem 0.75rem;
+  border-radius: var(--fraise-border-radius);
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+.fraise_navbar-menu .fraise_navbar-links li:hover {
+  background-color: var(--fraise-bg-muted);
+}
+.fraise_navbar-menu .fraise_navbar-links li.active {
+  background-color: var(--fraise-bg-muted);
+  color: var(--fraise-text-primary);
+}
+
+.fraise_navbar-actions {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+.fraise_navbar-actions .fraise_navbar-shortcut {
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+  padding: 0.4rem 0.6rem;
+  background-color: var(--fraise-bg-muted);
+  border-radius: var(--fraise-border-radius);
+  font-size: 0.875rem;
+  color: var(--fraise-text-muted);
+}
+.fraise_navbar-actions .fraise_navbar-icon {
+  font-size: 1.1rem;
+  color: var(--fraise-text-muted);
+  cursor: pointer;
+}
+.fraise_navbar-actions .fraise_navbar-icon:hover {
+  color: var(--fraise-text-primary);
+}
+
+#ehx-donate-admin {
+  margin-left: -20px;
+}

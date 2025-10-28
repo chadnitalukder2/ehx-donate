@@ -1,0 +1,38 @@
+{
+    "name": "ehx-donate/wordpress-plugin",
+    "description": "A WordPress plugin with Laravel Lite architecture",
+    "type": "wordpress-plugin",
+    "license": "GPL-2.0-or-later",
+    "authors": [
+        {
+            "name": "Your Name",
+            "email": "your.email@example.com"
+        }
+    ],
+    "require": {
+        "php": ">=7.4"
+    },
+    "require-dev": {
+        "phpunit/phpunit": "^9.0"
+    },
+    "autoload": {
+        "psr-4": {
+            "EHXDonate\\": "app/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "EHXDonate\\Tests\\": "tests/"
+        }
+    },
+    "scripts": {
+        "test": "phpunit",
+        "post-install-cmd": [
+            "EHXDonate\\Core\\Installer::postInstall"
+        ]
+    },
+    "config": {
+        "optimize-autoloader": true,
+        "sort-packages": true
+    }
+}
