@@ -47,7 +47,7 @@ $GLOBALS['exh_donate'] = exh_donate_init();
 // Register WP-CLI commands
 // if (defined('WP_CLI') && WP_CLI) {
 //     require_once EHXDonate_PATH . 'includes/cli/RenameCommand.php';
-//     \WP_CLI::add_command('myplugin', 'EHXDonate\\CLI\\RenameCommand');
+//     \WP_CLI::add_command('EHXDonate', 'EHXDonate\\CLI\\RenameCommand');
 // }
 
 // Activation and deactivation hooks

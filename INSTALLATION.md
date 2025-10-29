@@ -82,7 +82,7 @@ fetch('/wp-json/ehx-donate/v1/trips', {
     method: 'POST',
     headers: {
         'Content-Type': 'application/json',
-        'X-WP-Nonce': myPlugin.nonce
+        'X-WP-Nonce': EHXDonate.nonce
     },
     body: JSON.stringify({
         title: 'New Trip',
@@ -99,7 +99,7 @@ fetch('/wp-json/ehx-donate/v1/trips', {
 
 ```bash
 # Rename the plugin
-wp myplugin rename --slug=new-plugin --namespace=NewPlugin --author="Your Name" --desc="New Description"
+wp EHXDonate rename --slug=new-plugin --namespace=NewPlugin --author="Your Name" --desc="New Description"
 ```
 
 ## Troubleshooting

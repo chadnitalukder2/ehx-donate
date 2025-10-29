@@ -51,7 +51,7 @@ class CreateTripsTable
             ]
         ];
 
-        $this->database->createTable('ehx_donate', $columns, $options);
+        $this->database->createTable('ehxdo_trips', $columns, $options);
     }
 
     /**
@@ -59,6 +59,6 @@ class CreateTripsTable
      */
     public function down(): void
     {
-        $this->database->dropTable('trips');
+        $this->database->dropTable('ehxdo_trips');
     }
 }

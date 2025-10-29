@@ -29,7 +29,7 @@ class RenameCommand extends WP_CLI_Command
      *
      * ## EXAMPLES
      *
-     *     wp myplugin rename --slug=new-plugin --namespace=NewPlugin --author="New Author" --desc="New Description"
+     *     wp EHXDonate rename --slug=new-plugin --namespace=NewPlugin --author="New Author" --desc="New Description"
      *
      * @when after_wp_load
      */

@@ -262,7 +262,7 @@ class Plugin
         );
         
         // Localize script with data
-        wp_localize_script('ehx-donate-admin', 'myPlugin', [
+        wp_localize_script('ehx-donate-admin', 'EHXDonate', [
             'ajaxUrl' => admin_url('admin-ajax.php'),
             'restUrl' => rest_url('ehx-donate/v1/'),
             'nonce' => wp_create_nonce('exh_donate_nonce'),
@@ -354,6 +354,15 @@ class Plugin
         // Run migrations
         $migrations = [
             'EHXDonate\\Database\\Migrations\\CreateTripsTable',
+            'EHXDonate\\Database\\Migrations\\CreateActivityLogTable',
+            'EHXDonate\\Database\\Migrations\\CreateCampaignTable',
+            'EHXDonate\\Database\\Migrations\\CreateCurrencyTable',
+            'EHXDonate\\Database\\Migrations\\CreateDonationLogTable',
+            'EHXDonate\\Database\\Migrations\\CreateDonationItemTable',
+            'EHXDonate\\Database\\Migrations\\CreateDonorTable',
+            'EHXDonate\\Database\\Migrations\\CreateMetaTable',
+            'EHXDonate\\Database\\Migrations\\CreateSubscriptionTable',
+            'EHXDonate\\Database\\Migrations\\CreateTransactionTable',
         ];
         
         foreach ($migrations as $migration) {
@@ -392,7 +401,8 @@ class Plugin
         $database = new Database();
         
         $tables = [
-            'trips',
+            'ehxdo_trips',
+            'ehxdo_activity_log',
         ];
         
         foreach ($tables as $table) {
