@@ -41,6 +41,7 @@ class CreateCampaignTable
             'header_image' => 'varchar(255) DEFAULT NULL',
             'visibility' => "enum('public','private','unlisted') NOT NULL DEFAULT 'public'",
             'categories' => 'json DEFAULT NULL',
+            'tags' => 'json DEFAULT NULL',
             'settings' => 'json DEFAULT NULL',
             'created_at' => 'timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP',
             'updated_at' => 'timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP'
