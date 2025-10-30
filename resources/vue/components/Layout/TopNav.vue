@@ -23,14 +23,6 @@
 
         <!-- Actions Right -->
         <div class="fraise_navbar-actions">
-            <div class="fraise_navbar-shortcut">
-                <el-icon>
-                    <Search />
-                </el-icon><span class="shortcut-text">⌘K</span>
-            </div>
-            <el-icon class="fraise_navbar-icon">
-                <Sunny />
-            </el-icon>
             <el-icon class="fraise_navbar-icon">
                 <Setting />
             </el-icon>
