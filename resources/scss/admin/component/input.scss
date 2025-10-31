@@ -1,0 +1,63 @@
+.el-input__wrapper, .el-textarea__inner{
+    border-radius: 8px !important;
+    .el-input__inner {
+        height: 35px;
+        border: none;
+        &:focus {
+            border: none;
+            box-shadow: none;
+        }
+    }
+}
+.el-form-item__content{
+    display: block !important;
+}
+.lmt_input{
+    margin-bottom: 0px !important;
+    textarea,select, input{
+        border: 1px solid $ehxd-neutral-500;
+        border-radius: 8px;
+        background: $ehxd_background_color_white;
+        &:hover{
+            box-shadow: 0 0 0 0.5px $ehxd-neutral-400 inset;
+        }
+        &:focus{
+            outline: none;
+            box-shadow: none;
+            border: 1px solid $ehxd-primary-500;
+        }
+    }
+}
+.form-label, .el-form-item__label {
+    @include text($size: 14px, $weight: 500);
+    margin-bottom: 5px;
+}
+.el-form-item{
+    margin-bottom: 25px !important;
+}
+
+.el-button--primary{
+    background-color: $ehx_primary_btn !important;
+    border: $ehx_primary_btn !important;
+    border-radius: 8px !important;
+}
+.el-button--primary:hover{
+    background-color: $ehx_primary_btn_hover !important;
+    border: $ehx_primary_btn_hover !important;
+}
+.is-active{
+    background-color: $ehx_primary_btn !important;
+    border: $ehx_primary_btn !important;
+}
+.number:hover, .btn-prev:hover, .btn-next:hover {
+    background-color: $ehx_primary_btn !important;
+    border: $ehx_primary_btn !important;
+    color: $ehxd_background_color_white !important;
+}
+
+.el-input__wrapper, .el-textarea__inner , .el-select__wrapper , .el-select-dropdown__item,
+    .is-focus:focus {
+        border: 1px solid  $ehxd_input_border !important;
+        box-shadow: 0 0 0 0px $ehxd_input_border !important;
+      }
+

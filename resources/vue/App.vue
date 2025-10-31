@@ -27,7 +27,7 @@ export default {
 <style lang="scss" scoped>
 .ehxdo_app_content {
  font-family: Inter Tight, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
-  // background: #F8F9FC;
+  background: #F8F9FC;
   margin-left: -20px;
   display: flex;
   gap: 20px;

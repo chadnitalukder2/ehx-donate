@@ -158,42 +158,6 @@ class Plugin
             'manage_options',
             'admin.php?page=ehx-donate.php#/dashboard',
         );
-
-          $submenu['ehx-donate.php']['campaigns'] = array(
-            __('Campaigns', 'ehx-donate'),
-            'manage_options',
-            'admin.php?page=ehx-donate.php#/campaigns',
-        );
-
-          $submenu['ehx-donate.php']['donations'] = array(
-            __('Donations', 'ehx-donate'),
-            'manage_options',
-            'admin.php?page=ehx-donate.php#/donations',
-        );
-
-         $submenu['ehx-donate.php']['donar'] = array(
-            __('Donar', 'ehx-donate'),
-            'manage_options',
-            'admin.php?page=ehx-donate.php#/donar',
-        );
-
-         $submenu['ehx-donate.php']['transactions'] = array(
-            __('Transactions', 'ehx-donate'),
-            'manage_options',
-            'admin.php?page=ehx-donate.php#/transactions',
-        );
-
-          $submenu['ehx-donate.php']['subscription'] = array(
-            __('Subscription', 'ehx-donate'),
-            'manage_options',
-            'admin.php?page=ehx-donate.php#/subscription',
-        );
-
-        $submenu['ehx-donate.php']['settings'] = array(
-            __('Settings', 'ehx-donate'),
-            'manage_options',
-            'admin.php?page=ehx-donate-settings',
-        );
     }
 
     /**

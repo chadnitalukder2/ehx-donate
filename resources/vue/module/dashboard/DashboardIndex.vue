@@ -1,6 +1,6 @@
 <template>
     <div>
-        <h1>Hello from DashboardIndex For exh  Donation</h1>
+      <h3>Donations Overview</h3>
     </div>
 </template>
 

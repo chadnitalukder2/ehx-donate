@@ -3,8 +3,9 @@
     height: 100vh;
     background-color: $bg-primary;
     border-radius: 16px;
-    border: 1px solid $border-color;
+    // border: 1px solid $border-color;
     padding: 10px 0px;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
     // box-shadow: 2px 0 8px rgba(0, 0, 0, 0.05);
 
 
@@ -34,7 +35,7 @@
                 outline: none;
             }
             &:hover {
-                background: $bg-hover;
+                background: #F8F9FC;
                 border: 1px solid $border-color;
                 border-radius: 8px;
                 color: $text-color-large;
@@ -44,10 +45,13 @@
             color: inherit;
         }
         .router-link-active, .router-link-exact-active {
-            background: $bg-hover;
+            background: #F8F9FC;
             border: 1px solid $border-color;
             border-radius: 8px;
             color: $text-color-large;
+              &:focus {
+               border: 1px solid $border-color;
+            }
         }
     }
 

@@ -1,9 +1,17 @@
 @import './base/color.scss';
 @import './component/layout/sidebar.scss';
 
+@import './component/input.scss';
+@import './component/buttons.scss';
+@import './component/form.scss';
+@import './component/modal.scss';
+@import './component/options.scss';
+@import './component/select.scss';
+@import './component/table.scss';
+
 a {
     text-decoration: none;
-
+    color: inherit;
     &:focus {
         border: none;
         box-shadow: none;

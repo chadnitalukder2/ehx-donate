@@ -42,8 +42,8 @@
   height: 100vh;
   background-color: #fff;
   border-radius: 16px;
-  border: 1px solid #C0C2C4;
   padding: 10px 0px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
 }
 .ehxdo-sidebar .ehxdo-menu {
   display: flex;
@@ -72,7 +72,7 @@
   outline: none;
 }
 .ehxdo-sidebar .ehxdo-menu .ehxdo_menu_item:hover {
-  background: #F6F8FA;
+  background: #F8F9FC;
   border: 1px solid #C0C2C4;
   border-radius: 8px;
   color: #0D0D12;
@@ -81,14 +81,18 @@
   color: inherit;
 }
 .ehxdo-sidebar .ehxdo-menu .router-link-active, .ehxdo-sidebar .ehxdo-menu .router-link-exact-active {
-  background: #F6F8FA;
+  background: #F8F9FC;
   border: 1px solid #C0C2C4;
   border-radius: 8px;
   color: #0D0D12;
 }
+.ehxdo-sidebar .ehxdo-menu .router-link-active:focus, .ehxdo-sidebar .ehxdo-menu .router-link-exact-active:focus {
+  border: 1px solid #C0C2C4;
+}
 
 a {
   text-decoration: none;
+  color: inherit;
 }
 a:focus {
   border: none;

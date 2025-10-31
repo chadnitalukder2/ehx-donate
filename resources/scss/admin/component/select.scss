@@ -1,0 +1,12 @@
+.el-select {
+    .el-select__wrapper {
+        border-radius: 8px;
+    }
+}
+.el-select-dropdown__item {
+    border: none !important;
+    border-bottom: 1px solid $ehxd_input_border  !important;
+    .is-selected{
+        color: $ehxd_text_dark !important;
+    }
+}

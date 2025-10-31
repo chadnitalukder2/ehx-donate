@@ -4,24 +4,28 @@
       <router-link to="/dashboard" class="ehxdo_menu_item">
         Dashboard
       </router-link>
-      <p class="ehxdo_menu_item">
-        <a href="#" class="ehxdo-menu-link ehxdo-menu-link--active">Campaigns</a>
-      </p>
-      <p class="ehxdo_menu_item">
-        <a href="#" class="ehxdo-menu-link">Donations</a>
-      </p>
-      <p class="ehxdo_menu_item">
-        <a href="#" class="ehxdo-menu-link">Gift Aid</a>
-      </p>
-      <p class="ehxdo_menu_item">
-        <a href="#" class="ehxdo-menu-link">Reports</a>
-      </p>
-      <p class="ehxdo_menu_item">
-        <a href="#" class="ehxdo-menu-link">Settings</a>
-      </p>
-      <p class="ehxdo_menu_item">
-        <a href="#" class="ehxdo-menu-link">Security</a>
-      </p>
+      <router-link to="/campaigns" class="ehxdo_menu_item">
+        Campaigns
+      </router-link>
+      <router-link to="/donations" class="ehxdo_menu_item">
+        Donations
+      </router-link>
+      <router-link to="/donors" class="ehxdo_menu_item">
+        Donors
+      </router-link>
+      
+      <router-link to="/transitions" class="ehxdo_menu_item">
+        Transitions
+      </router-link>
+      <router-link to="/subscriptions" class="ehxdo_menu_item">
+        Subscriptions
+      </router-link>
+      <router-link to="/reports" class="ehxdo_menu_item">
+        Reports
+      </router-link>
+      <router-link to="/settings" class="ehxdo_menu_item">
+        Settings
+      </router-link>
     </div>
   </div>
 </template>
