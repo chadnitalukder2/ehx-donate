@@ -1,7 +1,7 @@
 {
-    "name": "restaurant-menu-mange-and-order",
+    "name": "ehx-donate",
     "version": "1.0.0",
-    "description": "restaurant-menu-mange-and-order WooCommerce Plugin",
+    "description": "ehx-donate Plugin",
     "scripts": {
         "dev": "npm run development",
         "development": "mix",
@@ -22,8 +22,8 @@
         "laravel-mix": "^6.0.49",
         "postcss": "^8.3.0",
         "resolve-url-loader": "^5.0.0",
-        "sass": "^1.85.0",
-        "sass-loader": "^16.0.5",
+        "sass": "^1.69.5",
+        "sass-loader": "^13.3.2",
         "vue-loader": "^16.0.0",
         "webpack": "^5.98.0",
         "webpack-cli": "^6.0.1"

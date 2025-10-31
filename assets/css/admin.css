@@ -1,42 +1,3 @@
-:root {
-  --el-color-primary: #253241;
-  --fraise-primary-color: #253241;
-  --fraise-secondary-color: #6B3CEB;
-  --fraise-success-color: #189877;
-  --fraise-warning-color: #F58E07;
-  --fraise-danger-color: #EF4444;
-  --fraise-info-color: #017EF3;
-  --fraise-dark-color: #253241;
-  --fraise-light-color: #F8F9FC;
-  --fraise-white-color: #fff;
-  --fraise-black-color: #000;
-  --fraise-gray-color: #98A2B3;
-  --fraise-gray-dark-color: #758195;
-  --fraise-border-color: #C0C2C4;
-  --fraise-border-radius: 12px;
-  --fraise-text-primary: #11171D;
-  --fraise-text-secondary: #8E99AA;
-  --fraise-text-muted: #98A2B3;
-  --fraise-text-disabled: #ADB5C2;
-  --fraise-bg-primary: #fff;
-  --fraise-bg-secondary: #F5F6F7;
-  --fraise-bg-muted: #F9FAFB;
-  --fraise-border-light: #D6DAE1;
-  --fraise-border-medium: #C1C7D1;
-  --fraise-border-strong: #ADB5C2;
-  --fraise-blue-500: #017EF3;
-  --fraise-orange-500: #F97316;
-  --fraise-red-500: #EF4444;
-  --fraise-green-500: #22C55E;
-  --fraise-green-200: #166534;
-  --fraise-green-700: #15803D;
-  --fraise-yellow-500: #F59E0B;
-  --fraise-purple-500: #A855F7;
-  --fraise-sky-500: #0EA5E9;
-  --fraise-pink-500: #EC4899;
-  --fraise-teal-500: #14B8A6;
-}
-
 .ehxdo-sidebar {
   width: 200px;
   height: 100vh;
@@ -73,7 +34,7 @@
 }
 .ehxdo-sidebar .ehxdo-menu .ehxdo_menu_item:hover {
   background: #F8F9FC;
-  border: 1px solid #C0C2C4;
+  border: 1px solid rgba(138, 138, 138, 0.2705882353);
   border-radius: 8px;
   color: #0D0D12;
 }
@@ -82,12 +43,296 @@
 }
 .ehxdo-sidebar .ehxdo-menu .router-link-active, .ehxdo-sidebar .ehxdo-menu .router-link-exact-active {
   background: #F8F9FC;
-  border: 1px solid #C0C2C4;
+  border: 1px solid rgba(138, 138, 138, 0.2705882353);
   border-radius: 8px;
   color: #0D0D12;
 }
 .ehxdo-sidebar .ehxdo-menu .router-link-active:focus, .ehxdo-sidebar .ehxdo-menu .router-link-exact-active:focus {
-  border: 1px solid #C0C2C4;
+  border: 1px solid rgba(138, 138, 138, 0.2705882353);
+}
+
+.el-input__wrapper, .el-textarea__inner {
+  border-radius: 8px !important;
+}
+.el-input__wrapper .el-input__inner, .el-textarea__inner .el-input__inner {
+  height: 35px;
+  border: none;
+}
+.el-input__wrapper .el-input__inner:focus, .el-textarea__inner .el-input__inner:focus {
+  border: none;
+  box-shadow: none;
+}
+
+.el-form-item__content {
+  display: block !important;
+}
+
+.lmt_input {
+  margin-bottom: 0px !important;
+}
+.lmt_input textarea, .lmt_input select, .lmt_input input {
+  border: 1px solid #E3E6EF;
+  border-radius: 8px;
+  background: white;
+}
+.lmt_input textarea:hover, .lmt_input select:hover, .lmt_input input:hover {
+  box-shadow: 0 0 0 0.5px #E8EAF1 inset;
+}
+.lmt_input textarea:focus, .lmt_input select:focus, .lmt_input input:focus {
+  outline: none;
+  box-shadow: none;
+  border: 1px solid #017EF3;
+}
+
+.form-label, .el-form-item__label {
+  margin: 0;
+  color: #2F3448;
+  font-size: 14px;
+  font-style: normal;
+  font-weight: 500;
+  line-height: 24px;
+  margin-bottom: 5px;
+}
+
+.el-form-item {
+  margin-bottom: 25px !important;
+}
+
+.el-button--primary {
+  background-color: #1a1b1c !important;
+  border: #1a1b1c !important;
+  border-radius: 8px !important;
+}
+
+.el-button--primary:hover {
+  background-color: #373434 !important;
+  border: #373434 !important;
+}
+
+.is-active {
+  background-color: #1a1b1c !important;
+  border: #1a1b1c !important;
+}
+
+.number:hover, .btn-prev:hover, .btn-next:hover {
+  background-color: #1a1b1c !important;
+  border: #1a1b1c !important;
+  color: white !important;
+}
+
+.el-input__wrapper, .el-textarea__inner, .el-select__wrapper, .el-select-dropdown__item,
+.is-focus:focus {
+  border: 1px solid #E8EAF1 !important;
+  box-shadow: 0 0 0 0px #E8EAF1 !important;
+}
+
+.el-button--primary {
+  color: #253241;
+  background: #017EF3;
+}
+
+.el-button--success {
+  color: #253241;
+  background: #253241;
+  border-color: #253241;
+}
+.el-button--success:hover {
+  background: #1C2732;
+  border-color: #253241;
+}
+
+.el-button {
+  border-radius: 8px;
+}
+
+.lmt_box_icon {
+  background: none;
+  border: none;
+  color: #017EF3;
+  padding: 0px;
+}
+
+.ehxd-app-modal {
+  padding: 0;
+}
+.ehxd-app-modal .el-dialog {
+  border-radius: 8px;
+}
+.ehxd-app-modal .el-dialog__header {
+  border-bottom: 1px solid #E8EAF1;
+  padding: 20px 10px;
+}
+.ehxd-app-modal .el-dialog__header .el-dialog__title {
+  margin: 0;
+  color: #2F3448;
+  font-size: 16px;
+  font-style: normal;
+  font-weight: 600;
+  line-height: 24px;
+}
+.ehxd-app-modal .el-dialog__header .el-dialog__headerbtn {
+  font-size: 16px;
+  font-weight: 700;
+  background: #EEEFF1;
+  border-radius: 8px;
+  width: 34px;
+  height: 34px;
+  margin: 20px;
+}
+.ehxd-app-modal .el-dialog__body {
+  padding: 20px;
+}
+.ehxd-app-modal .ehxd-modal-footer {
+  display: flex;
+  justify-content: flex-end;
+  padding-top: 16px;
+}
+
+.delete-modal-body {
+  padding: 20px 0px;
+  text-align: center;
+  margin-bottom: 5px;
+}
+.delete-modal-body h1 {
+  margin: 0;
+  color: #2F3448;
+  font-size: 18px;
+  font-style: normal;
+  font-weight: 600;
+  line-height: 24px;
+}
+
+.lmt-app-options {
+  border: 1px solid #E8EAF1;
+  border-radius: 8px;
+  padding: 20px;
+  margin: 10px 0px;
+}
+.lmt-app-options .app-option {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin: 24px 0px;
+}
+.lmt-app-options .app-option .draggable-icon {
+  font-size: 22px;
+  cursor: move;
+}
+.lmt-app-options .app-option .option-content {
+  width: 100%;
+}
+.lmt-app-options .app-option .delete-icon {
+  border: 1px solid #E8EAF1;
+  padding: 9px;
+  border-radius: 8px;
+  cursor: pointer;
+}
+.lmt-app-options .add-new-option {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  text-decoration: underline;
+  cursor: pointer;
+  color: #017EF3;
+}
+
+.el-select .el-select__wrapper {
+  border-radius: 8px;
+}
+
+.el-select-dropdown__item {
+  border: none !important;
+  border-bottom: 1px solid #E8EAF1 !important;
+}
+.el-select-dropdown__item .is-selected {
+  color: #253241 !important;
+}
+
+.ehxd-table-wrapper {
+  padding: 0px 35px 35px 35px;
+  background: #F8F9FC;
+  border-radius: 8px;
+}
+.ehxd-table-wrapper .ehxd-table-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px 0px;
+  border-radius: 8px 8px 0px 0px;
+}
+.ehxd-table-wrapper .ehxd-table-header .ehxd_title .table-title {
+  margin: 0;
+  color: #2F3448;
+  font-size: 16px;
+  font-style: normal;
+  font-weight: 600;
+  line-height: 24px;
+}
+.ehxd-table-wrapper .ehxd-table-header .ehxd_title .table-short-dsc {
+  margin: 2px 0px;
+}
+.ehxd-table-wrapper .ehxd-table-header .ltm_button {
+  border-radius: 8px;
+  padding: 12px 10px;
+  height: 38px;
+  font-size: 13px;
+  letter-spacing: 0.4px;
+}
+.ehxd-table-wrapper .ehxd-table-filter {
+  background: white;
+  padding: 12px 20px;
+  border-radius: 10px 10px 0px 0px;
+  border-bottom: 1px solid #E8EAF1;
+  display: flex;
+  gap: 20px;
+}
+.ehxd-table-wrapper .ehxd-table-filter .el-date-editor {
+  max-width: 250px;
+}
+.ehxd-table-wrapper .ehxd-pagination {
+  background: white;
+  display: flex;
+  align-items: center;
+  text-align: center;
+  justify-content: space-between;
+}
+.ehxd-table-wrapper .ehxd-pagination .ehxd_footer_page p {
+  font-weight: 400;
+  font-size: 14px;
+}
+.ehxd-table-wrapper .table-footer {
+  padding: 4px 20px;
+  border-radius: 0px 0px 10px 10px;
+}
+.ehxd-table-wrapper .table-footer .el-select {
+  width: 89px !important;
+}
+.ehxd-table-wrapper .table-footer .el-select .el-select__wrapper {
+  min-height: 30px;
+  padding: 4px 8px !important;
+}
+.ehxd-table-wrapper .table-footer .el-pagination {
+  display: flex;
+  justify-content: flex-end;
+}
+.ehxd-table-wrapper .table-footer .el-pagination .el-pagination__total {
+  margin-right: 5px;
+}
+.ehxd-table-wrapper .table-footer .el-pagination .number, .ehxd-table-wrapper .table-footer .el-pagination .btn-prev, .ehxd-table-wrapper .table-footer .el-pagination .btn-next {
+  border-radius: 8px;
+  min-width: 0px;
+  line-height: 0px;
+  height: 0px;
+  padding: 14px 10px !important;
+}
+.ehxd-table-wrapper table thead > tr > th {
+  background-color: #F8F9FC !important;
+}
+.ehxd-table-wrapper table tr {
+  height: 40px;
+}
+.ehxd-table-wrapper table td {
+  height: 50px;
 }
 
 a {
