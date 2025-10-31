@@ -32,5 +32,9 @@ export default {
   display: flex;
   gap: 20px;
   padding: 20px 20px 20px 20px;
+
+  .ehxdo_main_content{
+    flex: 1;
+  }
 }
 </style>

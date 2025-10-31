@@ -10,11 +10,10 @@
         <AppTable :tableData="categories" v-loading="loading">
             <template #header>
                 <div class="ehxd_title">
-                    <h1 class="table-title">All Category</h1>
-                    <p class="table-short-dsc">Manage and view all your category</p>
+                    <h1 class="table-title">All Campaign</h1>
                 </div>
                 <el-button @click="openCategoryAddModal()" size="large" type="primary" icon="Plus" class="ltm_button">
-                    Add New Category
+                    Add New Campaign
                 </el-button>
             </template>
 
@@ -24,16 +23,12 @@
             </template>
 
             <template #columns>
-                <el-table-column prop="id" label="ID" width="60" />
-                <el-table-column prop="name" label="Name" width="auto" />
-                <el-table-column prop="slug" label="Slug" width="auto" />
-                <el-table-column prop="directories" label="Directory" width="auto">
-                    <template #default="scope">
-                        <span>
-                            {{scope.row.directories.map(d => d.name).join(', ')}}
-                        </span>
-                    </template>
-                </el-table-column>
+                <el-table-column prop="id" label="No" width="60" />
+                <el-table-column prop="name" label="Campaign Title" width="auto" />
+                <el-table-column prop="slug" label="Goal Amount" width="auto" />
+                <el-table-column prop="slug" label="Raised" width="auto" />
+                <el-table-column prop="slug" label="Status" width="auto" />
+
                 <el-table-column prop="added_date" label="Add Date" width="auto">
                     <template #default="{ row }">
                         {{ formatAddedDate(row.created_at) }}
