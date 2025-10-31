@@ -30,6 +30,7 @@ class CreateCampaignTable
         $columns = [
             'id' => 'bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT',
             'post_id' => 'bigint(20) UNSIGNED NOT NULL',
+            'title' => 'varchar(255) NOT NULL',
             'short_description' => 'varchar(255) DEFAULT NULL',
             'goal_amount' => 'decimal(15,2) NOT NULL DEFAULT 0.00',
             'currency' => 'varchar(255) NOT NULL',
