@@ -1,2 +1,12 @@
 @import './base/color.scss';
 @import './component/layout/sidebar.scss';
+
+a {
+    text-decoration: none;
+
+    &:focus {
+        border: none;
+        box-shadow: none;
+        outline: none;
+    }
+}

@@ -1,9 +1,9 @@
 <template>
   <div class="ehxdo-sidebar">
     <div class="ehxdo-menu">
-      <p class="ehxdo_menu_item">
-        <a href="#" class="ehxdo-menu-link">Dashboard</a>
-      </p>
+      <router-link to="/dashboard" class="ehxdo_menu_item">
+        Dashboard
+      </router-link>
       <p class="ehxdo_menu_item">
         <a href="#" class="ehxdo-menu-link ehxdo-menu-link--active">Campaigns</a>
       </p>

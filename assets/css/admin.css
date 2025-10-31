@@ -60,17 +60,38 @@
   font-weight: 500;
   letter-spacing: 0.3px;
   cursor: pointer;
-  transition: all 0.2s ease;
+  transition: all 0.3s ease-in-out;
   color: #666D80;
   margin: 0px !important;
-}
-.ehxdo-sidebar .ehxdo-menu .ehxdo_menu_item a {
   text-decoration: none;
   color: inherit;
+}
+.ehxdo-sidebar .ehxdo-menu .ehxdo_menu_item:focus {
+  border: none;
+  box-shadow: none;
+  outline: none;
 }
 .ehxdo-sidebar .ehxdo-menu .ehxdo_menu_item:hover {
   background: #F6F8FA;
   border: 1px solid #C0C2C4;
   border-radius: 8px;
   color: #0D0D12;
+}
+.ehxdo-sidebar .ehxdo-menu a {
+  color: inherit;
+}
+.ehxdo-sidebar .ehxdo-menu .router-link-active, .ehxdo-sidebar .ehxdo-menu .router-link-exact-active {
+  background: #F6F8FA;
+  border: 1px solid #C0C2C4;
+  border-radius: 8px;
+  color: #0D0D12;
+}
+
+a {
+  text-decoration: none;
+}
+a:focus {
+  border: none;
+  box-shadow: none;
+  outline: none;
 }
