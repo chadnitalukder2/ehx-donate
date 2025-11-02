@@ -16,14 +16,22 @@ class Campaign extends Model
      * The attributes that are mass assignable
      */
     protected $fillable = [
+        'id',
+        'post_id',
         'title',
-        'description',
-        'destination',
+        'short_description',
+        'goal_amount',
+        'currency',
         'start_date',
         'end_date',
-        'price',
-        'status',
-        'user_id'
+        'type',
+        'is_p2p',
+        'template',
+        'header_image',
+        'visibility',
+        'category',
+        'tags',
+        'status',   
     ];
 
     /**

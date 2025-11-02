@@ -5,6 +5,10 @@
             <slot name="header"></slot>
         </div>
 
+        <div class="ehxd-table-body">
+            <slot name="body"></slot>
+        </div>
+
         <div class="ehxd-table-filter">
             <slot name="filter"></slot>
         </div>

@@ -262,7 +262,7 @@
 .ehxd-table-wrapper .ehxd-table-header .ehxd_title .table-title {
   margin: 0;
   color: #2F3448;
-  font-size: 16px;
+  font-size: 20px;
   font-style: normal;
   font-weight: 600;
   line-height: 24px;
@@ -280,10 +280,11 @@
 .ehxd-table-wrapper .ehxd-table-filter {
   background: white;
   padding: 12px 20px;
-  border-radius: 10px 10px 0px 0px;
+  border-radius: 16px 16px 0px 0px;
   border-bottom: 1px solid #E8EAF1;
   display: flex;
   gap: 20px;
+  justify-content: space-between;
 }
 .ehxd-table-wrapper .ehxd-table-filter .el-date-editor {
   max-width: 250px;
@@ -301,7 +302,7 @@
 }
 .ehxd-table-wrapper .table-footer {
   padding: 4px 20px;
-  border-radius: 0px 0px 10px 10px;
+  border-radius: 0px 0px 16px 16px;
 }
 .ehxd-table-wrapper .table-footer .el-select {
   width: 89px !important;
@@ -332,6 +333,12 @@
 }
 .ehxd-table-wrapper table td {
   height: 50px;
+}
+.ehxd-table-wrapper .el-table .ascending .sort-caret.ascending {
+  border-bottom-color: #000 !important;
+}
+.ehxd-table-wrapper .el-table .descending .sort-caret.descending {
+  border-top-color: #000 !important;
 }
 
 a {

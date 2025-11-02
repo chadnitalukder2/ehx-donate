@@ -2,7 +2,7 @@
 
 namespace EHXDonate\Controllers;
 
-use EHXDonate\Models\Trip;
+use EHXDonate\Models\Campaign;
 
 /**
  * Campaign Controller
@@ -14,12 +14,13 @@ class CampaignController extends Controller
      */
     public function index(): void
     {
-        $trips = Trip::all();
-        
+         dd('campaigns');
+        $campaigns = Campaign::all();
+       
         $this->success([
-            'trips' => array_map(function($trip) {
-                return $trip->toArray();
-            }, $trips)
+            'campaigns' => array_map(function($campaign) {
+                return $campaign->toArray();
+            }, $campaigns)
         ]);
     }
 
@@ -28,20 +29,20 @@ class CampaignController extends Controller
      */
     public function show(int $id): void
     {
-        $trip = Trip::find($id);
-        
-        if (!$trip) {
-            $this->error('Trip not found', 404);
+        $campaign = Campaign::find($id);
+
+        if (!$campaign) {
+            $this->error('Campaign not found', 404);
             return;
         }
         
         $this->success([
-            'trip' => $trip->toArray()
+            'campaign' => $campaign->toArray()
         ]);
     }
 
     /**
-     * Create a new trip
+     * Create a new campaign
      */
     public function store(): void
     {
@@ -58,30 +59,30 @@ class CampaignController extends Controller
         ]);
         
         $data['user_id'] = $this->getCurrentUserId();
-        
-        $trip = Trip::create($data);
-        
+
+        $campaign = Campaign::create($data);
+
         $this->success([
-            'trip' => $trip->toArray()
-        ], 'Trip created successfully', 201);
+            'campaign' => $campaign->toArray()
+        ], 'Campaign created successfully', 201);
     }
 
     /**
-     * Update a trip
+     * Update a campaign
      */
     public function update(int $id): void
     {
         $this->requireAuth();
-        
-        $trip = Trip::find($id);
-        
-        if (!$trip) {
-            $this->error('Trip not found', 404);
+
+        $campaign = Campaign::find($id);
+
+        if (!$campaign) {
+            $this->error('Campaign not found', 404);
             return;
         }
-        
-        // Check if user owns the trip or has admin capabilities
-        if ($trip->user_id !== $this->getCurrentUserId() && !$this->can('manage_options')) {
+
+        // Check if user owns the campaign or has admin capabilities
+        if ($campaign->user_id !== $this->getCurrentUserId() && !$this->can('manage_options')) {
             $this->error('Unauthorized', 403);
             return;
         }
@@ -101,94 +102,94 @@ class CampaignController extends Controller
             return $value !== '';
         });
         
-        $trip->fill($data);
-        $trip->save();
+        $campaign->fill($data);
+        $campaign->save();
         
         $this->success([
-            'trip' => $trip->toArray()
-        ], 'Trip updated successfully');
+            'campaign' => $campaign->toArray()
+        ], 'Campaign updated successfully');
     }
 
     /**
-     * Delete a trip
+     * Delete a campaign
      */
     public function destroy(int $id): void
     {
         $this->requireAuth();
-        
-        $trip = Trip::find($id);
-        
-        if (!$trip) {
-            $this->error('Trip not found', 404);
+
+        $campaign = Campaign::find($id);
+
+        if (!$campaign) {
+            $this->error('Campaign not found', 404);
             return;
         }
-        
-        // Check if user owns the trip or has admin capabilities
-        if ($trip->user_id !== $this->getCurrentUserId() && !$this->can('manage_options')) {
+
+        // Check if user owns the campaign or has admin capabilities
+        if ($campaign->user_id !== $this->getCurrentUserId() && !$this->can('manage_options')) {
             $this->error('Unauthorized', 403);
             return;
         }
-        
-        $trip->delete();
-        
-        $this->success([], 'Trip deleted successfully');
+
+        $campaign->delete();
+
+        $this->success([], 'Campaign deleted successfully');
     }
 
     /**
-     * Get upcoming trips
+     * Get upcoming campaigns
      */
     public function upcoming(): void
     {
-        $trips = Trip::getUpcoming();
-        
+        $campaigns = Campaign::getUpcoming();
+
         $this->success([
-            'trips' => array_map(function($trip) {
-                return $trip->toArray();
-            }, $trips)
+            'campaigns' => array_map(function($campaign) {
+                return $campaign->toArray();
+            }, $campaigns)
         ]);
     }
 
     /**
-     * Get past trips
+     * Get past campaigns
      */
     public function past(): void
     {
-        $trips = Trip::getPast();
-        
+        $campaigns = Campaign::getPast();
+
         $this->success([
-            'trips' => array_map(function($trip) {
-                return $trip->toArray();
-            }, $trips)
+            'campaigns' => array_map(function($campaign) {
+                return $campaign->toArray();
+            }, $campaigns)
         ]);
     }
 
     /**
-     * Get trips by status
+     * Get campaigns by status
      */
     public function byStatus(string $status): void
     {
-        $trips = Trip::getByStatus($status);
-        
+        $campaigns = Campaign::getByStatus($status);
+
         $this->success([
-            'trips' => array_map(function($trip) {
-                return $trip->toArray();
-            }, $trips)
+            'campaigns' => array_map(function($campaign) {
+                return $campaign->toArray();
+            }, $campaigns)
         ]);
     }
 
     /**
-     * Get user's trips
+     * Get user's campaigns
      */
-    public function myTrips(): void
+    public function myCampaigns(): void
     {
         $this->requireAuth();
-        
-        $trips = Trip::getByUser($this->getCurrentUserId());
-        
+
+        $campaigns = Campaign::getByUser($this->getCurrentUserId());
+
         $this->success([
-            'trips' => array_map(function($trip) {
-                return $trip->toArray();
-            }, $trips)
+            'campaigns' => array_map(function($campaign) {
+                return $campaign->toArray();
+            }, $campaigns)
         ]);
     }
 }

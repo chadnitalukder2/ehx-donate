@@ -9,7 +9,7 @@
         border-radius: 8px 8px 0px 0px;
         .ehxd_title{
             .table-title {
-                @include text($size: 16px, $weight: 600)
+                @include text($size: 20px, $weight: 600)
             }
             .table-short-dsc{
                 margin: 2px 0px;
@@ -28,10 +28,11 @@
     .ehxd-table-filter {
         background: $ehxd_background_color_white;
         padding: 12px 20px;
-        border-radius: 10px 10px 0px 0px;
+        border-radius: 16px 16px 0px 0px;
         border-bottom: $ehxd_border;
         display: flex;
         gap: 20px;
+        justify-content: space-between;
         .el-date-editor {
             max-width: 250px;
         }
@@ -52,7 +53,7 @@
     }
     .table-footer {
         padding: 4px 20px;
-        border-radius: 0px 0px 10px 10px;
+        border-radius: 0px 0px 16px 16px;
         .el-select{
             width: 89px !important;
             .el-select__wrapper{
@@ -88,6 +89,13 @@
         td{
             height: 50px;
         }
+    }
+
+    .el-table .ascending .sort-caret.ascending {
+        border-bottom-color: #000 !important;
+    }
+    .el-table .descending .sort-caret.descending {
+        border-top-color: #000 !important;
     }
 
 }
