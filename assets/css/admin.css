@@ -325,14 +325,17 @@
   height: 0px;
   padding: 14px 10px !important;
 }
+.ehxd-table-wrapper .el-table .cell {
+  overflow: visible !important;
+}
 .ehxd-table-wrapper table thead > tr > th {
   background-color: #F8F9FC !important;
 }
 .ehxd-table-wrapper table tr {
-  height: 40px;
+  height: 45px;
 }
 .ehxd-table-wrapper table td {
-  height: 50px;
+  height: 60px;
 }
 .ehxd-table-wrapper .el-table .ascending .sort-caret.ascending {
   border-bottom-color: #000 !important;

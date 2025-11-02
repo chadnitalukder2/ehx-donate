@@ -229,7 +229,9 @@ class Plugin
         wp_localize_script('ehx-donate-admin', 'EHXDonate', [
             'ajaxUrl' => admin_url('admin-ajax.php'),
             'restUrl' => rest_url('ehx-donate/v1/'),
-            'nonce' => wp_create_nonce('exh_donate_nonce'),
+              'restNonce' => wp_create_nonce('wp_rest'),
+
+            // 'nonce' => wp_create_nonce('exh_donate_nonce'),
             'strings' => [
                 'loading' => __('Loading...', 'ehx-donate'),
                 'error' => __('An error occurred', 'ehx-donate'),

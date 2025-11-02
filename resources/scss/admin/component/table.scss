@@ -79,15 +79,18 @@
            
         }
     }
+    .el-table .cell{
+        overflow: visible !important;
+    }
     table {
         thead > tr > th {
             background-color: $ehxd-neutral-50 !important;
         }
         tr {
-            height: 40px;
+            height: 45px;
         }
         td{
-            height: 50px;
+            height: 60px;
         }
     }
 

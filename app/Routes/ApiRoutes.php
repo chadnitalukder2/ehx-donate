@@ -36,15 +36,8 @@ class ApiRoutes
         // Campaign routes
         $router->group(['prefix' => '/api'], function($router) {
             // Public campaign routes
-            $router->get('/getAllCampaigns', 'CampaignController@index');
-            $router->get('/getActiveCampaigns', 'CampaignController@active');
-            $router->get('/getCompletedCampaigns', 'CampaignController@completed');
-            $router->get('/getCampaign/{id}', 'CampaignController@show');
+            $router->get('/getAllCampaigns', 'CampaignController@index'); 
             
-            // Protected campaign routes
-            $router->post('/campaigns', 'CampaignController@store', ['auth']);
-            $router->put('/campaigns/{id}', 'CampaignController@update', ['auth']);
-            $router->delete('/campaigns/{id}', 'CampaignController@destroy', ['auth']);
         });
     }
 }

@@ -8,7 +8,7 @@
         </AppModal>
 
         <AppTable :tableData="campaigns" v-loading="loading">
-          
+
             <template #header>
                 <div class="ehxd_title">
                     <h1 class="table-title">All Campaign</h1>
@@ -80,27 +80,34 @@
                         <el-option label="Pending" value="pending"></el-option>
                         <el-option label="Completed" value="completed"></el-option>
                     </el-select>
-                    <el-button @click="getAllCampaigns()" class="ehxdo_export_btn" size="medium" type="primary" style="">
+                    <el-button @click="getAllCampaigns()" class="ehxdo_export_btn" size="medium" type="primary"
+                        style="">
                         <!-- <el-icon class="ehxdo_ex_icon"><Bottom /></el-icon> -->
 
-                       Export CSV</el-button>
+                        Export CSV</el-button>
                 </div>
 
             </template>
 
             <template #columns>
-                <!-- <el-table :data="campaigns" style="width: 100%" :default-sort="{ prop: 'goal', order: 'descending' }"
-                    @sort-change="handleSortChange"> -->
-                <!-- Sortable columns -->
                 <el-table-column prop="id" label="ID" width="80" />
                 <el-table-column prop="name" label="Title" />
                 <el-table-column prop="goal" label="Goal" />
                 <el-table-column prop="donation" label="Donation" />
                 <el-table-column prop="raised" label="Raised" />
-
                 <!-- Status column -->
-                <el-table-column prop="status" label="Status" />
-                <!-- </el-table> -->
+                <el-table-column prop="status" label="Status">
+                    <template #default="{ row }">
+                        <span :class="[
+                            'status-badge',
+                            row.status === 'active' ? 'ehxdo_status-active' :
+                                row.status === 'pending' ? 'ehxdo_status-pending' :
+                                    row.status === 'completed' ? 'ehxdo_status-complete' : ''
+                        ]">
+                            {{ row.status }}
+                        </span>
+                    </template>
+                </el-table-column>
             </template>
 
             <template #footer>
@@ -166,9 +173,9 @@ export default {
         return {
             search: '',
             campaigns: [
-                { id: 1, name: 'Education Fund', goal: 5000, donation: 2500, raised: 2600, status: 'Active' },
-                { id: 2, name: 'Health Support', goal: 10000, donation: 8000, raised: 9500, status: 'Completed' },
-                { id: 3, name: 'Food Relief', goal: 3000, donation: 1000, raised: 1200, status: 'Pending' },
+                { id: 1, name: 'Education Fund', goal: 5000, donation: 2500, raised: 2600, status: 'active' },
+                { id: 2, name: 'Health Support', goal: 10000, donation: 8000, raised: 9500, status: 'completed' },
+                { id: 3, name: 'Food Relief', goal: 3000, donation: 1000, raised: 1200, status: 'pending' },
             ],
             campaign: {},
             total_campaign: 0,
@@ -179,7 +186,7 @@ export default {
             active_id: null,
             add_campaign_modal: false,
             nonce: window.EHXDonate.nonce,
-            rest_api: window.EHXDonate.ajaxUrl,
+            rest_api: window.EHXDonate.restUrl,
         }
     },
     watch: {
@@ -214,14 +221,6 @@ export default {
             return new Date(date).toLocaleDateString('en-GB', options);
         },
 
-        handleSortChange({ column, prop, order }) {
-            console.log('Sorted by:', prop, order)
-            this.getAllCampaigns({
-                sort_by: prop,
-                sort_order: order === 'ascending' ? 'asc' : 'desc'
-            })
-        },
-
         async getAllCampaigns() {
             this.loading = true;
             console.log(`${this.rest_api}`, 'rest api');
@@ -231,11 +230,15 @@ export default {
                         page: this.currentPage,
                         limit: this.pageSize,
                         search: this.search || '',
+                        status: this.status_filter || '',
                     },
                     headers: {
+                        'Content-Type': 'application/json',
                         'X-WP-Nonce': this.nonce
-                    }
+                    },
+                    withCredentials: true
                 });
+                console.log('Campaigns response:', response);
                 this.campaigns = response?.data?.campaigns_data;
                 this.total_campaign = response?.data?.total || 0;
                 this.last_page = response?.data?.last_page || 1;
@@ -316,7 +319,68 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.ehxdo_export_btn{
+//status===============
+.status-badge {
+    border-radius: 16px;
+    text-transform: capitalize;
+    font-size: 12px;
+    font-weight: 500;
+    padding: 2px 8px 2px 6px;
+}
+
+.ehxdo_status-active {
+    color: #339D88;
+    border: 1px solid #339D88;
+
+    &::before {
+        content: '';
+        display: inline-block;
+        width: 6px;
+        height: 6px;
+        background-color: #339D88;
+        border-radius: 50%;
+        margin-right: 4px;
+        margin-bottom: 2px;
+        vertical-align: middle;
+    }
+}
+
+.ehxdo_status-pending {
+    border: 1px solid #D39C3D;
+    color: #D39C3D;
+
+    &::before {
+        content: '';
+        display: inline-block;
+        width: 6px;
+        height: 6px;
+        background-color: #D39C3D;
+        border-radius: 50%;
+        margin-right: 4px;
+        margin-bottom: 2px;
+        vertical-align: middle;
+    }
+}
+
+.ehxdo_status-complete {
+    border: 1px solid #6B39F4;
+    color: #6B39F4;
+
+    &::before {
+        content: '';
+        display: inline-block;
+        width: 6px;
+        height: 6px;
+        background-color: #6B39F4;
+        border-radius: 50%;
+        margin-right: 4px;
+        margin-bottom: 2px;
+        vertical-align: middle;
+    }
+}
+
+//export button style============
+.ehxdo_export_btn {
     margin-left: 8px;
     background: #fff !important;
     color: #666D80;
@@ -328,9 +392,10 @@ export default {
         background: #F8F9FC !important;
     }
 }
+
 .ehxdo_ex_icon {
     font-size: 16px;
-    
+
 }
 
 .ehxdo-stats-grid {
