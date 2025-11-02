@@ -101,4 +101,10 @@
         border-top-color: #000 !important;
     }
 
+    .el-button--small.is-circle {
+        border-radius: 50%;
+        padding: 10px;
+        height: 32px;
+        width: auto;
+    }
 }

@@ -343,6 +343,12 @@
 .ehxd-table-wrapper .el-table .descending .sort-caret.descending {
   border-top-color: #000 !important;
 }
+.ehxd-table-wrapper .el-button--small.is-circle {
+  border-radius: 50%;
+  padding: 10px;
+  height: 32px;
+  width: auto;
+}
 
 a {
   text-decoration: none;

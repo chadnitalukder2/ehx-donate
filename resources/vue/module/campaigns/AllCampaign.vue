@@ -104,11 +104,18 @@
                 </el-table-column>
                 <el-table-column label="Actions" width="75">
                     <template #default="{ row }">
-                        <el-popover placement="bottom-end" width="100"    popper-class="ehxdo-action-popover" trigger="click" v-model:visible="row.showActions" >
+                        <el-popover placement="bottom-end" width="100" :popper-style="{ minWidth: '100px' }"
+                            popper-class="ehxdo-action-popover" trigger="click" v-model:visible="row.showActions">
                             <div class="action-popup">
-                                <el-button type="text" @click="editCampaign(row)"> <el-icon><EditPen /></el-icon> Edit</el-button>
-                                <el-button type="text" @click="viewCampaign(row)"> <el-icon><View /></el-icon> View</el-button>
-                                <el-button type="text" @click="deleteCampaign(row)"> <el-icon><DeleteFilled /></el-icon> Delete</el-button>
+                                <el-button type="text" @click="editCampaign(row)" class="ehxdo_edit"> <el-icon>
+                                        <EditPen />
+                                    </el-icon> Edit</el-button>
+                                <el-button type="text" @click="viewCampaign(row)" class="ehxdo_view"> <el-icon>
+                                        <View />
+                                    </el-icon> View</el-button>
+                                <el-button type="text" @click="deleteCampaign(row)" class="ehxdo_delete"> <el-icon>
+                                        <DeleteFilled />
+                                    </el-icon> Delete</el-button>
                             </div>
                             <template #reference>
                                 <el-button icon="More" circle size="small"></el-button>
@@ -297,32 +304,49 @@ export default {
 
 <style lang="scss" scoped>
 //action popup styles============
-:deep(.ehxdo-action-popover.el-popover) {
-    min-width: 100px !important;
-    width: 100px !important;
-    padding: 6px 0;
-}
-:deep(.el-popover.el-popper){
-    min-width: 100px !important;
-}
+
 .action-popup {
     display: flex;
     flex-direction: column;
     align-items: flex-start;
     gap: 4px;
+
     .el-button+.el-button {
-    margin-left: 0px;
-}
-.el-button--text{
-    color: #666D80;
-    font-weight: 500;
-        font-size: 12px;
-}
-span{
-    i{
-        margin-right: 8px;
+        margin-left: 0px;
     }
-}
+
+    .el-button--text {
+        color: #666D80;
+        font-weight: 500;
+        font-size: 12px;
+        width: 100%;
+        transition: background-color 0.3s ease;
+    }
+
+    span {
+        i {
+            margin-right: 8px;
+        }
+    }
+
+    .el-button--text:hover {
+        background-color: #F8F9FC;
+    }
+    .ehxdo_edit {
+        &:hover {
+            color: #079455;
+        }
+    }
+    .ehxdo_view {
+        &:hover {
+            color: #3366FF;
+        }
+    }
+    .ehxdo_delete {
+        &:hover {
+            color: #DF1C41;
+        }
+    }
 }
 
 
