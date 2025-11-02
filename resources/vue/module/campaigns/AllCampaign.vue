@@ -80,7 +80,7 @@
                         <el-option label="Pending" value="pending"></el-option>
                         <el-option label="Completed" value="completed"></el-option>
                     </el-select>
-                    <el-button @click="getAllCampaigns()" size="medium" type="primary" style="margin-left: 8px;">
+                    <el-button @click="getAllCampaigns()" class="ehxdo_export_btn" size="medium" type="primary" style="">
                         <!-- <el-icon class="ehxdo_ex_icon"><Bottom /></el-icon> -->
 
                        Export CSV</el-button>
@@ -316,6 +316,18 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+.ehxdo_export_btn{
+    margin-left: 8px;
+    background: #fff !important;
+    color: #666D80;
+    font-weight: normal;
+    border: 1px solid #DFE1E7 !important;
+    transition: all 0.3s ease;
+
+    &:hover {
+        background: #F8F9FC !important;
+    }
+}
 .ehxdo_ex_icon {
     font-size: 16px;
     
