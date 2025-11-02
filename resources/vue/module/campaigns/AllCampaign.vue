@@ -1,12 +1,6 @@
 <template>
     <div class="ehxd_wrapper">
 
-        <AppModal :title="'Add New Campaign'" :width="700" :showFooter="false" ref="add_campaign_modal">
-            <template #body>
-                <!-- <AddCampaign @updateDataAfterNewAdd="handleAddedCampaign" /> -->
-            </template>
-        </AppModal>
-
         <AppTable :tableData="campaigns" v-loading="loading">
 
             <template #header>
@@ -90,7 +84,7 @@
             </template>
 
             <template #columns>
-                <el-table-column prop="id" label="ID" width="80" />
+                <el-table-column prop="id" label="ID" width="60" />
                 <el-table-column prop="name" label="Title" />
                 <el-table-column prop="goal" label="Goal" />
                 <el-table-column prop="donation" label="Donation" />
@@ -108,6 +102,20 @@
                         </span>
                     </template>
                 </el-table-column>
+                <el-table-column label="Actions" width="75">
+                    <template #default="{ row }">
+                        <el-popover placement="bottom-end" width="100"    popper-class="ehxdo-action-popover" trigger="click" v-model:visible="row.showActions" >
+                            <div class="action-popup">
+                                <el-button type="text" @click="editCampaign(row)"> <el-icon><EditPen /></el-icon> Edit</el-button>
+                                <el-button type="text" @click="viewCampaign(row)"> <el-icon><View /></el-icon> View</el-button>
+                                <el-button type="text" @click="deleteCampaign(row)"> <el-icon><DeleteFilled /></el-icon> Delete</el-button>
+                            </div>
+                            <template #reference>
+                                <el-button icon="More" circle size="small"></el-button>
+                            </template>
+                        </el-popover>
+                    </template>
+                </el-table-column>
             </template>
 
             <template #footer>
@@ -121,18 +129,6 @@
             </template>
 
         </AppTable>
-
-        <AppModal :title="'Update campaign'" :width="700" :showFooter="false" ref="update_campaign_modal">
-            <template #body>
-                <div>
-                    <!-- <AddCampaign ref="addCampaign" :campaigns_data="campaign"
-                        @updateDataAfterNewAdd="handleUpdatedCampaign" /> -->
-                </div>
-            </template>
-            <template #footer>
-
-            </template>
-        </AppModal>
 
 
         <AppModal :title="'Delete campaign'" :width="500" :showFooter="false" ref="delete_campaign_modal">
@@ -167,15 +163,14 @@ export default {
         AppTable,
         Icon,
         AppModal,
-        // AddCampaign
     },
     data() {
         return {
             search: '',
             campaigns: [
-                { id: 1, name: 'Education Fund', goal: 5000, donation: 2500, raised: 2600, status: 'active' },
-                { id: 2, name: 'Health Support', goal: 10000, donation: 8000, raised: 9500, status: 'completed' },
-                { id: 3, name: 'Food Relief', goal: 3000, donation: 1000, raised: 1200, status: 'pending' },
+                { id: 1111, name: 'Education Fund', goal: 5000, donation: 2, raised: 2600, status: 'active' },
+                { id: 2222, name: 'Health Support', goal: 10000, donation: 8, raised: 9500, status: 'completed' },
+                { id: 3333, name: 'Food Relief', goal: 3000, donation: 10, raised: 1200, status: 'pending' },
             ],
             campaign: {},
             total_campaign: 0,
@@ -185,7 +180,7 @@ export default {
             pageSize: 10,
             active_id: null,
             add_campaign_modal: false,
-            nonce: window.EHXDonate.nonce,
+            nonce: window.EHXDonate.restNonce,
             rest_api: window.EHXDonate.restUrl,
         }
     },
@@ -207,14 +202,6 @@ export default {
     },
 
     methods: {
-        openCampaignAddModal() {
-            if (this.$refs.add_campaign_modal) {
-                this.$refs.add_campaign_modal.openModel();
-            } else {
-                console.log("Modal ref not found! Ensure AppModal is rendered.");
-            }
-        },
-
         formatAddedDate(date) {
             if (!date) return '';
             const options = { day: 'numeric', month: 'long', year: 'numeric' };
@@ -222,31 +209,30 @@ export default {
         },
 
         async getAllCampaigns() {
-            this.loading = true;
-            console.log(`${this.rest_api}`, 'rest api');
-            try {
-                const response = await axios.get(`${this.rest_api}/getAllCampaigns`, {
-                    params: {
-                        page: this.currentPage,
-                        limit: this.pageSize,
-                        search: this.search || '',
-                        status: this.status_filter || '',
-                    },
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'X-WP-Nonce': this.nonce
-                    },
-                    withCredentials: true
-                });
-                console.log('Campaigns response:', response);
-                this.campaigns = response?.data?.campaigns_data;
-                this.total_campaign = response?.data?.total || 0;
-                this.last_page = response?.data?.last_page || 1;
-                this.loading = false;
-            } catch (error) {
-                this.loading = false;
-                console.error('Error fetching couriers:',);
-            }
+            //this.loading = true;
+            // try {
+            //     const response = await axios.get(`${this.rest_api}api/getAllCampaigns`, {
+            //         params: {
+            //             page: this.currentPage,
+            //             limit: this.pageSize,
+            //             search: this.search || '',
+            //             status: this.status_filter || '',
+            //         },
+            //         headers: {
+            //             'Content-Type': 'application/json',
+            //             'X-WP-Nonce': this.nonce
+            //         },
+            //         withCredentials: true
+            //     });
+            //     console.log('Campaigns response:', response);
+            //     this.campaigns = response?.data?.campaigns_data;
+            //     this.total_campaign = response?.data?.total || 0;
+            //     this.last_page = response?.data?.last_page || 1;
+            //     this.loading = false;
+            // } catch (error) {
+            //     this.loading = false;
+            //     console.error('Error fetching couriers:',);
+            // }
         },
 
         openDeleteCampaignModal(row) {
@@ -293,15 +279,6 @@ export default {
             // }
         },
 
-        openUpdateCampaignModal(row) {
-            this.campaign = row;
-            this.$refs.update_campaign_modal.openModel();
-        },
-
-        handleUpdatedCampaign(updated) {
-            this.getAllCampaigns(); // or update the array locally
-            this.$refs.update_campaign_modal.handleClose();
-        },
 
         handleAddedCampaign(newCampaign) {
             this.getAllCampaigns();
@@ -319,6 +296,36 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+//action popup styles============
+:deep(.ehxdo-action-popover.el-popover) {
+    min-width: 100px !important;
+    width: 100px !important;
+    padding: 6px 0;
+}
+:deep(.el-popover.el-popper){
+    min-width: 100px !important;
+}
+.action-popup {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 4px;
+    .el-button+.el-button {
+    margin-left: 0px;
+}
+.el-button--text{
+    color: #666D80;
+    font-weight: 500;
+        font-size: 12px;
+}
+span{
+    i{
+        margin-right: 8px;
+    }
+}
+}
+
+
 //status===============
 .status-badge {
     border-radius: 16px;
