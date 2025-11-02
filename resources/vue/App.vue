@@ -1,5 +1,6 @@
 <template>
   <div id="app">
+    <!-- <Navbar /> -->
     <div class="ehxdo_app_content">
       <div class="ehxdo_sidebar_content">
         <Sidebar />
@@ -15,11 +16,13 @@
 
 <script>
 import Sidebar from './components/Layout/Sidebar.vue';
+import Navbar from './components/Layout/Navbar.vue';
 
 export default {
   name: 'App',
   components: {
     Sidebar,
+    Navbar
   },
 }
 </script>

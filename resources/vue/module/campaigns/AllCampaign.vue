@@ -7,7 +7,7 @@
                 <div class="ehxd_title">
                     <h1 class="table-title">All Campaign</h1>
                 </div>
-                <el-button @click="openCampaignAddModal()" size="large" type="primary" icon="Plus" class="ltm_button">
+                <el-button @click="openCampaignAddPage()" size="large" type="primary" icon="Plus" class="ltm_button">
                     Add New Campaign
                 </el-button>
             </template>
@@ -113,7 +113,7 @@
                                 <el-button type="text" @click="viewCampaign(row)" class="ehxdo_view"> <el-icon>
                                         <View />
                                     </el-icon> View</el-button>
-                                <el-button type="text" @click="deleteCampaign(row)" class="ehxdo_delete"> <el-icon>
+                                <el-button type="text" @click="openDeleteCampaignModal(row)" class="ehxdo_delete"> <el-icon>
                                         <DeleteFilled />
                                     </el-icon> Delete</el-button>
                             </div>
@@ -150,7 +150,7 @@
                 <div class="exd-modal-footer" style="text-align: center;">
                     <el-button @click="$refs.delete_campaign_modal.handleClose()" type="default"
                         size="medium">Cancel</el-button>
-                    <el-button @click="deleteCampaign" type="primary" size="medium">Delete</el-button>
+                    <el-button @click="deleteCampaign" type="primary" size="medium" style="background: #DF1C41 !important ;">Delete</el-button>
                 </div>
             </template>
         </AppModal>
@@ -213,6 +213,9 @@ export default {
             if (!date) return '';
             const options = { day: 'numeric', month: 'long', year: 'numeric' };
             return new Date(date).toLocaleDateString('en-GB', options);
+        },
+        openCampaignAddPage() {
+            this.$router.push({ name: 'add_campaign' });
         },
 
         async getAllCampaigns() {

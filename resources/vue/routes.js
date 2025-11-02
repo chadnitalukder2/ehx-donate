@@ -2,6 +2,7 @@ import { createRouter, createWebHashHistory } from 'vue-router';
 
 import DashboardIndex from './module/dashboard/DashboardIndex.vue';
 import AllCampaign from './module/campaigns/AllCampaign.vue';
+import AddCampaign from './module/campaigns/AddCampaign.vue';
 import AllDonation from './module/donations/AllDonation.vue';
 import AllDonor from './module/donor/AllDonor.vue';
 import Reports from './module/reports/Reports.vue';
@@ -25,6 +26,14 @@ const router = createRouter({
             path: '/campaigns',
             component: AllCampaign,
             name: 'campaigns',
+            meta: {
+                active_menu: 0
+            }
+        },
+        {
+            path: '/campaigns/add',
+            component: AddCampaign,
+            name: 'add_campaign',
             meta: {
                 active_menu: 0
             }
