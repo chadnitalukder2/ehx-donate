@@ -175,7 +175,6 @@ import axios from "axios";
 import AppTable from "../../components/AppTable.vue";
 import Icon from "../../components/Icons/AppIcon.vue";
 import AppModal from "../../components/AppModal.vue";
-// import AddCampaign from "./AddCampaign.vue";
 export default {
     components: {
         AppTable,

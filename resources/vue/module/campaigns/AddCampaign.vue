@@ -19,51 +19,134 @@
 
                     <!-- Basic Details Section -->
                     <div class="ehxdo-section">
-                        <el-card style="max-width: 100%; border-radius: 16px; box-shadow: none;     border: none;">
+                        <el-card style="max-width: 100%; border-radius: 16px; box-shadow: none; border: none;">
                             <template #header>
                                 <div class="card-header">
                                     <h2 class="ehxdo-section-title">Basic Details </h2>
-                                    <!-- <p class="ehxdo-section-subtitle">
-                                        Enter the core information about your campaign
-                                    </p> -->
                                 </div>
                             </template>
                             <div class="ehxdo-form-group">
                                 <label class="ehxdo-label">Campaign title</label>
-                                <el-input v-model="title" class="ehxdo-input" placeholder="Enter campaign title" />
+                                <el-input v-model="campaigns.title" class="ehxdo-input"
+                                    placeholder="Enter campaign title" />
                             </div>
 
                             <div class="ehxdo-form-group">
                                 <label class="ehxdo-label">Description</label>
-                                <el-input v-model="short_description" type="textarea" :rows="5"
+                                <el-input v-model="campaigns.short_description" type="textarea" :rows="5"
                                     class="ehxdo-textarea" />
                             </div>
 
                             <div class="ehxdo-form-row">
                                 <div class="ehxdo-form-col">
                                     <label class="ehxdo-label">Start Date</label>
-                                    <el-date-picker v-model="startDate" type="date" class="ehxdo-date-picker"
+                                    <el-date-picker v-model="campaigns.startDate" type="date" class="ehxdo-date-picker"
                                         placeholder="DD-MM-YYYY" format="DD-MM-YYYY" style="width: 100%;" />
                                 </div>
                                 <div class="ehxdo-form-col">
                                     <label class="ehxdo-label">End Date</label>
-                                    <el-date-picker v-model="endDate" type="date" class="ehxdo-date-picker"
+                                    <el-date-picker v-model="campaigns.endDate" type="date" class="ehxdo-date-picker"
                                         placeholder="DD-MM-YYYY" format="DD-MM-YYYY" style="width: 100%;" />
                                 </div>
                             </div>
 
+                        </el-card>
+                    </div>
+
+                    <!-- Donation Information Section -->
+                    <div class="ehxdo-section">
+                        <el-card style="max-width: 100%; border-radius: 16px; box-shadow: none; border: none;">
+                            <template #header>
+                                <div class="card-header">
+                                    <h2 class="ehxdo-section-title">Donation information </h2>
+                                </div>
+                            </template>
+                            <!-- Goal Amount -->
                             <div class="ehxdo-form-group">
-                                <label class="ehxdo-label">Category </label>
-                                <el-select-v2 v-model="category" :options="options" placeholder="Please select"
-                                    style="width: 100%; margin-right: 16px; vertical-align: middle" allow-create
-                                    default-first-option filterable multiple clearable />
+                                <label class="ehxdo-label">
+                                    Goal Amount
+                                    <el-icon class="ehxdo-info-icon">
+                                        <QuestionFilled />
+                                    </el-icon>
+                                </label>
+                                <el-input v-model="campaigns.goal_amount" class="ehxdo-input" placeholder="100,000.00"
+                                    :formatter="(value) => `$ ${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',')"
+                                    :parser="(value) => value.replace(/\$\s?|(,*)/g, '')" />
                             </div>
 
-                              <div class="ehxdo-form-group">
-                                <label class="ehxdo-label">Tags </label>
-                                <el-select-v2 v-model="tags" :options="options" placeholder="Please select"
-                                    style="width: 100%; margin-right: 16px; vertical-align: middle" allow-create
-                                    default-first-option filterable multiple clearable />
+                            <!-- Allow Custom Amount -->
+                            <div class="ehxdo-section-inner">
+                                <div class="ehxdo-checkbox-group">
+                                    <el-checkbox v-model="campaigns.allow_custom_amount" class="ehxdo-checkbox">
+                                        Allow Custom Amount
+                                    </el-checkbox>
+                                </div>
+                                <p class="ehxdo-description">
+                                    With the Allow Custom Amount feature, users can set their own payment.
+                                </p>
+
+                                <div class="ehxdo-row">
+                                    <div class="ehxdo-col">
+                                        <el-input v-model="campaigns.min_donation" class="ehxdo-input"
+                                            placeholder="Minimum Donation" />
+                                    </div>
+                                    <div class="ehxdo-col">
+                                        <el-input v-model="campaigns.max_donation" class="ehxdo-input"
+                                            placeholder="Maximum Donation" />
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Predefined Pricing -->
+                            <div class="ehxdo-section-inner">
+                                <div class="ehxdo-checkbox-group">
+                                    <el-checkbox v-model="campaigns.predefined_pricing" class="ehxdo-checkbox">
+                                        Predefined Pricing
+                                    </el-checkbox>
+                                </div>
+                                <p class="ehxdo-description">
+                                    Enable this option to allow commission payments on recurring product subscriptions.
+                                </p>
+
+                                <div class="ehxdo-pricing-table">
+                                    <div class="ehxdo-table-header">
+                                        <div class="ehxdo-table-cell">Name</div>
+                                        <div class="ehxdo-table-cell">Amount</div>
+                                        <div class="ehxdo-table-cell-action"></div>
+                                    </div>
+
+                                    <div v-for="(item, index) in campaigns.pricing_items" :key="index" class="ehxdo-table-row">
+                                        <div class="ehxdo-table-cell">
+                                            <el-input v-model="item.name" class="ehxdo-input" placeholder="Basic" />
+                                        </div>
+                                        <div class="ehxdo-table-cell">
+                                            <el-input v-model="item.amount" class="ehxdo-input" placeholder="$ 5"
+                                                :formatter="(value) => `$ ${value}`"
+                                                :parser="(value) => value.replace(/\$\s?/g, '')" />
+                                        </div>
+                                        <div class="ehxdo-table-cell-action">
+                                            <el-button class="ehxdo-delete-btn" :icon="Delete" text
+                                                @click="removePricingItem(index)" />
+                                        </div>
+                                    </div>
+
+                                    <el-button class="ehxdo-add-btn" type="success" text :icon="Plus"
+                                        @click="addPricingItem">
+                                        Add More
+                                    </el-button>
+                                </div>
+                            </div>
+
+                            <!-- Allow Recurring Amount -->
+                            <div class="ehxdo-section-inner">
+                                <div class="ehxdo-checkbox-group">
+                                    <el-checkbox v-model="campaigns.allow_recurring_amount" class="ehxdo-checkbox">
+                                        Allow Recurring Amount
+                                    </el-checkbox>
+                                </div>
+                                <p class="ehxdo-description">
+                                    Enable this option to allow commission payments on recurring product subscriptions.
+                                </p>
                             </div>
 
                         </el-card>
@@ -72,51 +155,111 @@
                 </div>
 
                 <!-- Sidebar -->
-                <div class="ehxdo-sidebar">
-                    <!-- Live Preview Card -->
-                    <div class="ehxdo-card">
-                        <h3 class="ehxdo-card-title">Live Preview</h3>
-                        <p class="ehxdo-card-subtitle">How Your Campaign Will Look Online</p>
-                        <div class="ehxdo-preview-placeholder">
-                            <el-icon class="ehxdo-preview-icon">
-                                <picture />
-                            </el-icon>
-                        </div>
+                <div class="ehxdo-sidebar_campaign">
+                    <!-- Campaign Image Card -->
+                    <div class="ehxdo-section">
+                        <el-card style="max-width: 100%; border-radius: 16px; box-shadow: none; border: none;">
+                            <template #header>
+                                <div class="card-header">
+                                    <h2 class="ehxdo-section-title">Campaign Image </h2>
+                                </div>
+                            </template>
+                            <el-upload class="ehxdo-upload" drag action="#" :show-file-list="false"
+                                :auto-upload="false">
+                                <div class="ehxdo-upload-content">
+                                    <el-icon class="ehxdo-upload-icon">
+                                        <UploadFilled />
+                                    </el-icon>
+                                    <p class="ehxdo-upload-text">Click to upload or drag and drop</p>
+                                    <p class="ehxdo-upload-hint">PNG, JPG or GIF (max. 2MB)</p>
+                                    <el-button type="primary" size="small" class="ehxdo-upload-button">
+                                        Choose File
+                                    </el-button>
+                                </div>
+                            </el-upload>
+                        </el-card>
                     </div>
 
-                    <!-- Campaign Tips Card -->
-                    <div class="ehxdo-card">
-                        <h3 class="ehxdo-card-title">Campaign Tips</h3>
-                        <div class="ehxdo-tips-list">
-                            <div class="ehxdo-tip-item">
-                                <span class="ehxdo-tip-label">Name</span>
-                                <el-slider v-model="nameProgress" class="ehxdo-slider" :show-tooltip="false" />
+                    <!-- Campaign Status Card -->
+                    <div class="ehxdo-section">
+                        <el-card style="max-width: 100%; border-radius: 16px; box-shadow: none; border: none;">
+                            <template #header>
+                                <div class="card-header">
+                                    <h2 class="ehxdo-section-title">Status</h2>
+                                </div>
+                            </template>
+
+                            <div class="ehxdo-status-group">
+                                <el-checkbox v-model="statusActive" class="ehxdo-status-checkbox"
+                                    @change="handleStatusChange('active')">
+                                    <span class="ehxdo-status-label">
+                                        <span class="ehxdo-status-dot ehxdo-status-dot-active"></span>
+                                        Active
+                                    </span>
+                                </el-checkbox>
+
+                                <el-checkbox v-model="statusPending" class="ehxdo-status-checkbox"
+                                    @change="handleStatusChange('pending')">
+                                    <span class="ehxdo-status-label">
+                                        <span class="ehxdo-status-dot ehxdo-status-dot-pending"></span>
+                                        Pending
+                                    </span>
+                                </el-checkbox>
+
+                                <el-checkbox v-model="statusComplete" class="ehxdo-status-checkbox"
+                                    @change="handleStatusChange('complete')">
+                                    <span class="ehxdo-status-label">
+                                        <span class="ehxdo-status-dot ehxdo-status-dot-complete"></span>
+                                        Complete
+                                    </span>
+                                </el-checkbox>
                             </div>
-                            <div class="ehxdo-tip-item">
-                                <span class="ehxdo-tip-label">Subtitle</span>
-                                <el-slider v-model="subtitleProgress" class="ehxdo-slider" :show-tooltip="false" />
-                            </div>
-                            <div class="ehxdo-tip-item">
-                                <span class="ehxdo-tip-label">How You Fit In</span>
-                                <el-slider v-model="fitProgress" class="ehxdo-slider" :show-tooltip="false" />
-                            </div>
-                        </div>
+                        </el-card>
+                    </div>
+
+                    <!-- Campaign Category Card -->
+                    <div class="ehxdo-section">
+                        <el-card style="max-width: 100%; border-radius: 16px; box-shadow: none; border: none;">
+                            <template #header>
+                                <div class="card-header">
+                                    <h2 class="ehxdo-section-title"> Category</h2>
+                                </div>
+                            </template>
+                            <el-select-v2 v-model="campaigns.category" :options="options" placeholder="Please select"
+                                style="width: 100%; margin-right: 16px; vertical-align: middle" allow-create
+                                default-first-option filterable multiple clearable />
+                        </el-card>
+                    </div>
+
+                    <!-- Campaign Tags Card -->
+                    <div class="ehxdo-section">
+                        <el-card style="max-width: 100%; border-radius: 16px; box-shadow: none; border: none;">
+                            <template #header>
+                                <div class="card-header">
+                                    <h2 class="ehxdo-section-title"> Tags</h2>
+                                </div>
+                            </template>
+                            <el-select-v2 v-model="campaigns.tags" :options="options" placeholder="Please select"
+                                style="width: 100%; margin-right: 16px; vertical-align: middle" allow-create
+                                default-first-option filterable multiple clearable />
+                        </el-card>
                     </div>
 
                     <!-- Actions Card -->
-                    <div class="ehxdo-card ehxdo-actions-card">
-                        <h3 class="ehxdo-card-title">Actions</h3>
-                        <el-button type="success" class="ehxdo-action-btn ehxdo-action-btn-primary">
-                            <el-icon>
-                                <check />
-                            </el-icon> Save Launch
-                        </el-button>
-                        <el-button plain class="ehxdo-action-btn ehxdo-action-btn-secondary">
-                            <el-icon>
-                                <download />
-                            </el-icon> Save as Draft
-                        </el-button>
-                        <el-button text class="ehxdo-action-btn ehxdo-action-btn-text">Cancel</el-button>
+                    <div class="ehxdo-section">
+                        <el-card style="max-width: 100%; border-radius: 16px; box-shadow: none; border: none;">
+                            <template #header>
+                                <div class="card-header">
+                                    <h2 class="ehxdo-section-title">Actions</h2>
+                                </div>
+                            </template>
+                            <el-button class="ehxdo-action-button ehxdo-action-button-primary" type="primary" @click="submitCampaignForm">
+                                <el-icon class="ehxdo-action-icon">
+                                    <Check />
+                                </el-icon>
+                                Save Campaign
+                            </el-button>
+                        </el-card>
                     </div>
                 </div>
 
@@ -126,50 +269,166 @@
 
 </template>
 
-<script setup>
-import { ref } from 'vue'
+<script>
+import axios from "axios";
 import {
     UploadFilled,
     Plus,
     Check,
-    Download,
-    Picture
+    Delete,
+    QuestionFilled,
+    Right
 } from '@element-plus/icons-vue';
 
-// Form data
-const campaignTitle = ref('');
-const campaignDescription = ref('');
-const audience = ref('');
-const startDate = ref('');
-const endDate = ref('');
+export default {
+    name: "AddCampaign",
+    components: {
+        UploadFilled,
+        Plus,
+        Check,
+        Delete,
+        QuestionFilled,
+        Right
+    },
+    data() {
+        return {
+            campaigns: {
+                title: "",
+                short_description: "",
+                startDate: "",
+                endDate: "",
+                goal_amount: "",
+                allow_custom_amount: false,
+                min_donation: "",
+                max_donation: "",
+                predefined_pricing: false,
+                pricing_items: [
+                    { name: 'Basic', amount: '5' }
+                ],
+                allow_recurring_amount: false,
+                campaign_image: null,
+                status: "active",
+                category: [],
+                tags: [],
+            },
+            statusActive: true,
+            statusPending: false,
+            statusComplete: false,
+            rules: {
+                title: [
+                    { required: true, message: "Campaign title is required", trigger: "blur" },
+                ],
+            },
+            submitting: false,
+            directories: [],
+            nonce: window.EHXDonate?.restNonce || '',
+            rest_api: window.EHXDonate?.restUrl || '',
+            initials: ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j'],
+            options: []
+        };
+    },
+    created() {
+        // Generate options for select
+        this.options = Array.from({ length: 1000 }).map((_, idx) => ({
+            value: `Option ${idx + 1}`,
+            label: `${this.initials[idx % 10]}${idx}`,
+        }));
+    },
+    methods: {
+        addPricingItem() {
+            this.campaigns.pricing_items.push({ name: '', amount: '' });
+        },
 
-// Donation switches
-const alexKrizenActive = ref(true);
-const breakfastActive = ref(false);
-const recurringActive = ref(false);
-const breakfastTime = ref('');
+        removePricingItem(index) {
+            if (this.campaigns.pricing_items.length > 1) {
+                this.campaigns.pricing_items.splice(index, 1);
+            } else {
+                this.$notify({
+                    title: "Warning",
+                    message: "At least one pricing item is required",
+                    type: "warning",
+                });
+            }
+        },
 
-// Settings
-const sendingType = ref('public');
-const uploadLink = ref('');
-const textContent = ref('');
-const valNumber = ref(0);
+        handleStatusChange(selectedStatus) {
+            // Only one status can be selected at a time
+            if (selectedStatus === 'active') {
+                if (this.statusActive) {
+                    this.statusPending = false;
+                    this.statusComplete = false;
+                    this.campaigns.status = 'active';
+                }
+            } else if (selectedStatus === 'pending') {
+                if (this.statusPending) {
+                    this.statusActive = false;
+                    this.statusComplete = false;
+                    this.campaigns.status = 'pending';
+                }
+            } else if (selectedStatus === 'complete') {
+                if (this.statusComplete) {
+                    this.statusActive = false;
+                    this.statusPending = false;
+                    this.campaigns.status = 'complete';
+                }
+            }
+        },
 
-// Progress sliders
-const nameProgress = ref(60);
-const subtitleProgress = ref(40);
-const fitProgress = ref(80);
+        async submitCampaignForm() {
+            console.log("Submitting campaign form with data:", this.campaigns);
+            
+            // Validate required fields
+            if (!this.campaigns.title) {
+                this.$notify({
+                    title: "Error",
+                    message: "Campaign title is required",
+                    type: "error",
+                });
+                return;
+            }
 
-const initials = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j']
+            this.submitting = true;
 
-const value1 = ref([])
-const value2 = ref()
-const category = ref([])
-const tags = ref([])
-const options = Array.from({ length: 1000 }).map((_, idx) => ({
-  value: `Option ${idx + 1}`,
-  label: `${initials[idx % 10]}${idx}`,
-}))
+            try {
+                const response = await axios.post(`${this.rest_api}/postCampaign`, this.campaigns, {
+                    headers: {
+                        "Content-Type": "application/json",
+                        "X-WP-Nonce": this.nonce,
+                    },
+                });
+
+                if (response.data.success === true) {
+                    this.$notify({
+                        title: "Success",
+                        message: "Campaign created successfully",
+                        type: "success",
+                    });
+
+                    // Reset form or redirect
+                    this.$router.push('/campaigns');
+                } else {
+                    this.$notify({
+                        title: "Error",
+                        message: "Failed to create campaign",
+                        type: "error",
+                    });
+                }
+            } catch (error) {
+                console.error("Error saving campaign:", error);
+                this.$notify({
+                    title: "Error",
+                    message: "An unexpected error occurred while saving the campaign.",
+                    type: "error",
+                });
+            } finally {
+                this.submitting = false;
+            }
+        },
+    },
+    mounted() {
+        // Initialize anything needed on mount
+    },
+};
 </script>
 
 <style lang="scss" scoped>
@@ -180,7 +439,6 @@ const options = Array.from({ length: 1000 }).map((_, idx) => ({
 .ehxdo-container {
     display: flex;
     gap: 20px;
-
     min-height: 100vh;
     font-family: Inter Tight, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
 }
@@ -210,17 +468,12 @@ const options = Array.from({ length: 1000 }).map((_, idx) => ({
 }
 
 .ehxdo-section {
-    // background: white;
-    // border-radius: 16px;
-    // padding: 24px;
     margin-bottom: 24px;
-    // box-shadow: 0 2px 4px rgba(0, 0, 0, 0.04);
 
     .ehxdo-section-title {
         font-size: 18px;
         font-weight: 600;
         color: #121A26;
-        margin: 0px;
         margin: 0 0 6px 0;
     }
 
@@ -232,11 +485,25 @@ const options = Array.from({ length: 1000 }).map((_, idx) => ({
     }
 }
 
+.ehxdo-section-inner {
+    margin-bottom: 32px;
+    padding-bottom: 32px;
+    border-bottom: 1px solid #e8e8e8;
+
+    &:last-child {
+        border-bottom: none;
+        margin-bottom: 0;
+        padding-bottom: 0;
+    }
+}
+
 .ehxdo-form-group {
-    margin-bottom: 20px;
+    margin-bottom: 25px;
 
     .ehxdo-label {
-        display: block;
+        display: flex;
+        align-items: center;
+        gap: 6px;
         font-size: 14px;
         font-weight: 500;
         color: #606266;
@@ -247,14 +514,13 @@ const options = Array.from({ length: 1000 }).map((_, idx) => ({
     .ehxdo-textarea {
         width: 100%;
     }
-   
 }
 
 .ehxdo-form-row {
     display: flex;
     gap: 20px;
     justify-content: space-between;
-    margin-bottom: 20px;
+    margin-bottom: 25px;
 
     .ehxdo-form-col {
         flex-basis: 50%;
@@ -274,287 +540,258 @@ const options = Array.from({ length: 1000 }).map((_, idx) => ({
     }
 }
 
-.ehxdo-upload-area {
-    margin-bottom: 16px;
-
-    .ehxdo-uploader {
-        width: 100%;
-
-        :deep(.el-upload) {
-            width: 100%;
-        }
-
-        :deep(.el-upload-dragger) {
-            width: 100%;
-            height: 200px;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            border: 2px dashed #dcdfe6;
-            border-radius: 8px;
-            background-color: #fafafa;
-            transition: all 0.3s;
-
-            &:hover {
-                border-color: #409eff;
-            }
-        }
-
-        .ehxdo-upload-icon {
-            font-size: 48px;
-            color: #c0c4cc;
-            margin-bottom: 16px;
-        }
-
-        .ehxdo-upload-text {
-            font-size: 14px;
-            color: #606266;
-            margin-bottom: 8px;
-        }
-
-        .ehxdo-upload-formats {
-            font-size: 12px;
-            color: #909399;
-        }
-    }
-}
-
-.ehxdo-powered-by {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    font-size: 12px;
-    color: #909399;
-
-    .ehxdo-powered-logo {
-        height: 20px;
-    }
-}
-
-.ehxdo-donation-item {
-    display: flex;
-    gap: 12px;
-    padding: 16px;
-    border: 1px solid #ebeef5;
-    border-radius: 8px;
-    margin-bottom: 16px;
-
-    .ehxdo-checkbox {
-        margin-top: 4px;
-    }
-
-    .ehxdo-donation-content {
-        flex: 1;
-
-        .ehxdo-donation-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 8px;
-
-            .ehxdo-donation-title {
-                font-size: 16px;
-                font-weight: 600;
-                color: #303133;
-                margin: 0;
-            }
-        }
-
-        .ehxdo-donation-desc {
-            font-size: 14px;
-            color: #606266;
-            margin: 0 0 12px 0;
-            line-height: 1.5;
-        }
-
-        .ehxdo-donation-meta {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            font-size: 14px;
-            color: #909399;
-
-            .ehxdo-donation-separator {
-                color: #dcdfe6;
-            }
-
-            strong {
-                color: #303133;
-                font-weight: 600;
-            }
-        }
-
-        .ehxdo-donation-actions {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-
-            .ehxdo-donation-time {
-                font-size: 14px;
-                color: #606266;
-            }
-
-            .ehxdo-time-picker {
-                flex: 1;
-                max-width: 200px;
-            }
-        }
-    }
-}
-
-.ehxdo-settings-item {
-    margin-bottom: 20px;
-
-    .ehxdo-label {
-        display: block;
-        font-size: 14px;
-        font-weight: 500;
-        color: #606266;
-        margin-bottom: 8px;
-    }
-
-    .ehxdo-radio-group {
-        display: flex;
-        flex-direction: column;
-        gap: 8px;
-
-        :deep(.el-radio) {
-            margin-right: 0;
-            margin-bottom: 8px;
-
-            .el-radio__label {
-                font-size: 14px;
-                color: #606266;
-            }
-        }
-    }
-
-    .ehxdo-input,
-    .ehxdo-textarea {
-        width: 100%;
-    }
-
-    .ehxdo-input-number {
-        width: 100%;
-    }
-}
-
 // Sidebar styles
-.ehxdo-sidebar {
+.ehxdo-sidebar_campaign {
     width: 320px;
     flex-shrink: 0;
+}
 
-    .ehxdo-card {
-        background: white;
+// Upload styles
+.ehxdo-upload {
+    :deep(.el-upload) {
+        width: 100%;
+        border: none;
+    }
+
+    :deep(.el-upload-dragger) {
+        width: 100%;
+        height: auto;
+        min-height: 200px;
+        padding: 32px 20px;
+        border: 2px dashed #dcdfe6;
         border-radius: 8px;
-        padding: 20px;
-        margin-bottom: 16px;
-        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.04);
+        background-color: #fafafa;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        transition: all 0.3s;
 
-        .ehxdo-card-title {
-            font-size: 16px;
-            font-weight: 600;
-            color: #303133;
-            margin: 0 0 8px 0;
-        }
-
-        .ehxdo-card-subtitle {
-            font-size: 13px;
-            color: #909399;
-            margin: 0 0 16px 0;
+        &:hover {
+            border-color: #409eff;
+            background-color: #f0f7ff;
         }
     }
 }
 
-.ehxdo-preview-placeholder {
+.ehxdo-upload-content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+}
+
+.ehxdo-upload-icon {
+    font-size: 48px;
+    color: #909399;
+    margin-bottom: 16px;
+}
+
+.ehxdo-upload-text {
+    font-size: 14px;
+    color: #606266;
+    margin: 0 0 4px 0;
+}
+
+.ehxdo-upload-hint {
+    font-size: 12px;
+    color: #909399;
+    margin: 0 0 16px 0;
+}
+
+.ehxdo-upload-button {
+    margin-top: 8px;
+}
+
+// Status styles
+.ehxdo-status-group {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+.ehxdo-status-checkbox {
+    :deep(.el-checkbox__label) {
+        width: 100%;
+        padding: 12px 16px;
+        border: 1px solid #e8e8e8;
+        border-radius: 8px;
+        transition: all 0.3s;
+        display: flex;
+        align-items: center;
+
+        &:hover {
+            background-color: #f5f7fa;
+            border-color: #d0d0d0;
+        }
+    }
+
+    :deep(.el-checkbox__input.is-checked+.el-checkbox__label) {
+        background-color: #f0f9ff;
+        border-color: #409eff;
+    }
+}
+
+.ehxdo-status-label {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 14px;
+    font-weight: 500;
+    color: #303133;
+}
+
+.ehxdo-status-dot {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    flex-shrink: 0;
+}
+
+.ehxdo-status-dot-active {
+    background-color: #67c23a;
+    box-shadow: 0 0 0 3px rgba(103, 194, 58, 0.2);
+}
+
+.ehxdo-status-dot-pending {
+    background-color: #e6a23c;
+    box-shadow: 0 0 0 3px rgba(230, 162, 60, 0.2);
+}
+
+.ehxdo-status-dot-complete {
+    background-color: #409eff;
+    box-shadow: 0 0 0 3px rgba(64, 158, 255, 0.2);
+}
+
+// Actions styles
+.ehxdo-action-button {
     width: 100%;
-    height: 180px;
-    background-color: #f5f7fa;
-    border-radius: 8px;
     display: flex;
     align-items: center;
     justify-content: center;
+    height: 40px;
+    font-weight: 500;
 
-    .ehxdo-preview-icon {
-        font-size: 48px;
-        color: #c0c4cc;
-    }
-}
+    &.ehxdo-action-button-primary {
+        background-color: #67c23a;
+        border-color: #67c23a;
+        color: white;
 
-.ehxdo-tips-list {
-    .ehxdo-tip-item {
-        margin-bottom: 20px;
-
-        &:last-child {
-            margin-bottom: 0;
-        }
-
-        .ehxdo-tip-label {
-            display: block;
-            font-size: 13px;
-            color: #606266;
-            margin-bottom: 8px;
-        }
-
-        .ehxdo-slider {
-            :deep(.el-slider__runway) {
-                height: 6px;
-            }
-
-            :deep(.el-slider__bar) {
-                background-color: #67c23a;
-            }
-
-            :deep(.el-slider__button) {
-                width: 14px;
-                height: 14px;
-                border-color: #67c23a;
-            }
+        &:hover {
+            background-color: #85ce61;
+            border-color: #85ce61;
         }
     }
 }
 
-.ehxdo-actions-card {
-    .ehxdo-action-btn {
-        width: 100%;
-        margin-bottom: 12px;
-        justify-content: center;
+.ehxdo-action-icon {
+    margin-right: 6px;
+    font-size: 16px;
+}
 
-        &:last-child {
-            margin-bottom: 0;
-        }
+// Donation styles
+.ehxdo-info-icon {
+    color: #909399;
+    font-size: 16px;
+    cursor: help;
+}
 
-        &.ehxdo-action-btn-primary {
-            background-color: #67c23a;
-            border-color: #67c23a;
-            color: white;
+.ehxdo-checkbox-group {
+    margin-bottom: 8px;
+}
 
-            &:hover {
-                background-color: #85ce61;
-                border-color: #85ce61;
-            }
-        }
+.ehxdo-checkbox {
+    font-size: 15px;
+    font-weight: 500;
+    color: #1a1a1a;
+}
 
-        &.ehxdo-action-btn-secondary {
-            border-color: #dcdfe6;
-            color: #606266;
+.ehxdo-description {
+    font-size: 13px;
+    color: #666;
+    margin: 0 0 16px 0;
+    line-height: 1.5;
+}
 
-            &:hover {
-                color: #409eff;
-                border-color: #c6e2ff;
-                background-color: #ecf5ff;
-            }
-        }
+.ehxdo-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+}
 
-        &.ehxdo-action-btn-text {
-            color: #909399;
+.ehxdo-col {
+    width: 100%;
+}
 
-            &:hover {
-                color: #606266;
-            }
-        }
-    }
+.ehxdo-pricing-table {
+    margin-top: 16px;
+    background: #fafafa;
+    border-radius: 8px;
+    padding: 16px;
+}
+
+.ehxdo-table-header {
+    display: grid;
+    grid-template-columns: 1fr 1fr 40px;
+    gap: 12px;
+    margin-bottom: 12px;
+    padding: 0 4px;
+}
+
+.ehxdo-table-cell {
+    font-size: 13px;
+    font-weight: 500;
+    color: #666;
+}
+
+.ehxdo-table-cell-action {
+    width: 40px;
+}
+
+.ehxdo-table-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr 40px;
+    gap: 12px;
+    align-items: center;
+    margin-bottom: 12px;
+}
+
+.ehxdo-delete-btn {
+    color: #909399;
+    padding: 8px;
+}
+
+.ehxdo-delete-btn:hover {
+    color: #f56c6c;
+}
+
+.ehxdo-add-btn {
+    margin-top: 8px;
+    font-weight: 500;
+}
+
+:deep(.el-checkbox__input.is-checked .el-checkbox__inner) {
+    background-color: #67c23a;
+    border-color: #67c23a;
+}
+
+:deep(.el-checkbox__label) {
+    color: #1a1a1a;
+    font-weight: 500;
+}
+
+:deep(.el-input__wrapper) {
+    border-radius: 6px;
+    box-shadow: 0 0 0 1px #dcdfe6 inset;
+    padding: 8px 12px;
+}
+
+:deep(.el-input__wrapper:hover) {
+    box-shadow: 0 0 0 1px #c0c4cc inset;
+}
+
+:deep(.el-input__wrapper.is-focus) {
+    box-shadow: 0 0 0 1px #409eff inset;
 }
 
 // Responsive design
@@ -563,8 +800,9 @@ const options = Array.from({ length: 1000 }).map((_, idx) => ({
         flex-direction: column;
     }
 
-    .ehxdo-sidebar {
+    .ehxdo-sidebar_campaign {
         width: 100%;
+        max-width: 100%;
     }
 }
 
