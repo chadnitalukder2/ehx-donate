@@ -65,3 +65,15 @@
         box-shadow: 0 0 0 0px $ehxd_input_border !important;
       }
 
+       input{
+        border: none !important;
+        border-radius: 4px;
+        padding: 8px 12px;
+        font-size: 14px;
+        color: #606266;
+
+        &:focus {
+            border-color: none !important;
+            box-shadow: none !important;
+        }
+    }

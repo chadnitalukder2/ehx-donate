@@ -130,6 +130,18 @@
   box-shadow: 0 0 0 0px #E8EAF1 !important;
 }
 
+input {
+  border: none !important;
+  border-radius: 4px;
+  padding: 8px 12px;
+  font-size: 14px;
+  color: #606266;
+}
+input:focus {
+  border-color: none !important;
+  box-shadow: none !important;
+}
+
 .el-button--primary {
   color: #fff !important;
   background: #067a3b !important;

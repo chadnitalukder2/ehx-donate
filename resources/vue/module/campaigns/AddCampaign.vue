@@ -43,15 +43,28 @@
                                 <div class="ehxdo-form-col">
                                     <label class="ehxdo-label">Start Date</label>
                                     <el-date-picker v-model="startDate" type="date" class="ehxdo-date-picker"
-                                        placeholder="DD-MM-YYYY" format="DD-MM-YYYY" style="width: 100%;"/>
+                                        placeholder="DD-MM-YYYY" format="DD-MM-YYYY" style="width: 100%;" />
                                 </div>
                                 <div class="ehxdo-form-col">
                                     <label class="ehxdo-label">End Date</label>
                                     <el-date-picker v-model="endDate" type="date" class="ehxdo-date-picker"
-                                        placeholder="DD-MM-YYYY" format="DD-MM-YYYY" style="width: 100%;"/>
+                                        placeholder="DD-MM-YYYY" format="DD-MM-YYYY" style="width: 100%;" />
                                 </div>
                             </div>
 
+                            <div class="ehxdo-form-group">
+                                <label class="ehxdo-label">Category </label>
+                                <el-select-v2 v-model="category" :options="options" placeholder="Please select"
+                                    style="width: 100%; margin-right: 16px; vertical-align: middle" allow-create
+                                    default-first-option filterable multiple clearable />
+                            </div>
+
+                              <div class="ehxdo-form-group">
+                                <label class="ehxdo-label">Tags </label>
+                                <el-select-v2 v-model="tags" :options="options" placeholder="Please select"
+                                    style="width: 100%; margin-right: 16px; vertical-align: middle" allow-create
+                                    default-first-option filterable multiple clearable />
+                            </div>
 
                         </el-card>
                     </div>
@@ -114,7 +127,7 @@
 </template>
 
 <script setup>
-import { ref } from 'vue';
+import { ref } from 'vue'
 import {
     UploadFilled,
     Plus,
@@ -146,6 +159,17 @@ const valNumber = ref(0);
 const nameProgress = ref(60);
 const subtitleProgress = ref(40);
 const fitProgress = ref(80);
+
+const initials = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j']
+
+const value1 = ref([])
+const value2 = ref()
+const category = ref([])
+const tags = ref([])
+const options = Array.from({ length: 1000 }).map((_, idx) => ({
+  value: `Option ${idx + 1}`,
+  label: `${initials[idx % 10]}${idx}`,
+}))
 </script>
 
 <style lang="scss" scoped>
@@ -223,6 +247,7 @@ const fitProgress = ref(80);
     .ehxdo-textarea {
         width: 100%;
     }
+   
 }
 
 .ehxdo-form-row {
@@ -233,6 +258,7 @@ const fitProgress = ref(80);
 
     .ehxdo-form-col {
         flex-basis: 50%;
+
         .ehxdo-label {
             display: block;
             font-size: 14px;
