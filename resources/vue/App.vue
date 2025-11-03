@@ -2,7 +2,7 @@
   <div id="app">
     
     <div class="ehxdo_app_content">
-      <Navbar />
+      <!-- <Navbar /> -->
       <div class="ehxdo_app_main_content">
       <div class="ehxdo_sidebar_content">
         <Sidebar />
@@ -39,7 +39,7 @@ export default {
   .ehxdo_app_main_content {
     display: flex;
     gap: 20px;
-    padding: 0px 20px 20px 0px;
+    padding: 20px 20px 20px 20px;
   }
 
   .ehxdo_main_content {

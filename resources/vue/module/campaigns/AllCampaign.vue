@@ -84,7 +84,11 @@
             </template>
 
             <template #columns>
-                <el-table-column prop="id" label="ID" width="60" />
+                <el-table-column label="ID" width="80">
+                    <template #default="scope">
+                        #{{ scope.$index + 1 }}
+                    </template>
+                </el-table-column>
                 <el-table-column prop="name" label="Title" />
                 <el-table-column prop="goal" label="Goal" />
                 <el-table-column prop="donation" label="Donation" />
@@ -104,23 +108,26 @@
                 </el-table-column>
                 <el-table-column label="Actions" width="75">
                     <template #default="{ row }">
-                        <el-popover placement="bottom-end" width="100" :popper-style="{ minWidth: '100px' }"
-                            popper-class="ehxdo-action-popover" trigger="click" v-model:visible="row.showActions">
-                            <div class="action-popup">
-                                <el-button type="text" @click="editCampaign(row)" class="ehxdo_edit"> <el-icon>
-                                        <EditPen />
-                                    </el-icon> Edit</el-button>
-                                <el-button type="text" @click="viewCampaign(row)" class="ehxdo_view"> <el-icon>
-                                        <View />
-                                    </el-icon> View</el-button>
-                                <el-button type="text" @click="openDeleteCampaignModal(row)" class="ehxdo_delete"> <el-icon>
-                                        <DeleteFilled />
-                                    </el-icon> Delete</el-button>
-                            </div>
-                            <template #reference>
-                                <el-button icon="More" circle size="small"></el-button>
-                            </template>
-                        </el-popover>
+                        <div class="ehxdo_action_section">
+                            <el-popover placement="bottom-end" width="100" :popper-style="{ minWidth: '100px' }"
+                                popper-class="ehxdo-action-popover" trigger="click" v-model:visible="row.showActions">
+                                <div class="action-popup">
+                                    <el-button type="text" @click="editCampaign(row)" class="ehxdo_edit"> <el-icon>
+                                            <EditPen />
+                                        </el-icon> Edit</el-button>
+                                    <el-button type="text" @click="viewCampaign(row)" class="ehxdo_view"> <el-icon>
+                                            <View />
+                                        </el-icon> View</el-button>
+                                    <el-button type="text" @click="openDeleteCampaignModal(row)" class="ehxdo_delete">
+                                        <el-icon>
+                                            <DeleteFilled />
+                                        </el-icon> Delete</el-button>
+                                </div>
+                                <template #reference>
+                                    <el-button icon="More" circle size="small"></el-button>
+                                </template>
+                            </el-popover>
+                        </div>
                     </template>
                 </el-table-column>
             </template>
@@ -150,7 +157,8 @@
                 <div class="exd-modal-footer" style="text-align: center;">
                     <el-button @click="$refs.delete_campaign_modal.handleClose()" type="default"
                         size="medium">Cancel</el-button>
-                    <el-button @click="deleteCampaign" type="primary" size="medium" style="background: #DF1C41 !important ;">Delete</el-button>
+                    <el-button @click="deleteCampaign" type="primary" size="medium"
+                        style="background: #DF1C41 !important ;">Delete</el-button>
                 </div>
             </template>
         </AppModal>
@@ -307,6 +315,19 @@ export default {
 
 <style lang="scss" scoped>
 //action popup styles============
+.ehxdo_action_section {
+    .el-button {
+        transition: all 0.3s ease;
+        background: #F8F9FC;
+        color: #0D0D12;
+    }
+
+    .el-button:hover {
+        background-color: #fff;
+        border: 1px solid #DFE1E7;
+    }
+}
+
 
 .action-popup {
     display: flex;
@@ -323,6 +344,8 @@ export default {
         font-weight: 500;
         font-size: 12px;
         width: 100%;
+        justify-content: flex-start;
+        display: flex;
         transition: background-color 0.3s ease;
     }
 
@@ -332,19 +355,19 @@ export default {
         }
     }
 
-    .el-button--text:hover {
-        background-color: #F8F9FC;
-    }
+
     .ehxdo_edit {
         &:hover {
             color: #079455;
         }
     }
+
     .ehxdo_view {
         &:hover {
             color: #3366FF;
         }
     }
+
     .ehxdo_delete {
         &:hover {
             color: #DF1C41;
@@ -359,7 +382,7 @@ export default {
     text-transform: capitalize;
     font-size: 12px;
     font-weight: 500;
-    padding: 2px 8px 2px 6px;
+    padding: 3px 8px 4px 8px;
 }
 
 .ehxdo_status-active {
