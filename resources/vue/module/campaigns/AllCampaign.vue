@@ -86,7 +86,7 @@
             <template #columns>
                 <el-table-column label="ID" width="80">
                     <template #default="scope">
-                        #{{ scope.$index + 1 }}
+                        {{ scope.$index + 1 }}
                     </template>
                 </el-table-column>
                 <el-table-column prop="name" label="Title" />

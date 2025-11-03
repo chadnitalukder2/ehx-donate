@@ -17,9 +17,9 @@
       <router-link to="/transitions" class="ehxdo_menu_item">
         Transitions
       </router-link>
-      <router-link to="/subscriptions" class="ehxdo_menu_item">
+      <!-- <router-link to="/subscriptions" class="ehxdo_menu_item">
         Subscriptions
-      </router-link>
+      </router-link> -->
       <router-link to="/reports" class="ehxdo_menu_item">
         Reports
       </router-link>
