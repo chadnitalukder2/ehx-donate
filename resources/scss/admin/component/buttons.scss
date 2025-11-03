@@ -1,6 +1,24 @@
 .el-button--primary {
-    color: $ehxd-dark-500;
-    background: $ehxd-primary-500;
+    color: #fff !important;
+    background: #067a3b !important;
+    border-color: #067a3b !important;
+    transition: all 0.3s ease !important;
+    &:hover {
+        background: #079455 !important;
+        border-color: #079455 !important;
+    }
+}
+
+.el-button--info{
+    background-color: #fff !important;
+    color: #606266 !important;
+    border: 1px solid #dcdfe6 !important;
+    transition: all 0.3s ease !important;
+    border-radius: 6px !important;
+    &:hover {
+        background-color: #f5f7fa !important;
+        border-color: #c6cdd6 !important;
+    }
 }
 
 .el-button--success {

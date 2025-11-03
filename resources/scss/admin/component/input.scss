@@ -1,13 +1,17 @@
 .el-input__wrapper, .el-textarea__inner{
     border-radius: 8px !important;
+    
     .el-input__inner {
-        height: 35px;
+        height: 38px !important;
         border: none;
         &:focus {
             border: none;
             box-shadow: none;
         }
     }
+}
+.el-input__wrapper{
+    height: 38px !important;
 }
 .el-form-item__content{
     display: block !important;

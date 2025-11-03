@@ -55,12 +55,16 @@
   border-radius: 8px !important;
 }
 .el-input__wrapper .el-input__inner, .el-textarea__inner .el-input__inner {
-  height: 35px;
+  height: 38px !important;
   border: none;
 }
 .el-input__wrapper .el-input__inner:focus, .el-textarea__inner .el-input__inner:focus {
   border: none;
   box-shadow: none;
+}
+
+.el-input__wrapper {
+  height: 38px !important;
 }
 
 .el-form-item__content {
@@ -127,8 +131,26 @@
 }
 
 .el-button--primary {
-  color: #253241;
-  background: #017EF3;
+  color: #fff !important;
+  background: #067a3b !important;
+  border-color: #067a3b !important;
+  transition: all 0.3s ease !important;
+}
+.el-button--primary:hover {
+  background: #079455 !important;
+  border-color: #079455 !important;
+}
+
+.el-button--info {
+  background-color: #fff !important;
+  color: #606266 !important;
+  border: 1px solid #dcdfe6 !important;
+  transition: all 0.3s ease !important;
+  border-radius: 6px !important;
+}
+.el-button--info:hover {
+  background-color: #f5f7fa !important;
+  border-color: #c6cdd6 !important;
 }
 
 .el-button--success {
@@ -256,7 +278,7 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 10px 0px;
+  padding: 20px 0px;
   border-radius: 8px 8px 0px 0px;
 }
 .ehxd-table-wrapper .ehxd-table-header .ehxd_title .table-title {
@@ -351,6 +373,10 @@
 }
 
 a {
+  text-decoration: none;
+  color: inherit;
+}
+a:hover {
   text-decoration: none;
   color: inherit;
 }

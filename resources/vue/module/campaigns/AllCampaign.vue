@@ -7,8 +7,11 @@
                 <div class="ehxd_title">
                     <h1 class="table-title">All Campaign</h1>
                 </div>
-                <el-button @click="openCampaignAddPage()" size="large" type="primary" icon="Plus" class="ltm_button">
-                    Add New Campaign
+                <el-button @click="openCampaignAddPage()" size="large" type="primary" class="ltm_button">
+                    <el-icon style="font-weight: bolder; font-size: 16px; margin-right: 4px;">
+                        <Plus />
+                    </el-icon>
+                    Add Campaign
                 </el-button>
             </template>
 
@@ -155,7 +158,7 @@
             </template>
             <template #footer>
                 <div class="exd-modal-footer" style="text-align: center;">
-                    <el-button @click="$refs.delete_campaign_modal.handleClose()" type="default"
+                    <el-button @click="$refs.delete_campaign_modal.handleClose()" type="info"
                         size="medium">Cancel</el-button>
                     <el-button @click="deleteCampaign" type="primary" size="medium"
                         style="background: #DF1C41 !important ;">Delete</el-button>
