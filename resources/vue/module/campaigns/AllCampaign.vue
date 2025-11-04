@@ -77,7 +77,7 @@
                         <el-option label="Pending" value="pending"></el-option>
                         <el-option label="Completed" value="completed"></el-option>
                     </el-select>
-                    <el-button @click="getAllCampaigns()" class="ehxdo_export_btn" size="medium" type="primary"
+                    <el-button @click="getAllCampaigns()" class="ehxdo_export_btn" size="medium" type="info"
                         style="">
                         <!-- <el-icon class="ehxdo_ex_icon"><Bottom /></el-icon> -->
 

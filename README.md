@@ -1,6 +1,6 @@
 # EHx Donate
 
-**Contributors:** [EH Studio](https://profiles.wordpress.org/ehstudio), [Sujit Sarkar](https://profiles.wordpress.org/iamsujitsarkar)
+**Contributors:** [EH Studio](https://profiles.wordpress.org/ehstudio), [Sujit Sarkar](https://profiles.wordpress.org/iamsujitsarkar), chadni54
 **Tags:** donation, fundraising, charity, nonprofit, campaigns
 **Requires at least:** 5.8  
 **Tested up to:** 6.8  

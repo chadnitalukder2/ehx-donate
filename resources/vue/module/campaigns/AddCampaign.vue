@@ -446,6 +446,7 @@ export default {
     justify-content: space-between;
     align-items: center;
     margin-bottom: 24px;
+    margin-top: 10px;
 
     .ehxdo-title {
         font-size: 20px;
