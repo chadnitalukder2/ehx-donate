@@ -165,7 +165,10 @@
                                     <h2 class="ehxdo-section-title">Campaign Image </h2>
                                 </div>
                             </template>
-                            <el-upload class="ehxdo-upload" drag action="#" :show-file-list="false"
+                            <div class="ehxdo-upload-image">
+                               <AppFileUpload v-model:selectedFile="campaigns.image" btnTitle="Add Media" />
+                            </div>
+                            <!-- <el-upload class="ehxdo-upload" drag action="#" :show-file-list="false"
                                 :auto-upload="false">
                                 <div class="ehxdo-upload-content">
                                     <el-icon class="ehxdo-upload-icon">
@@ -177,7 +180,7 @@
                                         Choose File
                                     </el-button>
                                 </div>
-                            </el-upload>
+                            </el-upload> -->
                         </el-card>
                     </div>
 
@@ -274,24 +277,11 @@
 
 <script>
 import axios from "axios";
-import {
-    UploadFilled,
-    Plus,
-    Check,
-    Delete,
-    QuestionFilled,
-    Right
-} from '@element-plus/icons-vue';
-
+import AppFileUpload from "../../components/AppFileUpload.vue";
 export default {
     name: "AddCampaign",
-    components: {
-        UploadFilled,
-        Plus,
-        Check,
-        Delete,
-        QuestionFilled,
-        Right
+   components: {
+       AppFileUpload
     },
     data() {
         return {
@@ -309,7 +299,7 @@ export default {
                     { name: 'Basic', amount: '5' }
                 ],
                 allow_recurring_amount: false,
-                campaign_image: null,
+                image: null,
                 status: "active",
                 category: [],
                 tags: [],

@@ -224,7 +224,7 @@ class Plugin
             $this->version,
             true
         );
-        
+         wp_enqueue_media();
         // Localize script with data
         wp_localize_script('ehx-donate-admin', 'EHXDonate', [
             'ajaxUrl' => admin_url('admin-ajax.php'),

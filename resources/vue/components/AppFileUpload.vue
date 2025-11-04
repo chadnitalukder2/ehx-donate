@@ -161,8 +161,8 @@ export default {
 
 .file-preview {
     position: relative;
-    width: 300px;
-    height: 200px;
+    width: 275px;
+    height: 250px;
     border-radius: 8px;
     border: 2px dashed #E8EAF1;
     overflow: hidden;
@@ -226,7 +226,7 @@ export default {
 }
 
 .upload-button-container {
-    height: 200px;
+    height: 250px;
     width: 100%;
     display: flex;
     align-items: center;
