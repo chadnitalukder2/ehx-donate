@@ -17,7 +17,7 @@
                         <el-card style="max-width: 100%; border-radius: 16px; box-shadow: none; border: none;">
                             <template #header>
                                 <div class="card-header">
-                                    <h2 class="ehxdo-section-title">Basic Details </h2>
+                                    <h2 class="ehxdo-section-title">Campaign Details </h2>
                                 </div>
                             </template>
                             <div class="ehxdo-form-group">
