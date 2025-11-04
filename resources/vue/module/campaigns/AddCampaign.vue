@@ -105,8 +105,8 @@
 
                                 <div class="ehxdo-pricing-table">
                                     <div class="ehxdo-table-header">
-                                        <div class="ehxdo-table-cell">Name</div>
-                                        <div class="ehxdo-table-cell">Amount</div>
+                                        <div class="ehxdo-table-cell" style=" font-weight: 500; color: #666; font-size: 14px;">Name</div>
+                                        <div class="ehxdo-table-cell" style=" font-weight: 500; color: #666; font-size: 14px;">Amount</div>
                                         <div class="ehxdo-table-cell-action"></div>
                                     </div>
 
@@ -766,11 +766,6 @@ export default {
     padding: 0 4px;
 }
 
-.ehxdo-table-cell {
-    font-size: 13px;
-    font-weight: 500;
-    color: #666;
-}
 
 .ehxdo-table-cell-action {
     width: 40px;
