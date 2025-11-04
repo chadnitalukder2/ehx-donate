@@ -745,7 +745,6 @@ export default {
     border-radius: 16px;
     padding: 16px;
     margin-left: 26px;
-    border: 1px solid #DFE1E7;
 }
 
 .ehxdo-table-header {
