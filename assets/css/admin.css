@@ -124,9 +124,8 @@
   color: white !important;
 }
 
-.el-input__wrapper, .el-textarea__inner, .el-select__wrapper, .el-select-dropdown__item,
-.is-focus:focus {
-  border: 1px solid #E8EAF1 !important;
+.el-input__wrapper, .el-textarea__inner, .el-select__wrapper, .el-select-dropdown__item, .checkbox__inner .is-focus:focus {
+  border: 2px solid #E8EAF1 !important;
   box-shadow: 0 0 0 0px #E8EAF1 !important;
 }
 

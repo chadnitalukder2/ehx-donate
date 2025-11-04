@@ -4,12 +4,7 @@
         <div class="ehxdo-header">
             <h1 class="ehxdo-title">Create new campaign</h1>
             <div class="ehxdo-header-actions">
-                <el-button type="info">
-                    <router-link to="/campaigns">Back</router-link>
-                    <el-icon>
-                        <Right />
-                    </el-icon>
-                </el-button>
+
             </div>
         </div>
         <el-form>
@@ -115,7 +110,8 @@
                                         <div class="ehxdo-table-cell-action"></div>
                                     </div>
 
-                                    <div v-for="(item, index) in campaigns.pricing_items" :key="index" class="ehxdo-table-row">
+                                    <div v-for="(item, index) in campaigns.pricing_items" :key="index"
+                                        class="ehxdo-table-row">
                                         <div class="ehxdo-table-cell">
                                             <el-input v-model="item.name" class="ehxdo-input" placeholder="Basic" />
                                         </div>
@@ -125,13 +121,18 @@
                                                 :parser="(value) => value.replace(/\$\s?/g, '')" />
                                         </div>
                                         <div class="ehxdo-table-cell-action">
-                                            <el-button class="ehxdo-delete-btn" :icon="Delete" text
-                                                @click="removePricingItem(index)" />
+                                            <el-button class="ehxdo-delete-btn" text @click="removePricingItem(index)">
+                                                <el-icon>
+                                                    <Delete />
+                                                </el-icon>
+                                            </el-button>
                                         </div>
                                     </div>
 
-                                    <el-button class="ehxdo-add-btn" type="success" text :icon="Plus"
-                                        @click="addPricingItem">
+                                    <el-button class="ehxdo-add-btn" text @click="addPricingItem">
+                                        <el-icon style="font-size: 16px; font-weight: 600; margin-right: 8px;">
+                                            <Plus />
+                                        </el-icon>
                                         Add More
                                     </el-button>
                                 </div>
@@ -253,11 +254,13 @@
                                     <h2 class="ehxdo-section-title">Actions</h2>
                                 </div>
                             </template>
-                            <el-button class="ehxdo-action-button ehxdo-action-button-primary" type="primary" @click="submitCampaignForm">
-                                <el-icon class="ehxdo-action-icon">
-                                    <Check />
-                                </el-icon>
+                            <el-button class="ehxdo-action-button ehxdo-action-button-primary" type="primary"
+                                @click="submitCampaignForm">
+                                
                                 Save Campaign
+                            </el-button>
+                            <el-button type="info" class="ehxdo-action-can-button">
+                                Cancel
                             </el-button>
                         </el-card>
                     </div>
@@ -376,7 +379,7 @@ export default {
 
         async submitCampaignForm() {
             console.log("Submitting campaign form with data:", this.campaigns);
-            
+
             // Validate required fields
             if (!this.campaigns.title) {
                 this.$notify({
@@ -611,24 +614,27 @@ export default {
 }
 
 .ehxdo-status-checkbox {
+    margin-right: 0px !important;
+
     :deep(.el-checkbox__label) {
         width: 100%;
-        padding: 12px 16px;
-        border: 1px solid #e8e8e8;
-        border-radius: 8px;
+        padding: 12px 16px !important;
+        border: 1px solid #e8e8e8 !important;
+        border-radius: 8px !important;
         transition: all 0.3s;
+        margin-left: 16px;
         display: flex;
+        gap: 16px;
         align-items: center;
 
         &:hover {
             background-color: #f5f7fa;
-            border-color: #d0d0d0;
+            border-color: #e8e8e8 !important;
         }
     }
 
     :deep(.el-checkbox__input.is-checked+.el-checkbox__label) {
-        background-color: #f0f9ff;
-        border-color: #409eff;
+        background-color: #f0f9ff !important;
     }
 }
 
@@ -673,14 +679,35 @@ export default {
     font-weight: 500;
 
     &.ehxdo-action-button-primary {
-        background-color: #67c23a;
-        border-color: #67c23a;
+        background-color: #00A63E;
+        border-color: #00A63E;
         color: white;
 
         &:hover {
             background-color: #85ce61;
             border-color: #85ce61;
         }
+    }
+}
+
+.ehxdo-action-can-button {
+    width: 100%;
+    margin-top: 16px;
+    margin-left: 0px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 40px;
+    font-weight: 500;
+    font-size: 14px;
+    background-color: #e4e7ed !important; 
+    border-color: 1px solid #e4e7ed !important;
+    color: #667085 !important;
+    transform: all 0.3s ease;
+
+    &:hover {
+        background-color: #F6F8FA !important;
+        border-color: #e4e7ed !important;
     }
 }
 
@@ -696,20 +723,18 @@ export default {
     cursor: help;
 }
 
-.ehxdo-checkbox-group {
-    margin-bottom: 8px;
-}
 
 .ehxdo-checkbox {
     font-size: 15px;
     font-weight: 500;
-    color: #1a1a1a;
+    color: #1a1a1a !important;
 }
 
 .ehxdo-description {
     font-size: 13px;
     color: #666;
     margin: 0 0 16px 0;
+    margin-left: 26px;
     line-height: 1.5;
 }
 
@@ -717,6 +742,7 @@ export default {
     display: grid;
     grid-template-columns: 1fr 1fr;
     gap: 16px;
+    margin-left: 26px;
 }
 
 .ehxdo-col {
@@ -725,9 +751,11 @@ export default {
 
 .ehxdo-pricing-table {
     margin-top: 16px;
-    background: #fafafa;
-    border-radius: 8px;
+    background: #F8F9FC;
+    border-radius: 16px;
     padding: 16px;
+    margin-left: 26px;
+    border: 1px solid #DFE1E7;
 }
 
 .ehxdo-table-header {
@@ -757,33 +785,64 @@ export default {
 }
 
 .ehxdo-delete-btn {
-    color: #909399;
+    color: #68696b;
     padding: 8px;
+    font-size: 16px;
+    transition: all 0.3s ease;
 }
 
 .ehxdo-delete-btn:hover {
     color: #f56c6c;
+    background: #fff !important;
+    border-radius: 6px !important;
 }
 
 .ehxdo-add-btn {
     margin-top: 8px;
     font-weight: 500;
+    border-radius: 6px;
+    color: #067a3b;
+    font-size: 14px;
+
+    &:hover {
+        background: transparent !important;
+        color: #00A63E;
+    }
+}
+
+:deep(.el-checkbox__inner) {
+    height: 15px !important;
+    width: 15px !important;
+    border: 2px solid #35343480 !important;
+    border-radius: 4px !important;
+    transition:
+        border-color 0.25s cubic-bezier(.71, -.46, .29, 1.46),
+        background-color 0.25s cubic-bezier(.71, -.46, .29, 1.46),
+        outline 0.25s cubic-bezier(.71, -.46, .29, 1.46);
+
+    &::after {
+        border: 2.5px solid transparent !important;
+        border-left: 0 !important;
+        border-top: 0 !important;
+        height: 8px !important;
+        width: 4px !important;
+        border-color: #fff !important;
+    }
 }
 
 :deep(.el-checkbox__input.is-checked .el-checkbox__inner) {
-    background-color: #67c23a;
-    border-color: #67c23a;
+    background-color: #00A63E !important;
+    border-color: #00A63E !important;
 }
 
 :deep(.el-checkbox__label) {
-    color: #1a1a1a;
-    font-weight: 500;
-}
-
-:deep(.el-input__wrapper) {
-    border-radius: 6px;
-    box-shadow: 0 0 0 1px #dcdfe6 inset;
-    padding: 8px 12px;
+    color: #1a1a1a !important;
+    font-weight: 500 !important;
+    padding-left: 12px !important;
+    transition: all 0.3s ease;
+    &:hover {
+        color: #00A63E !important;
+    }
 }
 
 :deep(.el-input__wrapper:hover) {
