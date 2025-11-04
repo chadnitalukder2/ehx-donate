@@ -21,14 +21,14 @@
                                 </div>
                             </template>
                             <div class="ehxdo-form-group">
-                                <label class="ehxdo-label">Campaign title</label>
+                                <label class="ehxdo-label">Campaign title <sapn style="color:#db0000; font-size:16px;">*</sapn></label>
                                 <el-input v-model="campaigns.title" class="ehxdo-input"
                                     placeholder="Enter campaign title" />
                             </div>
 
                             <div class="ehxdo-form-group">
-                                <label class="ehxdo-label">Description</label>
-                                <el-input v-model="campaigns.short_description" type="textarea" :rows="5"
+                                <label class="ehxdo-label">Description <sapn style="color:#db0000; font-size:16px;">*</sapn></label>
+                                <el-input v-model="campaigns.description" type="textarea" :rows="5"
                                     class="ehxdo-textarea" />
                             </div>
 
@@ -59,10 +59,7 @@
                             <!-- Goal Amount -->
                             <div class="ehxdo-form-group">
                                 <label class="ehxdo-label">
-                                    Goal Amount
-                                    <el-icon class="ehxdo-info-icon">
-                                        <QuestionFilled />
-                                    </el-icon>
+                                    Goal Amount <sapn style="color:#db0000; font-size:16px;">*</sapn>
                                 </label>
                                 <el-input v-model="campaigns.goal_amount" class="ehxdo-input" placeholder="100,000.00"
                                     :formatter="(value) => `$ ${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',')"
@@ -287,7 +284,7 @@ export default {
         return {
             campaigns: {
                 title: "",
-                short_description: "",
+                description: "",
                 startDate: "",
                 endDate: "",
                 goal_amount: "",
@@ -309,7 +306,13 @@ export default {
             statusComplete: false,
             rules: {
                 title: [
-                    { required: true, message: "Campaign title is required", trigger: "blur" },
+                    { required: true, message: "Campaign title is required", trigger: "blur", },
+                ],
+                 description: [
+                    { required: true, message: "Campaign description is required", trigger: "blur", },
+                ],
+                 goal_amount: [
+                    { required: true, message: "Goal amount is required", trigger: "blur", },
                 ],
             },
             submitting: false,
@@ -321,7 +324,6 @@ export default {
         };
     },
     created() {
-        // Generate options for select
         this.options = Array.from({ length: 1000 }).map((_, idx) => ({
             value: `Option ${idx + 1}`,
             label: `${this.initials[idx % 10]}${idx}`,
@@ -345,7 +347,6 @@ export default {
         },
 
         handleStatusChange(selectedStatus) {
-            // Only one status can be selected at a time
             if (selectedStatus === 'active') {
                 if (this.statusActive) {
                     this.statusPending = false;
@@ -375,6 +376,22 @@ export default {
                 this.$notify({
                     title: "Error",
                     message: "Campaign title is required",
+                    type: "error",
+                });
+                return;
+            }
+             if (!this.campaigns.description) {
+                this.$notify({
+                    title: "Error",
+                    message: "Campaign description is required",
+                    type: "error",
+                });
+                return;
+            }
+             if (!this.campaigns.goal_amount) {
+                this.$notify({
+                    title: "Error",
+                    message: "Goal amount is required",
                     type: "error",
                 });
                 return;
