@@ -165,7 +165,7 @@
                                     <h2 class="ehxdo-section-title">Campaign Image </h2>
                                 </div>
                             </template>
-                            <div class="ehxdo-upload-image">
+                            <div class="ehxdo-upload-image" style="overflow: hidden;">
                                <AppFileUpload v-model:selectedFile="campaigns.image" btnTitle="Add Media" />
                             </div>
                             <!-- <el-upload class="ehxdo-upload" drag action="#" :show-file-list="false"
@@ -226,7 +226,7 @@
                         <el-card style="max-width: 100%; border-radius: 16px; box-shadow: none; border: none;">
                             <template #header>
                                 <div class="card-header">
-                                    <h2 class="ehxdo-section-title"> Category</h2>
+                                    <h2 class="ehxdo-section-title"> Categories</h2>
                                 </div>
                             </template>
                             <el-select-v2 v-model="campaigns.category" :options="options" placeholder="Please select"
@@ -535,7 +535,7 @@ export default {
 
 // Sidebar styles
 .ehxdo-sidebar_campaign {
-    width: 320px;
+    width: 290px;
     flex-shrink: 0;
 }
 
