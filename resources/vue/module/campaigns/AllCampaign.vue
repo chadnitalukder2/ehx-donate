@@ -7,12 +7,7 @@
                 <div class="ehxd_title">
                     <h1 class="table-title">All Campaign</h1>
                 </div>
-                <el-button @click="openCampaignAddPage()" size="large" type="primary" class="ltm_button">
-                    <el-icon style="font-weight: bolder; font-size: 16px; margin-right: 4px;">
-                        <Plus />
-                    </el-icon>
-                    Add Campaign
-                </el-button>
+                <AddCampaignModal />
             </template>
 
             <template #body>
@@ -32,7 +27,7 @@
                         <div class="ehxdo-stat-change"><span class="ehxdo_positive">8.5%</span> from last month</div>
                     </div>
 
-                    <div class="ehxdo-stat-card">
+                    <div class="ehxdo-stat-card">  
                         <div class="ehxdo-stat-header">
                             <span class="ehxdo-stat-label">Campaign Pending</span>
                             <span class="ehxdo-stat-icon">
@@ -175,11 +170,13 @@ import axios from "axios";
 import AppTable from "../../components/AppTable.vue";
 import Icon from "../../components/Icons/AppIcon.vue";
 import AppModal from "../../components/AppModal.vue";
+import AddCampaignModal from "./AddCampaignModal.vue";
 export default {
     components: {
         AppTable,
         Icon,
         AppModal,
+        AddCampaignModal
     },
     data() {
         return {

@@ -31,9 +31,9 @@ const router = createRouter({
             }
         },
         {
-            path: '/campaigns/add',
+            path: '/campaigns/edit/:id',
             component: AddCampaign,
-            name: 'add_campaign',
+            name: 'edit_campaign',
             meta: {
                 active_menu: 0
             }

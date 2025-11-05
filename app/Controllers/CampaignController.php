@@ -3,6 +3,7 @@
 namespace EHXDonate\Controllers;
 
 use EHXDonate\Models\Campaign;
+use EHXDonate\Core\CPTHandler;
 
 /**
  * Campaign Controller
@@ -14,7 +15,6 @@ class CampaignController extends Controller
      */
     public function index(): void
     {
-         dd('campaigns');
         $campaigns = Campaign::all();
        
         $this->success([
@@ -35,6 +35,13 @@ class CampaignController extends Controller
             $this->error('Campaign not found', 404);
             return;
         }
+
+        $campaign->settings = json_decode($campaign->settings, true);
+        $campaign->categories = json_decode($campaign->categories, true);
+        $campaign->tags = json_decode($campaign->tags, true);
+
+        $post = get_post($campaign->post_id);
+        $campaign->post = $post;
         
         $this->success([
             'campaign' => $campaign->toArray()
@@ -47,19 +54,56 @@ class CampaignController extends Controller
     public function store(): void
     {
         $this->requireAuth();
-        
         $data = $this->validate([
             'title' => 'required|max:255',
-            'description' => 'max:1000',
-            'destination' => 'required|max:255',
-            'start_date' => 'required',
-            'end_date' => 'required',
-            'price' => 'required|numeric',
-            'status' => 'required|in:active,inactive'
+            'short_description' => 'max:255',
+            'goal_amount' => 'nullable|string',
+            'currency' => 'required|max:255',
+            'start_date' => 'nullable|date',
+            'end_date' => 'nullable|date',
+            'is_p2p' => 'nullable|in:0,1',
+            'template' => 'max:255',
+            'header_image' => 'max:255',
+            'visibility' => 'nullable|in:public,private,unlisted',
+            'categories' => 'json',
+            'tags' => 'json',
+            'settings' => 'json',
         ]);
         
         $data['user_id'] = $this->getCurrentUserId();
 
+        // check custom post type exist or not ehxdo_campaign
+        if (!post_type_exists('ehxdo_campaign')) {
+            (new CPTHandler())->registerCPT();
+        }
+
+        $post = [
+            'post_title' => $data['title'],
+            'post_status' => 'publish',
+            'post_type' => 'ehxdo_campaign',
+            'post_content' => '',
+            'post_author' => $data['user_id']
+        ];
+
+        $post_id = wp_insert_post($post);
+
+        if (is_wp_error($postId)) {
+            error_log('Campaign post creation failed: ' . $postId->get_error_message());
+            $this->error('Failed to create campaign post.', 400);
+            return;
+        }
+
+        wp_update_post([
+            'ID' => $post_id,
+            'post_content' => '[ehxdo_campaign post_id="' . $post_id . '"]',
+        ]);
+
+        $data['post_id'] = $post_id;
+
+        $data["categories"] = json_encode($data["categories"]);
+        $data["tags"] = json_encode($data["tags"]);
+        $data["settings"] = json_encode($data["settings"]);
+        
         $campaign = Campaign::create($data);
 
         $this->success([
@@ -94,8 +138,32 @@ class CampaignController extends Controller
             'start_date' => '',
             'end_date' => '',
             'price' => 'numeric',
-            'status' => 'in:active,inactive'
+            'status' => 'in:active,inactive',
+            'categories' => 'json',
+            'tags' => 'json',
+            'settings' => 'json',
+            'header_image' => 'max:255',
+            'visibility' => 'in:public,private,unlisted',
+            'goal_amount' => 'nullable|string',
+            'currency' => 'max:255',
+            'is_p2p' => 'in:0,1',
+            'template' => 'max:255',
         ]);
+
+        $data["categories"] = json_encode($data["categories"]);
+        $data["tags"] = json_encode($data["tags"]);
+        $data["settings"] = json_encode($data["settings"]);
+
+        $post = [
+            'ID' => $campaign->post_id,
+            'post_title' => $data['title'],
+            'post_content' => '[ehxdo_campaign id="' . $campaign->post_id . '"]',
+        ];
+
+        wp_update_post($post);
+
+        // delete post from data
+        unset($data['post']);
         
         // Remove empty values
         $data = array_filter($data, function($value) {

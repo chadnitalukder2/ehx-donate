@@ -29,9 +29,12 @@ class Campaign extends Model
         'template',
         'header_image',
         'visibility',
-        'category',
+        'categories',
         'tags',
-        'status',   
+        'status',
+        'settings',
+        'created_at',
+        'updated_at'   
     ];
 
     /**

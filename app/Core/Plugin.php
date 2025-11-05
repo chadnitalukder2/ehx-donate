@@ -5,6 +5,9 @@ namespace EHXDonate\Core;
 use EHXDonate\Routes\Router;
 use EHXDonate\Database\Database;
 use EHXDonate\Services\ServiceContainer;
+use EHXDonate\Core\Action;
+use EHXDonate\Helpers\Currency;
+use EHXDonate\Helpers\Country;
 
 /**
  * Main Plugin class - Bootstrap and service container
@@ -37,6 +40,11 @@ class Plugin
     protected $version;
 
     /**
+     * Action instance
+     */
+    protected $action;
+
+    /**
      * Constructor
      */
     protected function __construct()
@@ -45,6 +53,7 @@ class Plugin
         $this->container = new ServiceContainer();
         $this->router = new Router();
         $this->database = new Database();
+        (new Action())->register();
         
         $this->registerServices();
         $this->init();
@@ -216,11 +225,16 @@ class Plugin
             [],
             $this->version
         );
-        
+
+        // wp media enqueue
+        wp_enqueue_media();
+        wp_enqueue_script('wp-tinymce');
+        wp_enqueue_editor();
+
         wp_enqueue_script(
             'ehx-donate-admin',
             EHXDonate_URL . 'assets/js/admin.js',
-            ['jquery'],
+            ['wp-api-fetch', 'wp-blocks', 'wp-editor', 'wp-components', 'wp-element', 'wp-data', 'wp-i18n', 'jquery'],
             $this->version,
             true
         );
@@ -236,7 +250,18 @@ class Plugin
                 'loading' => __('Loading...', 'ehx-donate'),
                 'error' => __('An error occurred', 'ehx-donate'),
                 'success' => __('Success!', 'ehx-donate'),
-            ]
+            ],
+            // get all categories from database
+            'categories' => get_terms([
+                'taxonomy' => 'category',
+                'hide_empty' => false,
+            ]),
+            'tags' => get_terms([
+                'taxonomy' => 'post_tag',
+                'hide_empty' => false,
+            ]),
+            'currencies' => Currency::getAll(),
+            'countries' => Country::getAll(),
         ]);
     }
 

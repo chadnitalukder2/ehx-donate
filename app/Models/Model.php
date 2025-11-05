@@ -3,6 +3,7 @@
 namespace EHXDonate\Models;
 
 use EHXDonate\Core\Database;
+use Exception;
 
 /**
  * Base Model class - Lightweight ORM using $wpdb
@@ -30,6 +31,16 @@ abstract class Model
     protected $hidden = [];
 
     /**
+     * The attributes that are required
+     */
+    protected $required = [];
+
+    /**
+     * Validation rules
+     */
+    protected $rules = [];
+
+    /**
      * The model's attributes
      */
     protected $attributes = [];
@@ -43,6 +54,11 @@ abstract class Model
      * Global $wpdb instance
      */
     protected $wpdb;
+
+    /**
+     * Validation errors
+     */
+    protected $errors = [];
 
     /**
      * Constructor
@@ -123,10 +139,155 @@ abstract class Model
     }
 
     /**
+     * Validate the model's attributes
+     */
+    protected function validate(): bool
+    {
+        $this->errors = [];
+
+        // Check required fields
+        foreach ($this->required as $field) {
+            if (!isset($this->attributes[$field]) || $this->attributes[$field] === '' || $this->attributes[$field] === null) {
+                $this->errors[$field] = "The {$field} field is required.";
+            }
+        }
+
+        // Check custom validation rules
+        foreach ($this->rules as $field => $rules) {
+            if (!isset($this->attributes[$field])) {
+                continue;
+            }
+
+            $value = $this->attributes[$field];
+            $rulesArray = is_array($rules) ? $rules : explode('|', $rules);
+
+            foreach ($rulesArray as $rule) {
+                if (!$this->validateRule($field, $value, $rule)) {
+                    break; // Stop on first validation error for this field
+                }
+            }
+        }
+
+        return empty($this->errors);
+    }
+
+    /**
+     * Validate a single rule
+     */
+    protected function validateRule(string $field, $value, string $rule): bool
+    {
+        if (strpos($rule, ':') !== false) {
+            list($ruleName, $parameter) = explode(':', $rule, 2);
+        } else {
+            $ruleName = $rule;
+            $parameter = null;
+        }
+
+        switch ($ruleName) {
+            case 'email':
+                if (!filter_var($value, FILTER_VALIDATE_EMAIL)) {
+                    $this->errors[$field] = "The {$field} must be a valid email address.";
+                    return false;
+                }
+                break;
+
+            case 'numeric':
+                if (!is_numeric($value)) {
+                    $this->errors[$field] = "The {$field} must be numeric.";
+                    return false;
+                }
+                break;
+
+            case 'min':
+                if (strlen($value) < $parameter) {
+                    $this->errors[$field] = "The {$field} must be at least {$parameter} characters.";
+                    return false;
+                }
+                break;
+
+            case 'max':
+                if (strlen($value) > $parameter) {
+                    $this->errors[$field] = "The {$field} must not exceed {$parameter} characters.";
+                    return false;
+                }
+                break;
+
+            case 'url':
+                if (!filter_var($value, FILTER_VALIDATE_URL)) {
+                    $this->errors[$field] = "The {$field} must be a valid URL.";
+                    return false;
+                }
+                break;
+
+            case 'unique':
+                $table = $this->wpdb->prefix . $this->table;
+                $existing = $this->wpdb->get_var(
+                    $this->wpdb->prepare(
+                        "SELECT COUNT(*) FROM {$table} WHERE {$field} = %s",
+                        $value
+                    )
+                );
+                
+                if ($existing > 0) {
+                    // If updating, check if it's the same record
+                    if ($this->exists) {
+                        $currentId = $this->getAttribute($this->primaryKey);
+                        $existingId = $this->wpdb->get_var(
+                            $this->wpdb->prepare(
+                                "SELECT {$this->primaryKey} FROM {$table} WHERE {$field} = %s",
+                                $value
+                            )
+                        );
+                        
+                        if ($existingId != $currentId) {
+                            $this->errors[$field] = "The {$field} has already been taken.";
+                            return false;
+                        }
+                    } else {
+                        $this->errors[$field] = "The {$field} has already been taken.";
+                        return false;
+                    }
+                }
+                break;
+        }
+
+        return true;
+    }
+
+    /**
+     * Get validation errors
+     */
+    public function getErrors(): array
+    {
+        return $this->errors;
+    }
+
+    /**
+     * Get first error message
+     */
+    public function getFirstError(): ?string
+    {
+        return !empty($this->errors) ? reset($this->errors) : null;
+    }
+
+    /**
+     * Check if model has errors
+     */
+    public function hasErrors(): bool
+    {
+        return !empty($this->errors);
+    }
+
+    /**
      * Save the model to the database
      */
     public function save(): bool
     {
+        // Validate before saving
+        if (!$this->validate()) {
+            return false;
+        }
+
         $data = $this->attributes;
         
         if ($this->exists) {
@@ -139,12 +300,24 @@ abstract class Model
                 $data,
                 $where
             );
+            
+            // Check for database errors
+            if ($this->wpdb->last_error) {
+                $this->errors['database'] = $this->wpdb->last_error;
+                return false;
+            }
         } else {
             // Insert new record
             $result = $this->wpdb->insert(
                 $this->wpdb->prefix . $this->table,
                 $data
             );
+            
+            // Check for database errors
+            if ($this->wpdb->last_error) {
+                $this->errors['database'] = $this->wpdb->last_error;
+                return false;
+            }
             
             if ($result) {
                 $this->setAttribute($this->primaryKey, $this->wpdb->insert_id);
@@ -161,6 +334,7 @@ abstract class Model
     public function delete(): bool
     {
         if (!$this->exists) {
+            $this->errors['delete'] = 'Cannot delete a model that does not exist in the database.';
             return false;
         }
         
@@ -168,6 +342,11 @@ abstract class Model
             $this->wpdb->prefix . $this->table,
             [$this->primaryKey => $this->getAttribute($this->primaryKey)]
         );
+        
+        if ($this->wpdb->last_error) {
+            $this->errors['database'] = $this->wpdb->last_error;
+            return false;
+        }
         
         if ($result) {
             $this->exists = false;
@@ -224,7 +403,12 @@ abstract class Model
     public static function create(array $attributes): self
     {
         $model = new static($attributes);
-        $model->save();
+        
+        if (!$model->save()) {
+            // Throw exception or handle error
+            throw new Exception('Failed to create model: ' . $model->getFirstError());
+        }
+        
         return $model;
     }
 

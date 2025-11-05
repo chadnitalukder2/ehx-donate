@@ -36,7 +36,6 @@ class CreateCampaignTable
             'currency' => 'varchar(255) NOT NULL',
             'start_date' => 'date NOT NULL',
             'end_date' => 'date NOT NULL',
-            'type' => "enum('campaign','support-me') NOT NULL DEFAULT 'campaign'",
             'is_p2p' => 'tinyint(1) NOT NULL DEFAULT 0',
             'template' => 'varchar(255) DEFAULT NULL',
             'header_image' => 'varchar(255) DEFAULT NULL',
