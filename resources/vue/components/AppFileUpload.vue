@@ -161,7 +161,7 @@ export default {
 
 .file-preview {
     position: relative;
-    width: 245px;
+    width: 535px;
     height: 225px;
     border-radius: 8px;
     border: 2px dashed #E8EAF1;
@@ -227,7 +227,7 @@ export default {
 
 .upload-button-container {
     height: 225px;
-    width: 245px;
+    width: 535px;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -268,6 +268,11 @@ export default {
     }
 }
 
+:deep(.el-button+.el-button ){
+    margin-left: 0px !important;
+    border-radius: 50% !important;
+    padding: 18px 10px !important;
+}
 
 
 .error-message {

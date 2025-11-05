@@ -146,6 +146,9 @@ input:focus {
   background: #067a3b !important;
   border-color: #067a3b !important;
   transition: all 0.3s ease !important;
+  padding: 20px 15px !important;
+  font-size: 16px !important;
+  font-weight: 500 !important;
 }
 .el-button--primary:hover {
   background: #079455 !important;
@@ -158,6 +161,9 @@ input:focus {
   border: 1px solid #dcdfe6 !important;
   transition: all 0.3s ease !important;
   border-radius: 6px !important;
+  padding: 20px 15px !important;
+  font-size: 16px !important;
+  font-weight: 500 !important;
 }
 .el-button--info:hover {
   background-color: #f5f7fa !important;

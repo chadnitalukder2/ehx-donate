@@ -60,6 +60,10 @@ abstract class Model
      */
     protected $errors = [];
 
+    protected $query = [
+        'orderBy' => null,
+    ];
+
     /**
      * Constructor
      */
@@ -67,7 +71,7 @@ abstract class Model
     {
         global $wpdb;
         $this->wpdb = $wpdb;
-        
+
         if (empty($this->table)) {
             $this->table = $this->getTableName();
         }
@@ -129,12 +133,12 @@ abstract class Model
     public function toArray(): array
     {
         $attributes = $this->attributes;
-        
+
         // Remove hidden attributes
         foreach ($this->hidden as $hidden) {
             unset($attributes[$hidden]);
         }
-        
+
         return $attributes;
     }
 
@@ -227,7 +231,7 @@ abstract class Model
                         $value
                     )
                 );
-                
+
                 if ($existing > 0) {
                     // If updating, check if it's the same record
                     if ($this->exists) {
@@ -238,7 +242,7 @@ abstract class Model
                                 $value
                             )
                         );
-                        
+
                         if ($existingId != $currentId) {
                             $this->errors[$field] = "The {$field} has already been taken.";
                             return false;
@@ -289,18 +293,18 @@ abstract class Model
         }
 
         $data = $this->attributes;
-        
+
         if ($this->exists) {
             // Update existing record
             $where = [$this->primaryKey => $this->getAttribute($this->primaryKey)];
             unset($data[$this->primaryKey]);
-            
+
             $result = $this->wpdb->update(
                 $this->wpdb->prefix . $this->table,
                 $data,
                 $where
             );
-            
+
             // Check for database errors
             if ($this->wpdb->last_error) {
                 $this->errors['database'] = $this->wpdb->last_error;
@@ -312,19 +316,19 @@ abstract class Model
                 $this->wpdb->prefix . $this->table,
                 $data
             );
-            
+
             // Check for database errors
             if ($this->wpdb->last_error) {
                 $this->errors['database'] = $this->wpdb->last_error;
                 return false;
             }
-            
+
             if ($result) {
                 $this->setAttribute($this->primaryKey, $this->wpdb->insert_id);
                 $this->exists = true;
             }
         }
-        
+
         return $result !== false;
     }
 
@@ -337,21 +341,21 @@ abstract class Model
             $this->errors['delete'] = 'Cannot delete a model that does not exist in the database.';
             return false;
         }
-        
+
         $result = $this->wpdb->delete(
             $this->wpdb->prefix . $this->table,
             [$this->primaryKey => $this->getAttribute($this->primaryKey)]
         );
-        
+
         if ($this->wpdb->last_error) {
             $this->errors['database'] = $this->wpdb->last_error;
             return false;
         }
-        
+
         if ($result) {
             $this->exists = false;
         }
-        
+
         return $result !== false;
     }
 
@@ -362,17 +366,17 @@ abstract class Model
     {
         $instance = new static();
         $table = $instance->wpdb->prefix . $instance->table;
-        
+
         $result = $instance->wpdb->get_row(
             $instance->wpdb->prepare("SELECT * FROM {$table} WHERE {$instance->primaryKey} = %s", $id)
         );
-        
+
         if ($result) {
             $instance->fill((array) $result);
             $instance->exists = true;
             return $instance;
         }
-        
+
         return null;
     }
 
@@ -383,9 +387,9 @@ abstract class Model
     {
         $instance = new static();
         $table = $instance->wpdb->prefix . $instance->table;
-        
+
         $results = $instance->wpdb->get_results("SELECT * FROM {$table}");
-        
+
         $models = [];
         foreach ($results as $result) {
             $model = new static();
@@ -393,9 +397,10 @@ abstract class Model
             $model->exists = true;
             $models[] = $model;
         }
-        
+
         return $models;
     }
+
 
     /**
      * Create a new model instance
@@ -403,12 +408,12 @@ abstract class Model
     public static function create(array $attributes): self
     {
         $model = new static($attributes);
-        
+
         if (!$model->save()) {
             // Throw exception or handle error
             throw new Exception('Failed to create model: ' . $model->getFirstError());
         }
-        
+
         return $model;
     }
 
@@ -419,17 +424,17 @@ abstract class Model
     {
         $instance = new static();
         $table = $instance->wpdb->prefix . $instance->table;
-        
+
         if ($value === null) {
             $value = $operator;
             $operator = '=';
         }
-        
+
         $sql = "SELECT * FROM {$table} WHERE {$column} {$operator} %s";
         $results = $instance->wpdb->get_results(
             $instance->wpdb->prepare($sql, $value)
         );
-        
+
         $models = [];
         foreach ($results as $result) {
             $model = new static();
@@ -437,9 +442,19 @@ abstract class Model
             $model->exists = true;
             $models[] = $model;
         }
-        
+
         return $models;
     }
+
+   public static function orderBy($column, $direction = 'ASC')
+{
+   
+    $instance = new static();
+    $instance->query['orderBy'] = [$column, strtoupper($direction)];
+   
+    return $instance;
+}
+
 
     /**
      * Magic method to get attributes

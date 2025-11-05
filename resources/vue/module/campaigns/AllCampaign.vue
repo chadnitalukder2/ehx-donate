@@ -27,7 +27,7 @@
                         <div class="ehxdo-stat-change"><span class="ehxdo_positive">8.5%</span> from last month</div>
                     </div>
 
-                    <div class="ehxdo-stat-card">  
+                    <div class="ehxdo-stat-card">
                         <div class="ehxdo-stat-header">
                             <span class="ehxdo-stat-label">Campaign Pending</span>
                             <span class="ehxdo-stat-icon">
@@ -72,8 +72,7 @@
                         <el-option label="Pending" value="pending"></el-option>
                         <el-option label="Completed" value="completed"></el-option>
                     </el-select>
-                    <el-button @click="getAllCampaigns()" class="ehxdo_export_btn" size="medium" type="info"
-                        style="">
+                    <el-button @click="getAllCampaigns()" class="ehxdo_export_btn" size="medium" type="info" style="">
                         <!-- <el-icon class="ehxdo_ex_icon"><Bottom /></el-icon> -->
 
                         Export CSV</el-button>
@@ -87,10 +86,19 @@
                         {{ scope.$index + 1 }}
                     </template>
                 </el-table-column>
-                <el-table-column prop="name" label="Title" />
-                <el-table-column prop="goal" label="Goal" />
-                <el-table-column prop="donation" label="Donation" />
-                <el-table-column prop="raised" label="Raised" />
+                <el-table-column prop="title" label="Title" />
+                <el-table-column prop="goal_amount" label="Goal Amount" />
+                <el-table-column prop="donation" label="Donation">
+                    <template #default="{ row }">
+                        {{ row.donation ?? 0 }}
+                    </template>
+                </el-table-column>
+
+                <el-table-column prop="raised" label="Raised">
+                    <template #default="{ row }">
+                        {{ row.raised ?? 0 }}
+                    </template>
+                </el-table-column>
                 <!-- Status column -->
                 <el-table-column prop="status" label="Status">
                     <template #default="{ row }">
@@ -181,11 +189,7 @@ export default {
     data() {
         return {
             search: '',
-            campaigns: [
-                { id: 1111, name: 'Education Fund', goal: 5000, donation: 2, raised: 2600, status: 'active' },
-                { id: 2222, name: 'Health Support', goal: 10000, donation: 8, raised: 9500, status: 'completed' },
-                { id: 3333, name: 'Food Relief', goal: 3000, donation: 10, raised: 1200, status: 'pending' },
-            ],
+            campaigns: [],
             campaign: {},
             total_campaign: 0,
             loading: false,
@@ -221,35 +225,42 @@ export default {
             const options = { day: 'numeric', month: 'long', year: 'numeric' };
             return new Date(date).toLocaleDateString('en-GB', options);
         },
+        editCampaign(row) {
+            // Assuming row contains the campaign data
+            this.$router.push({
+                name: 'edit_campaign',
+                params: { id: row.id }
+            });
+        },
         openCampaignAddPage() {
             this.$router.push({ name: 'add_campaign' });
         },
 
         async getAllCampaigns() {
-            //this.loading = true;
-            // try {
-            //     const response = await axios.get(`${this.rest_api}api/getAllCampaigns`, {
-            //         params: {
-            //             page: this.currentPage,
-            //             limit: this.pageSize,
-            //             search: this.search || '',
-            //             status: this.status_filter || '',
-            //         },
-            //         headers: {
-            //             'Content-Type': 'application/json',
-            //             'X-WP-Nonce': this.nonce
-            //         },
-            //         withCredentials: true
-            //     });
-            //     console.log('Campaigns response:', response);
-            //     this.campaigns = response?.data?.campaigns_data;
-            //     this.total_campaign = response?.data?.total || 0;
-            //     this.last_page = response?.data?.last_page || 1;
-            //     this.loading = false;
-            // } catch (error) {
-            //     this.loading = false;
-            //     console.error('Error fetching couriers:',);
-            // }
+            this.loading = true;
+            try {
+                const response = await axios.get(`${this.rest_api}api/getAllCampaigns`, {
+                    params: {
+                        page: this.currentPage,
+                        limit: this.pageSize,
+                        search: this.search || '',
+                        status: this.status_filter || '',
+                    },
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-WP-Nonce': this.nonce
+                    },
+                    withCredentials: true
+                });
+                console.log('Campaigns response:', response.data.data.campaigns);
+                this.campaigns = response?.data?.data?.campaigns;
+                // this.total_campaign = response?.data?.total || 0;
+                // this.last_page = response?.data?.last_page || 1;
+                this.loading = false;
+            } catch (error) {
+                this.loading = false;
+                console.error('Error fetching couriers:', error);
+            }
         },
 
         openDeleteCampaignModal(row) {
@@ -305,7 +316,7 @@ export default {
     },
 
     mounted() {
-        console.log('window', window);
+        console.log('window', this.campaigns);
         this.getAllCampaigns();
     },
 
@@ -466,7 +477,7 @@ export default {
 .ehxdo-stat-card {
     background: white;
     border-radius: 16px;
-    padding: 12px;
+    padding: 16px;
     box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
 }
 
@@ -538,5 +549,8 @@ export default {
         font-weight: 500;
         border-radius: 50px;
     }
+}
+:deep(.el-select__wrapper){
+    min-height: 40px !important;
 }
 </style>

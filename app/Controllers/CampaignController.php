@@ -13,8 +13,9 @@ class CampaignController extends Controller
     /**
      * Get all campaigns
      */
-    public function index(): void
+    public function index( ): void
     {
+
         $campaigns = Campaign::all();
        
         $this->success([
@@ -22,6 +23,7 @@ class CampaignController extends Controller
                 return $campaign->toArray();
             }, $campaigns)
         ]);
+       
     }
 
     /**
@@ -57,14 +59,14 @@ class CampaignController extends Controller
         $data = $this->validate([
             'title' => 'required|max:255',
             'short_description' => 'max:255',
-            'goal_amount' => 'nullable|string',
-            'currency' => 'required|max:255',
+            'goal_amount' => 'required|string',
+            // 'currency' => 'required|max:255',
             'start_date' => 'nullable|date',
             'end_date' => 'nullable|date',
             'is_p2p' => 'nullable|in:0,1',
             'template' => 'max:255',
-            'header_image' => 'max:255',
-            'visibility' => 'nullable|in:public,private,unlisted',
+            'header_image' => 'required',
+            'status' => 'in:active,pending,completed',
             'categories' => 'json',
             'tags' => 'json',
             'settings' => 'json',
@@ -87,8 +89,8 @@ class CampaignController extends Controller
 
         $post_id = wp_insert_post($post);
 
-        if (is_wp_error($postId)) {
-            error_log('Campaign post creation failed: ' . $postId->get_error_message());
+        if (is_wp_error($post_id)) {
+            error_log('Campaign post creation failed: ' . $post_id->get_error_message());
             $this->error('Failed to create campaign post.', 400);
             return;
         }
@@ -134,16 +136,15 @@ class CampaignController extends Controller
         $data = $this->validate([
             'title' => 'max:255',
             'description' => 'max:1000',
-            'destination' => 'max:255',
+            'short_destination' => 'max:255',
             'start_date' => '',
             'end_date' => '',
             'price' => 'numeric',
-            'status' => 'in:active,inactive',
+            'status' => 'in:active,pending,completed',
             'categories' => 'json',
             'tags' => 'json',
             'settings' => 'json',
-            'header_image' => 'max:255',
-            'visibility' => 'in:public,private,unlisted',
+            'header_image' => '',
             'goal_amount' => 'nullable|string',
             'currency' => 'max:255',
             'is_p2p' => 'in:0,1',

@@ -39,7 +39,7 @@ class CreateCampaignTable
             'is_p2p' => 'tinyint(1) NOT NULL DEFAULT 0',
             'template' => 'varchar(255) DEFAULT NULL',
             'header_image' => 'varchar(255) DEFAULT NULL',
-            'visibility' => "enum('public','private','unlisted') NOT NULL DEFAULT 'public'",
+            'status' => "enum('active','pending','completed') NOT NULL DEFAULT 'active'",
             'categories' => 'json DEFAULT NULL',
             'tags' => 'json DEFAULT NULL',
             'settings' => 'json DEFAULT NULL',
@@ -51,8 +51,7 @@ class CreateCampaignTable
             'primary_key' => 'id',
             'indexes' => [
                 'KEY idx_post_id (post_id)',
-                'KEY idx_type (type)',
-                'KEY idx_visibility (visibility)',
+                'KEY idx_status (status)',
                 'KEY idx_start_date (start_date)',
                 'KEY idx_end_date (end_date)'
             ]
