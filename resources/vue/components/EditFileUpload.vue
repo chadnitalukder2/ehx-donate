@@ -272,6 +272,8 @@ export default {
     transition: all .3s ease-in-out !important;
     margin-top: 10px;
     border-radius: 8px;
+    padding: 16px 15px !important;
+    font-size: 13px !important;
 
     &:hover {
         background-color: #f5f7fa;

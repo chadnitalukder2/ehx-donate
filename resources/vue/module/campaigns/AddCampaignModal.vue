@@ -198,12 +198,14 @@ export default {
 
 :deep(.el-dialog__headerbtn) {
     font-size: 20px !important;
-    height: 80px !important;
-    width: 77px !important;
+    height: 20px !important;
+    width: 20px !important;
+    margin: 25px 30px 0px 0px !important;
+    transition: all .3s ease-in-out !important;
 
-    &:hover {
-        color: #0D0D12 !important;
-    }
+}
+:deep(.el-dialog__headerbtn:hover .el-dialog__close ){
+color: #0D0D12 !important;
 }
 
 :deep(.el-dialog__title) {
