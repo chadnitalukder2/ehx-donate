@@ -57,7 +57,7 @@
             </div>
             <template #footer>
                 <el-button @click="dialogVisible = false" type="info">Cancel</el-button>
-                <el-button type="primary" @click="submitForm">Create Campaign</el-button>
+                <el-button :loading="submitting" type="primary" @click="submitForm">Create Campaign</el-button>
             </template>
 
         </el-dialog>
@@ -73,6 +73,7 @@ export default {
     },
     data() {
         return {
+            submitting: false,
             dialogVisible: false,
             nonce: window.EHXDonate.restNonce,
             restUrl: window.EHXDonate.restUrl,
@@ -126,6 +127,8 @@ export default {
             this.dialogVisible = true;
         },
         submitForm() {
+            this.submitting = true;
+
             this.$refs.campaignForm.validate((valid) => {
                 if (valid) {
                     fetch(this.restUrl + 'api/campaigns', {
@@ -137,23 +140,30 @@ export default {
                         body: JSON.stringify(this.form)
                     })
                         .then(res => {
-                            if (!res.ok) {
-                                throw new Error('Something went wrong');
-                            }
-                            // Parse response JSON
-                            // console.log('Response:', res.json());
+                            if (!res.ok) throw new Error('Something went wrong');
                             return res.json();
                         })
                         .then(data => {
                             console.log('Response data:', data);
-                            // Example: access response fields
-                            // data.success, data.message, data.data.campaign
                             if (data.success) {
+                                this.$notify({
+                                    title: 'Success',
+                                    message: 'Campaign created successfully',
+                                    type: 'success',
+                                    offset: 20,
+                                });
                                 this.dialogVisible = false;
                                 this.$router.push({ name: 'edit_campaign', params: { id: data.data.campaign.id } });
                             }
                         })
-                        .catch(err => console.error('Error:', err));
+                        .catch(err => {
+                            console.error('Error:', err);
+                        })
+                        .finally(() => {
+                            this.submitting = false;
+                        });
+                } else {
+                    this.submitting = false;
                 }
             });
         },
@@ -180,8 +190,9 @@ export default {
     padding-bottom: 16px;
     margin-right: 15px;
 }
-:deep(.el-dialog__footer){
-        margin-top: 15px;
+
+:deep(.el-dialog__footer) {
+    margin-top: 15px;
     margin-right: 15px;
     border-top: 1px solid #DFE1E7;
 }
@@ -211,7 +222,26 @@ export default {
     padding-right: 15px;
     height: 430px;
     overflow: auto;
-     scrollbar-width: thin; 
-    scrollbar-color: #6f6f6f70  #f0f0f0;
+    // scrollbar-width: thin;
+    // scrollbar-color: #f5f7fa #e7e7e7;
+}
+
+.ehxdo_modal_campaign::-webkit-scrollbar {
+    width: 8px;
+}
+
+.ehxdo_modal_campaign::-webkit-scrollbar-track {
+    background: #f5f7fa;
+    border-radius: 10px;
+}
+
+.ehxdo_modal_campaign::-webkit-scrollbar-thumb {
+    background-color: #d9dada;
+    border-radius: 10px;
+    border: 2px solid #f5f7fa;
+}
+
+.ehxdo_modal_campaign::-webkit-scrollbar-thumb:hover {
+    background-color: #d9dada;
 }
 </style>

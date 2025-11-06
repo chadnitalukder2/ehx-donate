@@ -4,12 +4,12 @@
         <div class="ehxdo-header">
             <h1 class="ehxdo-title">Edit Campaign</h1>
             <div class="ehxdo-header-actions">
-                <el-button @click="$router.back()" class="ehxdo-back-btn">
+                <!-- <el-button @click="$router.back()" class="ehxdo-back-btn">
                     <el-icon>
                         <ArrowLeft />
                     </el-icon>
                     Back
-                </el-button>
+                </el-button> -->
             </div>
         </div>
 
@@ -207,7 +207,7 @@
                                 <el-checkbox v-model="statusActive" class="ehxdo-status-checkbox"
                                     @change="handleStatusChange('active')">
                                     <span class="ehxdo-status-label">
-                                        <span class="ehxdo-status-dot ehxdo-status-dot-active"></span>
+                                        <!-- <span class="ehxdo-status-dot ehxdo-status-dot-active"></span> -->
                                         Active
                                     </span>
                                 </el-checkbox>
@@ -215,7 +215,7 @@
                                 <el-checkbox v-model="statusPending" class="ehxdo-status-checkbox"
                                     @change="handleStatusChange('pending')">
                                     <span class="ehxdo-status-label">
-                                        <span class="ehxdo-status-dot ehxdo-status-dot-pending"></span>
+                                        <!-- <span class="ehxdo-status-dot ehxdo-status-dot-pending"></span> -->
                                         Pending
                                     </span>
                                 </el-checkbox>
@@ -223,7 +223,7 @@
                                 <el-checkbox v-model="statusComplete" class="ehxdo-status-checkbox"
                                     @change="handleStatusChange('completed')">
                                     <span class="ehxdo-status-label">
-                                        <span class="ehxdo-status-dot ehxdo-status-dot-complete"></span>
+                                        <!-- <span class="ehxdo-status-dot ehxdo-status-dot-complete"></span> -->
                                         Completed
                                     </span>
                                 </el-checkbox>
@@ -341,6 +341,7 @@ export default {
                     title: "Warning",
                     message: "At least one pricing item is required",
                     type: "warning",
+                     offset: 20,
                 });
             }
         },
@@ -411,6 +412,7 @@ export default {
                     title: "Error",
                     message: "Failed to load campaign data",
                     type: "error",
+                     offset: 20,
                 });
             }
         },
@@ -441,6 +443,7 @@ export default {
                         title: 'Success',
                         message: 'Campaign updated successfully',
                         type: 'success',
+                        offset: 20,
                     });
 
                     // Optionally redirect to campaigns list
@@ -452,6 +455,7 @@ export default {
                     title: "Error",
                     message: "An unexpected error occurred while updating the campaign.",
                     type: "error",
+                     offset: 20,
                 });
             } finally {
                 this.submitting = false;
@@ -584,12 +588,12 @@ export default {
 
         &:hover {
             background-color: #f5f7fa;
-            border-color: #e8e8e8 !important;
+            border-color: #f5f7fa !important;
         }
     }
 
     :deep(.el-checkbox__input.is-checked+.el-checkbox__label) {
-        background-color: #f0f9ff !important;
+        background-color: #f5f7fa !important;
     }
 }
 
@@ -655,13 +659,13 @@ export default {
     height: 40px;
     font-weight: 500;
     font-size: 14px;
-    background-color: #409eff !important;
-    border-color: #409eff !important;
-    color: white !important;
+    background-color: #FFFFFF !important;
+    border-color: #E4E7EC !important;
+    color: #344054 !important;
 
     &:hover {
-        background-color: #66b1ff !important;
-        border-color: #66b1ff !important;
+        background-color: #F6F8FA !important;
+        border-color: #E4E7EC !important;
     }
 }
 
@@ -675,8 +679,8 @@ export default {
     height: 40px;
     font-weight: 500;
     font-size: 14px;
-    background-color: #e4e7ed !important;
-    border-color: #e4e7ed !important;
+    background-color: #F6F8FA !important;
+    border-color: #F6F8FA !important;
     color: #667085 !important;
 
     &:hover {
@@ -691,8 +695,9 @@ export default {
     font-weight: 500;
     color: #1a1a1a !important;
 }
+
 :deep(.ehxdo-checkbox.is-checked .el-checkbox__label) {
-  color: #00A63E !important;
+    color: #00A63E !important;
 }
 
 .ehxdo-description {

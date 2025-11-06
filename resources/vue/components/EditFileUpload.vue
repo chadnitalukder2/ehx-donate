@@ -272,6 +272,7 @@ export default {
 .media-library-button {
     transition: all .3s ease-in-out;
     margin-top: 10px;
+
     &:hover {
         background-color: #1A1B1C;
         color: #fff;

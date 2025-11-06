@@ -25,3 +25,12 @@ a {
         outline: none;
     }
 }
+
+::selection {
+  background-color: #00a36c; 
+  color: #ffffff;
+}
+
+:deep(.el-notification){
+    top:20px !important;
+}

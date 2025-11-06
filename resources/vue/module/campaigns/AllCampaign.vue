@@ -17,9 +17,16 @@
                             <span class="ehxdo-stat-label">Campaign Active</span>
                             <span class="ehxdo-stat-icon">
                                 <div class="ehxdo_icon_box">
-                                    <el-icon class="ehxdo_icon">
+                                    <!-- <el-icon class="ehxdo_icon">
                                         <SuccessFilled />
-                                    </el-icon>
+                                    </el-icon> -->
+                                    <svg width="20" height="20" viewBox="0 0 20 20" fill="none"
+                                        xmlns="http://www.w3.org/2000/svg">
+                                        <path fill-rule="evenodd" clip-rule="evenodd"
+                                            d="M10.0003 18.3333C5.39795 18.3333 1.66699 14.6023 1.66699 9.99996C1.66699 5.39759 5.39795 1.66663 10.0003 1.66663C14.6027 1.66663 18.3337 5.39759 18.3337 9.99996C18.3337 14.6023 14.6027 18.3333 10.0003 18.3333ZM10.8337 5.41663C10.8337 4.95639 10.4606 4.58329 10.0003 4.58329C9.54009 4.58329 9.16699 4.95639 9.16699 5.41663V5.9369C7.97486 6.24058 7.08366 7.18021 7.08366 8.33329C7.08366 9.16378 7.37486 9.863 8.00554 10.3135C8.5802 10.724 9.31138 10.8333 10.0003 10.8333C10.5614 10.8333 10.8719 10.9323 11.0264 11.0427C11.1249 11.113 11.2503 11.2471 11.2503 11.6666C11.2503 11.9238 10.9152 12.5 10.0003 12.5C9.12098 12.5 8.88921 11.955 8.88921 11.8055C8.88921 11.3453 8.51612 10.9722 8.05588 10.9722C7.59564 10.9722 7.22255 11.3453 7.22255 11.8055C7.22255 12.8197 7.99738 13.7551 9.16699 14.0616V14.5833C9.16699 15.0435 9.54009 15.4166 10.0003 15.4166C10.4606 15.4166 10.8337 15.0435 10.8337 14.5833V14.063C12.0258 13.7593 12.917 12.8197 12.917 11.6666C12.917 10.8361 12.6258 10.1369 11.9951 9.68643C11.4204 9.27596 10.6893 9.16663 10.0003 9.16663C9.43927 9.16663 9.12878 9.06763 8.97427 8.95726C8.8758 8.88692 8.75033 8.7528 8.75033 8.33329C8.75033 8.07609 9.08542 7.49996 10.0003 7.49996C10.4382 7.49996 10.7731 7.64513 10.9864 7.8178C11.2186 8.0058 11.2503 8.16992 11.2503 8.1944C11.2503 8.65464 11.6234 9.02774 12.0837 9.02774C12.5439 9.02774 12.917 8.65464 12.917 8.1944C12.917 7.52444 12.532 6.92467 12.0351 6.52239C11.7052 6.25536 11.2973 6.04807 10.8337 5.9333V5.41663Z"
+                                            fill="#079455" />
+                                    </svg>
+
                                 </div>
                             </span>
                         </div>
@@ -32,9 +39,15 @@
                             <span class="ehxdo-stat-label">Campaign Pending</span>
                             <span class="ehxdo-stat-icon">
                                 <div class="ehxdo_icon_box">
-                                    <el-icon class="ehxdo_icon">
+                                    <!-- <el-icon class="ehxdo_icon">
                                         <RemoveFilled />
-                                    </el-icon>
+                                    </el-icon> -->
+                                    <svg width="20" height="20" viewBox="0 0 20 20" fill="none"
+                                        xmlns="http://www.w3.org/2000/svg">
+                                        <path fill-rule="evenodd" clip-rule="evenodd"
+                                            d="M10.0003 18.3333C5.39795 18.3333 1.66699 14.6023 1.66699 9.99996C1.66699 5.39759 5.39795 1.66663 10.0003 1.66663C14.6027 1.66663 18.3337 5.39759 18.3337 9.99996C18.3337 14.6023 14.6027 18.3333 10.0003 18.3333ZM6.25033 9.16663C5.79009 9.16663 5.41699 9.53972 5.41699 9.99996C5.41699 10.4602 5.79009 10.8333 6.25033 10.8333H13.7503C14.2106 10.8333 14.5837 10.4602 14.5837 9.99996C14.5837 9.53972 14.2106 9.16663 13.7503 9.16663H6.25033Z"
+                                            fill="#079455" />
+                                    </svg>
                                 </div>
                             </span>
                         </div>
@@ -47,9 +60,17 @@
                             <span class="ehxdo-stat-label">Campaign Completed</span>
                             <span class="ehxdo-stat-icon">
                                 <div class="ehxdo_icon_box">
-                                    <el-icon class="ehxdo_icon">
+                                    <!-- <el-icon class="ehxdo_icon">
                                         <SuccessFilled />
-                                    </el-icon>
+                                    </el-icon> -->
+
+                                    <svg width="20" height="20" viewBox="0 0 20 20" fill="none"
+                                        xmlns="http://www.w3.org/2000/svg">
+                                        <path fill-rule="evenodd" clip-rule="evenodd"
+                                            d="M10.0003 18.3333C5.39795 18.3333 1.66699 14.6023 1.66699 9.99996C1.66699 5.39759 5.39795 1.66663 10.0003 1.66663C14.6027 1.66663 18.3337 5.39759 18.3337 9.99996C18.3337 14.6023 14.6027 18.3333 10.0003 18.3333ZM14.3396 8.50588C14.665 8.18045 14.665 7.65281 14.3396 7.32737C14.0141 7.00193 13.4865 7.00193 13.1611 7.32737L8.75033 11.7381L6.83958 9.82737C6.51414 9.50193 5.98651 9.50193 5.66107 9.82737C5.33563 10.1528 5.33563 10.6804 5.66107 11.0059L8.16107 13.5059C8.48651 13.8313 9.01414 13.8313 9.33958 13.5059L14.3396 8.50588Z"
+                                            fill="#079455" />
+                                    </svg>
+
                                 </div>
                             </span>
                         </div>
@@ -115,7 +136,8 @@
                 <el-table-column label="Actions" width="75">
                     <template #default="{ row }">
                         <div class="ehxdo_action_section">
-                            <el-popover placement="bottom-end" width="100" :popper-style="{ minWidth: '100px' }"
+                            <el-popover placement="bottom-end" width="100"
+                                :popper-style="{ minWidth: '100px', borderRadius: '16px' }"
                                 popper-class="ehxdo-action-popover" trigger="click" v-model:visible="row.showActions">
                                 <div class="action-popup">
                                     <el-button type="text" @click="editCampaign(row)" class="ehxdo_edit"> <el-icon>
@@ -450,8 +472,9 @@ export default {
 .ehxdo_export_btn {
     margin-left: 8px;
     background: #fff !important;
-    color: #666D80;
-    font-weight: normal;
+    color: #666D80 !important;
+    font-weight: normal !important;
+    font-size: 14px !important;
     border: 1px solid #DFE1E7 !important;
     transition: all 0.3s ease;
 
@@ -550,7 +573,8 @@ export default {
         border-radius: 50px;
     }
 }
-:deep(.el-select__wrapper){
+
+:deep(.el-select__wrapper) {
     min-height: 40px !important;
 }
 </style>

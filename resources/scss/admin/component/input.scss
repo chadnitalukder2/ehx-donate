@@ -2,16 +2,17 @@
     border-radius: 8px !important;
 
     .el-input__inner {
-        height: 38px !important;
-        border: none;
+        height: 44px !important;
+        border: none; 
         &:focus {
             border: none;
             box-shadow: none;
         }
     }
 }
-.el-input__wrapper{
-    height: 38px !important;
+
+.el-input__wrapper {
+    height: 44px !important;
 }
 .el-form-item__content{
     display: block !important;
@@ -61,7 +62,7 @@
 
 .el-input__wrapper, .el-textarea__inner , .el-select__wrapper , .el-select-dropdown__item, .checkbox__inner
     .is-focus:focus {
-        border: 2px solid  $ehxd_input_border !important;
+        border: 1px solid  $ehxd_input_border !important;
         box-shadow: 0 0 0 0px $ehxd_input_border !important;
       }
 
