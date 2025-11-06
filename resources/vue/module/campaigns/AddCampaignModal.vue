@@ -3,61 +3,63 @@
         <el-button type="primary" @click="openDialog"><el-icon style="font-size: 16px; margin-right: 6px;">
                 <Plus />
             </el-icon> Create Campaign</el-button>
+
         <el-dialog title="Create Campaign" v-model="dialogVisible" width="600px">
+            <div class="ehxdo_modal_campaign">
+                <el-form ref="campaignForm" :model="form" :rules="rules">
+                    <el-form-item label="Campaign Title" prop="title">
+                        <el-input v-model="form.title" placeholder="Enter campaign title" />
+                    </el-form-item>
 
-            <el-form ref="campaignForm" :model="form" :rules="rules">
-                <el-form-item label="Campaign Title" prop="title">
-                    <el-input v-model="form.title" placeholder="Enter campaign title" />
-                </el-form-item>
 
+                    <el-form-item label="Short Description" prop="short_description">
+                        <el-input v-model="form.short_description" :maxlength="250" show-word-limit :rows="4"
+                            type="textarea" placeholder="Say something about your campaign..." />
+                    </el-form-item>
 
-                <el-form-item label="Short Description" prop="short_description">
-                    <el-input v-model="form.short_description" :maxlength="250" show-word-limit :rows="4" type="textarea"
-                        placeholder="Say something about your campaign..." />
-                </el-form-item>
+                    <el-form-item label="Goal Amount" prop="goal_amount">
+                        <el-input v-model.number="form.goal_amount" type="number" placeholder="Enter goal amount" />
+                    </el-form-item>
 
-                <el-form-item label="Goal Amount" prop="goal_amount">
-                    <el-input v-model.number="form.goal_amount" type="number" placeholder="Enter goal amount" />
-                </el-form-item>
-
-                <!-- <el-form-item label="Currency" prop="currency">
+                    <!-- <el-form-item label="Currency" prop="currency">
                     <el-select v-model="form.currency" placeholder="Select currency">
                         <el-option v-for="(item, index) in currencies" :key="index" :label="item" :value="index" />
                     </el-select>
                 </el-form-item> -->
 
-                <el-form-item label="Categories" prop="categories">
-                    <!-- <el-select v-model="form.categories" multiple placeholder="Select categories">
+                    <el-form-item label="Categories" prop="categories">
+                        <!-- <el-select v-model="form.categories" multiple placeholder="Select categories">
                         <el-option v-for="item in categories" :key="item?.term_id" :label="item.name"
                             :value="item?.term_id" />
                     </el-select> -->
-                    <el-select-v2 v-model="form.categories"
-                        :options="categories.map(item => ({ label: item.name, value: item.term_id }))" multiple
-                        placeholder="Select categories" filterable clearable allow-create style="width: 100%;" />
-                </el-form-item>
+                        <el-select-v2 v-model="form.categories"
+                            :options="categories.map(item => ({ label: item.name, value: item.term_id }))" multiple
+                            placeholder="Select categories" filterable clearable allow-create style="width: 100%;" />
+                    </el-form-item>
 
-                <!-- <el-form-item label="Tags" prop="tags">
+                    <!-- <el-form-item label="Tags" prop="tags">
                     <el-select v-model="form.tags" multiple placeholder="Select tags">
                         <el-option v-for="(item, index) in tags" :key="item.term_id" :label="item.name"
                             :value="item.term_id" />
                     </el-select>
                 </el-form-item> -->
 
-                <el-form-item label="Thumbnail Image" prop="header_image">
-                    <div class="ehxdo-upload-image" style="overflow: hidden;">
-                        <AppFileUpload v-model:selectedFile="form.header_image" btnTitle="Add Media" />
-                    </div>
-                </el-form-item>
+                    <el-form-item label="Thumbnail Image" prop="header_image">
+                        <div class="ehxdo-upload-image" style="overflow: hidden;">
+                            <AppFileUpload v-model:selectedFile="form.header_image" btnTitle="Add Media" />
+                        </div>
+                    </el-form-item>
 
 
 
 
-            </el-form>
-
+                </el-form>
+            </div>
             <template #footer>
                 <el-button @click="dialogVisible = false" type="info">Cancel</el-button>
                 <el-button type="primary" @click="submitForm">Create Campaign</el-button>
             </template>
+
         </el-dialog>
     </div>
 </template>
@@ -84,6 +86,8 @@ export default {
                 short_description: "",
                 template: "default",
                 status: "active",
+                start_date: '',
+                end_date: '',
                 categories: [],
                 tags: [],
                 header_image: "",
@@ -92,20 +96,19 @@ export default {
                     "min_donation": 5,
                     "max_donation": 1000,
                     "predefined_pricing": true,
+                    "description": '',
                     "pricing_items": [
                         { "name": "Basic", "amount": 5 },
-                        { "name": "Premium", "amount": 10 }
+                        { "name": "Premium", "amount": 10 },
+                        { "name": "Premium", "amount": 15 }
                     ],
-                    "allow_recurring_amount": true,
+                    "allow_recurring_amount": false,
                     "images": [],
                 }
             },
             rules: {
                 title: [
                     { required: true, message: "Title is required", trigger: "blur" },
-                ],
-                currency: [
-                    { required: true, message: "Please select a currency", trigger: "change" },
                 ],
                 goal_amount: [
                     { required: true, message: "Goal amount is required", trigger: "blur" },
@@ -114,12 +117,6 @@ export default {
                 short_description: [
                     { required: true, message: "Short Description is required", trigger: "blur" },
                 ],
-                categories: [
-                    { type: "array", required: true, message: "Please select at least one category", trigger: "change" },
-                ],
-                header_image: [
-                    { required: true, message: 'Please upload a thumbnail image', trigger: 'change' }
-                ]
 
             },
         };
@@ -168,8 +165,12 @@ export default {
 </script>
 
 <style scoped lang="scss">
+:deep(.el-overlay-dialog) {
+    top: -55px !important;
+}
+
 :deep(.el-dialog) {
-    padding: 30px !important;
+    padding: 30px 15px 30px 30px !important;
     border-radius: 16px !important;
 }
 
@@ -177,6 +178,12 @@ export default {
     border-bottom: 1px solid #DFE1E7;
     margin-bottom: 16px;
     padding-bottom: 16px;
+    margin-right: 15px;
+}
+:deep(.el-dialog__footer){
+        margin-top: 15px;
+    margin-right: 15px;
+    border-top: 1px solid #DFE1E7;
 }
 
 :deep(.el-dialog__headerbtn) {
@@ -198,5 +205,13 @@ export default {
 :deep(.el-form-item) {
     display: block !important;
     margin-bottom: 20px !important;
+}
+
+.ehxdo_modal_campaign {
+    padding-right: 15px;
+    height: 430px;
+    overflow: auto;
+     scrollbar-width: thin; 
+    scrollbar-color: #6f6f6f70  #f0f0f0;
 }
 </style>

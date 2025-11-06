@@ -1,4 +1,4 @@
-<template>  
+<template>
     <div class="file-upload-container">
         <!-- Preview area when file is selected -->
         <div v-if="selectedFile" class="file-preview">
@@ -38,11 +38,16 @@
 
         <!-- Upload button when no file is selected -->
         <div v-else class="upload-button-container">
-
+            <svg width="30" height="30" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M24 6V30" stroke="#98A2B3" stroke-width="4" stroke-linecap="round" stroke-linejoin="round" />
+                <path d="M34 16L24 6L14 16" stroke="#98A2B3" stroke-width="4" stroke-linecap="round"
+                    stroke-linejoin="round" />
+                <path
+                    d="M42 30V38C42 39.0609 41.5786 40.0783 40.8284 40.8284C40.0783 41.5786 39.0609 42 38 42H10C8.93913 42 7.92172 41.5786 7.17157 40.8284C6.42143 40.0783 6 39.0609 6 38V30"
+                    stroke="#98A2B3" stroke-width="4" stroke-linecap="round" stroke-linejoin="round" />
+            </svg>
             <el-button @click="openMediaUploader" class="media-library-button" style="padding: 15px 9px;">
-                <el-icon>
-                    <Plus />
-                </el-icon>
+                Select to upload
             </el-button>
         </div>
 
@@ -161,7 +166,7 @@ export default {
 
 .file-preview {
     position: relative;
-    width: 535px;
+    width: 525px;
     height: 225px;
     border-radius: 8px;
     border: 2px dashed #E8EAF1;
@@ -227,7 +232,7 @@ export default {
 
 .upload-button-container {
     height: 225px;
-    width: 535px;
+    width: 525px;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -262,13 +267,16 @@ export default {
 }
 
 .media-library-button {
+    transition: all .3s ease-in-out !important;
+    margin-top: 10px;
+
     &:hover {
         background-color: #1A1B1C;
         color: #fff;
     }
 }
 
-:deep(.el-button+.el-button ){
+:deep(.el-button+.el-button) {
     margin-left: 0px !important;
     border-radius: 50% !important;
     padding: 18px 10px !important;
