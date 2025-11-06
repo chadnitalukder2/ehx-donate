@@ -238,7 +238,7 @@ export default {
     justify-content: center;
     border-radius: 8px;
     border: 2px dashed #dcdfe6;
-    background-color: #f5f7fa;
+    // background-color: #f5f7fa;
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -269,10 +269,13 @@ export default {
 .media-library-button {
     transition: all .3s ease-in-out !important;
     margin-top: 10px;
-
+    border-radius: 8px;
+    padding: 16px 15px !important;
+    font-size: 13px !important;
     &:hover {
-        background-color: #1A1B1C;
-        color: #fff;
+       background-color: #f5f7fa;
+        color: #3c434a;
+        border: 1px solid #f5f7fa;
     }
 }
 

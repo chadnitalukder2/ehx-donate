@@ -21,7 +21,6 @@ class Campaign extends Model
         'title',
         'short_description',
         'goal_amount',
-        'currency',
         'start_date',
         'end_date',
         'is_p2p',

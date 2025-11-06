@@ -53,15 +53,16 @@
                                 <div class="ehxdo-form-col">
                                     <el-form-item label="Start Date">
                                         <el-date-picker v-model="form.start_date" type="date" class="ehxdo-date-picker"
-                                            placeholder="DD-MM-YYYY" format="DD-MM-YYYY" style="width: 100%;" />
+                                            placeholder="DD-MM-YYYY" format="DD-MM-YYYY" value-format="YYYY-MM-DD"
+                                            style="width: 100%;" />
                                     </el-form-item>
                                 </div>
                                 <div class="ehxdo-form-col">
                                     <el-form-item label="End Date">
                                         <el-date-picker v-model="form.end_date" type="date" class="ehxdo-date-picker"
-                                            placeholder="DD-MM-YYYY" format="DD-MM-YYYY" style="width: 100%;" />
+                                            placeholder="DD-MM-YYYY" format="DD-MM-YYYY" value-format="YYYY-MM-DD"
+                                            style="width: 100%;" />
                                     </el-form-item>
-
                                 </div>
                             </div>
 
@@ -295,7 +296,6 @@ import EditFileUpload from "../../components/EditFileUpload.vue";
 export default {
     name: "EditCampaign",
     components: {
-        // DraggableFileUpload,
         EditFileUpload,
     },
     data() {
@@ -341,18 +341,18 @@ export default {
                     title: "Warning",
                     message: "At least one pricing item is required",
                     type: "warning",
-                     offset: 20,
+                    offset: 20,
                 });
             }
         },
 
-        onMediaUploaded(images) {
-            this.form.settings.images = images;
-        },
+        // onMediaUploaded(images) {
+        //     this.form.settings.images = images;
+        // },
 
-        removeImage(index) {
-            this.form.settings.images.splice(index, 1);
-        },
+        // removeImage(index) {
+        //     this.form.settings.images.splice(index, 1);
+        // },
 
         handleStatusChange(selectedStatus) {
             if (selectedStatus === 'active') {
@@ -397,8 +397,6 @@ export default {
 
                 const data = await response.json();
                 this.form = data.data.campaign;
-                console.log(this.form, 'hello')
-                // Set status checkboxes based on current status
                 if (this.form.status === 'active') {
                     this.statusActive = true;
                 } else if (this.form.status === 'pending') {
@@ -412,7 +410,7 @@ export default {
                     title: "Error",
                     message: "Failed to load campaign data",
                     type: "error",
-                     offset: 20,
+                    offset: 20,
                 });
             }
         },
@@ -455,7 +453,7 @@ export default {
                     title: "Error",
                     message: "An unexpected error occurred while updating the campaign.",
                     type: "error",
-                     offset: 20,
+                    offset: 20,
                 });
             } finally {
                 this.submitting = false;

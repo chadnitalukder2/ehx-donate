@@ -13,17 +13,16 @@ class CampaignController extends Controller
     /**
      * Get all campaigns
      */
-    public function index( ): void
+    public function index(): void
     {
 
         $campaigns = Campaign::all();
-       
+
         $this->success([
-            'campaigns' => array_map(function($campaign) {
+            'campaigns' => array_map(function ($campaign) {
                 return $campaign->toArray();
             }, $campaigns)
         ]);
-       
     }
 
     /**
@@ -44,7 +43,7 @@ class CampaignController extends Controller
 
         $post = get_post($campaign->post_id);
         $campaign->post = $post;
-        
+
         $this->success([
             'campaign' => $campaign->toArray()
         ]);
@@ -60,21 +59,31 @@ class CampaignController extends Controller
             'title' => 'required|max:255',
             'short_description' => 'max:255',
             'goal_amount' => 'required|string',
-            // 'currency' => 'required|max:255',
             'start_date' => 'nullable|date',
             'end_date' => 'nullable|date',
             'is_p2p' => 'nullable|in:0,1',
             'template' => 'max:255',
-            'header_image' => '',
+            'header_image' => 'nullable|string',
             'status' => 'in:active,pending,completed',
             'categories' => 'json',
             'tags' => 'json',
             'settings' => 'json',
         ]);
-        
+
         $data['user_id'] = $this->getCurrentUserId();
 
-        // check custom post type exist or not ehxdo_campaign
+        if (!empty($data['start_date'])) {
+            $data['start_date'] = substr($data['start_date'], 0, 10);
+        } else {
+            $data['start_date'] = null;
+        }
+
+        if (!empty($data['end_date'])) {
+            $data['end_date'] = substr($data['end_date'], 0, 10);
+        } else {
+            $data['end_date'] = null;
+        }
+
         if (!post_type_exists('ehxdo_campaign')) {
             (new CPTHandler())->registerCPT();
         }
@@ -105,7 +114,7 @@ class CampaignController extends Controller
         $data["categories"] = json_encode($data["categories"]);
         $data["tags"] = json_encode($data["tags"]);
         $data["settings"] = json_encode($data["settings"]);
-        
+
         $campaign = Campaign::create($data);
 
         $this->success([
@@ -132,10 +141,9 @@ class CampaignController extends Controller
             $this->error('Unauthorized', 403);
             return;
         }
-        
+
         $data = $this->validate([
             'title' => 'max:255',
-            'description' => 'max:1000',
             'short_destination' => 'max:255',
             'start_date' => 'nullable|date',
             'end_date' => 'nullable|date',
@@ -144,13 +152,21 @@ class CampaignController extends Controller
             'categories' => 'json',
             'tags' => 'json',
             'settings' => 'json',
-            'header_image' => '',
+            'header_image' => 'nullable|string',
             'goal_amount' => 'nullable|string',
             'currency' => 'max:255',
             'is_p2p' => 'in:0,1',
             'template' => 'max:255',
         ]);
 
+        if (!empty($data['start_date'])) {
+            $data['start_date'] = substr($data['start_date'], 0, 10);
+        }
+
+        if (!empty($data['end_date'])) {
+            $data['end_date'] = substr($data['end_date'], 0, 10);
+        }
+        // dd($data, 'data');
         $data["categories"] = json_encode($data["categories"]);
         $data["tags"] = json_encode($data["tags"]);
         $data["settings"] = json_encode($data["settings"]);
@@ -165,15 +181,32 @@ class CampaignController extends Controller
 
         // delete post from data
         unset($data['post']);
-        
+
         // Remove empty values
-        $data = array_filter($data, function($value) {
-            return $value !== '';
-        });
-        
+        // $data = array_filter($data, function ($value) {
+        //     return $value !== '';
+        // });
+
+        // $campaign->fill($data);
+
+        $header_image = isset($data['header_image']) ? $data['header_image'] : null;
+        $has_header_image = array_key_exists('header_image', $data);
+
+        $data = array_filter($data, function ($value, $key) {
+            if ($key === 'header_image') {
+                return true;
+            }
+            return $value !== '' && $value !== null;
+        }, ARRAY_FILTER_USE_BOTH);
+
+        if ($has_header_image) {
+            $data['header_image'] = $header_image;
+        }
+
         $campaign->fill($data);
+
         $campaign->save();
-        
+
         $this->success([
             'campaign' => $campaign->toArray()
         ], 'Campaign updated successfully');
@@ -212,7 +245,7 @@ class CampaignController extends Controller
         $campaigns = Campaign::getUpcoming();
 
         $this->success([
-            'campaigns' => array_map(function($campaign) {
+            'campaigns' => array_map(function ($campaign) {
                 return $campaign->toArray();
             }, $campaigns)
         ]);
@@ -226,7 +259,7 @@ class CampaignController extends Controller
         $campaigns = Campaign::getPast();
 
         $this->success([
-            'campaigns' => array_map(function($campaign) {
+            'campaigns' => array_map(function ($campaign) {
                 return $campaign->toArray();
             }, $campaigns)
         ]);
@@ -240,7 +273,7 @@ class CampaignController extends Controller
         $campaigns = Campaign::getByStatus($status);
 
         $this->success([
-            'campaigns' => array_map(function($campaign) {
+            'campaigns' => array_map(function ($campaign) {
                 return $campaign->toArray();
             }, $campaigns)
         ]);
@@ -256,7 +289,7 @@ class CampaignController extends Controller
         $campaigns = Campaign::getByUser($this->getCurrentUserId());
 
         $this->success([
-            'campaigns' => array_map(function($campaign) {
+            'campaigns' => array_map(function ($campaign) {
                 return $campaign->toArray();
             }, $campaigns)
         ]);
