@@ -268,4 +268,9 @@ export default {
 .ehxdo_modal_campaign::-webkit-scrollbar-thumb:hover {
     background-color: #d9dada;
 }
+
+:deep(.el-select__input) {
+    height: 38px !important;
+}
+
 </style>
