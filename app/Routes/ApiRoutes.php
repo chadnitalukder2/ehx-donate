@@ -40,6 +40,7 @@ class ApiRoutes
             $router->get('/campaigns/{id}', 'CampaignController@show');
             $router->post('/campaigns', 'CampaignController@store', ['auth']);  
             $router->put('/campaigns/{id}', 'CampaignController@update', ['auth']); 
+            $router->delete('/deleteCampaign/{id}', 'CampaignController@destroy', ['auth']);
         });
     }
 }

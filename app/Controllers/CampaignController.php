@@ -218,15 +218,13 @@ class CampaignController extends Controller
     public function destroy(int $id): void
     {
         $this->requireAuth();
-
+    
         $campaign = Campaign::find($id);
 
         if (!$campaign) {
             $this->error('Campaign not found', 404);
             return;
         }
-
-        // Check if user owns the campaign or has admin capabilities
         if ($campaign->user_id !== $this->getCurrentUserId() && !$this->can('manage_options')) {
             $this->error('Unauthorized', 403);
             return;

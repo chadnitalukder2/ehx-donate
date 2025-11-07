@@ -293,40 +293,40 @@ export default {
             // this.loading = true;
             const id = this.active_id;
 
-            // try {
-            //     const response = await axios.post(`${this.rest_api}/deleteCampaign/${id}`, {}, {
-            //         headers: {
-            //             'Content-Type': 'application/json',
-            //             'X-WP-Nonce': this.nonce
-            //         }
-            //     });
+            try {
+                  const response = await axios.delete(`${this.rest_api}api/deleteCampaign/${id}`,{
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-WP-Nonce': this.nonce
+                    }
+                });
 
-            //     if (response.data.success === true) {
-            //         this.$notify({
-            //             title: 'Success',
-            //             message: 'campaign deleted successfully',
-            //             type: 'success',
-            //         });
-            //         this.getAllCampaigns();
-            //         this.$refs.delete_campaign_modal.handleClose();
-            //     } else {
-            //         this.$notify({
-            //             title: 'Error',
-            //             message: 'Failed to delete campaign',
-            //             type: 'error',
-            //         });
-            //     }
+                if (response.data.success === true) {
+                    this.$notify({
+                        title: 'Success',
+                        message: 'campaign deleted successfully',
+                        type: 'success',
+                    });
+                    this.getAllCampaigns();
+                    this.$refs.delete_campaign_modal.handleClose();
+                } else {
+                    this.$notify({
+                        title: 'Error',
+                        message: 'Failed to delete campaign',
+                        type: 'error',
+                    });
+                }
 
-            // } catch (error) {
-            //     console.error('Error deleting campaign:', error);
-            //     this.$notify({
-            //         title: 'Error',
-            //         message: 'An unexpected error occurred while deleting the campaign.',
-            //         type: 'error',
-            //     });
-            // } finally {
-            //     this.loading = false;
-            // }
+            } catch (error) {
+                console.error('Error deleting campaign:', error);
+                this.$notify({
+                    title: 'Error',
+                    message: 'An unexpected error occurred while deleting the campaign.',
+                    type: 'error',
+                });
+            } finally {
+                this.loading = false;
+            }
         },
 
 
