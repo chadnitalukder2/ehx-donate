@@ -312,14 +312,14 @@ export default {
 
             rules: {
                 title: [
-                    { required: true, message: "Title is required. Previous value remains if empty.", trigger: "blur" },
+                    { required: true, message: "Title is required.", trigger: "blur" },
                 ],
                 goal_amount: [
-                    { required: true, message: "Goal amount is required. Previous value remains if empty.", trigger: "blur" },
+                    { required: true, message: "Goal amount is required.", trigger: "blur" },
                     { type: "number", min: 1, message: "Goal amount must be greater than 0", trigger: "blur" },
                 ],
                 short_description: [
-                    { required: true, message: "Short Description is required. Previous value remains if empty.", trigger: "blur" },
+                    { required: true, message: "Short Description is required. ", trigger: "blur" },
                 ],
 
             },
@@ -431,6 +431,33 @@ export default {
 
         async submitForm() {
             // Validate required fields
+            if (this.form.title === '') {
+                this.$notify({
+                    title: 'Warning',
+                    message: 'Title is required.',
+                    type: 'warning',
+                    offset: 20,
+                });
+                return;
+            }
+            if (this.form.short_description === '') {
+                this.$notify({
+                    title: 'Warning',
+                    message: 'Short Description is required.',
+                    type: 'warning',
+                    offset: 20,
+                });
+                return;
+            }
+            if (this.form.goal_amount === '') {
+                this.$notify({
+                    title: 'Warning',
+                    message: 'Goal amount is required.',
+                    type: 'warning',
+                    offset: 20,
+                });
+                return;
+            }
             this.submitting = true;
             try {
                 const response = await fetch(this.restUrl + 'api/campaigns/' + this.$route.params.id, {
