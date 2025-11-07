@@ -5,7 +5,7 @@
             <!-- File type detection and appropriate preview -->
             <div class="preview-wrapper">
                 <!-- Image preview -->
-                <el-image v-if="isImageFile" :src="selectedFile" fit="contain" class="file-thumbnail"
+                <el-image v-if="isImageFile" :src="selectedFile" fit="cover" class="file-thumbnail"
                     :preview-src-list="[selectedFile]" />
                 <!-- Document/other file preview -->
                 <div v-else class="file-icon">

@@ -5,7 +5,7 @@
             <!-- File type detection and appropriate preview -->
             <div class="preview-wrapper">
                 <!-- Image preview -->
-                <el-image v-if="isImageFile" :src="selectedFile" fit="contain" class="file-thumbnail"
+                <el-image v-if="isImageFile" :src="selectedFile" fit="cover" class="file-thumbnail"
                     :preview-src-list="[selectedFile]" />
                 <!-- Document/other file preview -->
                 <div v-else class="file-icon">
@@ -170,7 +170,7 @@ export default {
 .file-preview {
     position: relative;
     width: 248px;
-    height: 185px;
+    height: 150px;
     border-radius: 8px;
     border: 2px dashed #E8EAF1;
     overflow: hidden;
@@ -234,7 +234,7 @@ export default {
 }
 
 .upload-button-container {
-    height: 185px;
+    height: 150px;
     width: 248px;
     display: flex;
     align-items: center;

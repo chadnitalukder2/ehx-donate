@@ -13,7 +13,7 @@
             </div>
         </div>
 
-        <el-form v-if="Object.keys(form).length > 0"  :rules="rules">
+        <el-form v-if="Object.keys(form).length > 0" :rules="rules">
             <div class="ehxdo-container">
 
                 <div class="ehxdo-main-content">
@@ -34,7 +34,7 @@
                             </div>
 
                             <div class="ehxdo-form-group">
-                                <el-form-item label="Short Description" prop="short_description" >
+                                <el-form-item label="Short Description" prop="short_description">
                                     <el-input type="textarea" :maxlength="250" show-word-limit rows="4"
                                         placeholder="Say something about your campaign..."
                                         v-model="form.short_description" />
@@ -310,16 +310,16 @@ export default {
             tagOptions: [],
             categoryOptions: [],
 
-              rules: {
+            rules: {
                 title: [
-                    { required: true, message: "Title is required ", trigger: "blur" },
+                    { required: true, message: "Title is required. Previous value remains if empty.", trigger: "blur" },
                 ],
                 goal_amount: [
-                    { required: true, message: "Goal amount is required", trigger: "blur" },
+                    { required: true, message: "Goal amount is required. Previous value remains if empty.", trigger: "blur" },
                     { type: "number", min: 1, message: "Goal amount must be greater than 0", trigger: "blur" },
                 ],
                 short_description: [
-                    { required: true, message: "Short Description is required", trigger: "blur" },
+                    { required: true, message: "Short Description is required. Previous value remains if empty.", trigger: "blur" },
                 ],
 
             },
@@ -431,9 +431,7 @@ export default {
 
         async submitForm() {
             // Validate required fields
-
             this.submitting = true;
-
             try {
                 const response = await fetch(this.restUrl + 'api/campaigns/' + this.$route.params.id, {
                     method: 'PUT',
@@ -457,7 +455,6 @@ export default {
                         type: 'success',
                         offset: 20,
                     });
-
                     // Optionally redirect to campaigns list
                     // this.$router.push('/campaigns');
                 }
@@ -570,11 +567,6 @@ export default {
 .ehxdo-sidebar_campaign {
     width: 290px;
     flex-shrink: 0;
-}
-
-// Upload styles
-.ehxdo-upload-image {
-    min-height: 200px;
 }
 
 // Status styles
