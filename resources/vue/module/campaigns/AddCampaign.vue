@@ -13,7 +13,7 @@
             </div>
         </div>
 
-        <el-form v-if="Object.keys(form).length > 0">
+        <el-form v-if="Object.keys(form).length > 0"  :rules="rules">
             <div class="ehxdo-container">
 
                 <div class="ehxdo-main-content">
@@ -28,13 +28,13 @@
                             </template>
 
                             <div class="ehxdo-form-group">
-                                <el-form-item label="Campaign Title" required>
+                                <el-form-item label="Campaign Title" prop="title">
                                     <el-input v-model="form.title" />
                                 </el-form-item>
                             </div>
 
                             <div class="ehxdo-form-group">
-                                <el-form-item label="Short Description" required>
+                                <el-form-item label="Short Description" prop="short_description" >
                                     <el-input type="textarea" :maxlength="250" show-word-limit rows="4"
                                         placeholder="Say something about your campaign..."
                                         v-model="form.short_description" />
@@ -80,12 +80,12 @@
 
                             <!-- Goal Amount -->
                             <div class="ehxdo-form-group">
-                                <label class="ehxdo-label">
-                                    Goal Amount <span style="color:#db0000; font-size:16px;">*</span>
-                                </label>
-                                <el-input v-model="form.goal_amount" class="ehxdo-input" placeholder="100,000.00"
-                                    :formatter="(value) => `$ ${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',')"
-                                    :parser="(value) => value.replace(/\$\s?|(,*)/g, '')" />
+                                <el-form-item label="Goal Amount" prop="goal_amount">
+                                    <el-input v-model="form.goal_amount" class="ehxdo-input" placeholder="100,000.00"
+                                        :formatter="(value) => `$ ${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',')"
+                                        :parser="(value) => value.replace(/\$\s?|(,*)/g, '')" />
+                                </el-form-item>
+
                             </div>
 
                             <!-- Allow Custom Amount -->
@@ -308,7 +308,21 @@ export default {
             nonce: window.EHXDonate?.restNonce || '',
             restUrl: window.EHXDonate?.restUrl || '',
             tagOptions: [],
-            categoryOptions: []
+            categoryOptions: [],
+
+              rules: {
+                title: [
+                    { required: true, message: "Title is required ", trigger: "blur" },
+                ],
+                goal_amount: [
+                    { required: true, message: "Goal amount is required", trigger: "blur" },
+                    { type: "number", min: 1, message: "Goal amount must be greater than 0", trigger: "blur" },
+                ],
+                short_description: [
+                    { required: true, message: "Short Description is required", trigger: "blur" },
+                ],
+
+            },
         };
     },
     created() {
@@ -604,28 +618,6 @@ export default {
     color: #303133;
 }
 
-.ehxdo-status-dot {
-    width: 10px;
-    height: 10px;
-    border-radius: 50%;
-    flex-shrink: 0;
-}
-
-.ehxdo-status-dot-active {
-    background-color: #67c23a;
-    box-shadow: 0 0 0 3px rgba(103, 194, 58, 0.2);
-}
-
-.ehxdo-status-dot-pending {
-    background-color: #e6a23c;
-    box-shadow: 0 0 0 3px rgba(230, 162, 60, 0.2);
-}
-
-.ehxdo-status-dot-complete {
-    background-color: #409eff;
-    box-shadow: 0 0 0 3px rgba(64, 158, 255, 0.2);
-}
-
 // Actions styles
 .ehxdo-action-button {
     width: 100%;
@@ -865,5 +857,9 @@ export default {
 
 :deep(.el-form-item) {
     display: block !important;
+}
+
+:deep(.el-select__input) {
+    height: 38px !important;
 }
 </style>

@@ -86,7 +86,7 @@ export default {
                 short_description: "",
                 template: "default",
                 status: "active",
-               start_date: new Date().toISOString().split('T')[0],
+                start_date: new Date().toISOString().split('T')[0],
                 end_date: null,
                 categories: [],
                 tags: [],
@@ -128,7 +128,7 @@ export default {
         submitForm() {
             this.submitting = true;
 
-            this.$refs.campaignForm.validate((valid) => {
+            this.$refs.campaignForm.validate((valid, fields) => {
                 if (valid) {
                     fetch(this.restUrl + 'api/campaigns', {
                         method: 'POST',
@@ -143,7 +143,6 @@ export default {
                             return res.json();
                         })
                         .then(data => {
-                            console.log('Response data:', data);
                             if (data.success) {
                                 this.$notify({
                                     title: 'Success',
@@ -153,15 +152,38 @@ export default {
                                 });
                                 this.dialogVisible = false;
                                 this.$router.push({ name: 'edit_campaign', params: { id: data.data.campaign.id } });
+                            } else {
+                                this.$notify({
+                                    title: 'Error',
+                                    message: data.message || 'Failed to create campaign',
+                                    type: 'error',
+                                    offset: 20,
+                                });
                             }
                         })
                         .catch(err => {
                             console.error('Error:', err);
+                            this.$notify({
+                                title: 'Error',
+                                message: err.message || 'Something went wrong',
+                                type: 'error',
+                                offset: 20,
+                            });
                         })
                         .finally(() => {
                             this.submitting = false;
                         });
                 } else {
+                    const firstErrorField = Object.keys(fields)[0];
+                    const firstErrorMessage = fields[firstErrorField][0].message;
+
+                    this.$notify({
+                        title: 'Validation Error',
+                        message: firstErrorMessage,
+                        type: 'warning',
+                        offset: 20,
+                    });
+
                     this.submitting = false;
                 }
             });
@@ -204,8 +226,9 @@ export default {
     transition: all .3s ease-in-out !important;
 
 }
-:deep(.el-dialog__headerbtn:hover .el-dialog__close ){
-color: #0D0D12 !important;
+
+:deep(.el-dialog__headerbtn:hover .el-dialog__close) {
+    color: #0D0D12 !important;
 }
 
 :deep(.el-dialog__title) {
