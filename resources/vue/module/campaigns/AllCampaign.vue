@@ -573,8 +573,16 @@ export default {
         border-radius: 50px;
     }
 }
-
+.ehxd-table-filter{
+    
+}
 :deep(.el-select__wrapper) {
-    min-height: 40px !important;
+    min-height: 38px !important;
+}
+:deep(.el-input__wrapper){
+     height: 38px !important;
+}
+:deep(.el-input__wrapper .el-input__inner){
+        height: 38px !important;
 }
 </style>

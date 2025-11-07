@@ -1,5 +1,5 @@
 .el-input__wrapper, .el-textarea__inner{
-    border-radius: 8px !important;
+    border-radius: 10px !important;
 
     .el-input__inner {
         height: 44px !important;
@@ -21,7 +21,7 @@
     margin-bottom: 0px !important;
     textarea,select, input{
         border: 1px solid $ehxd-neutral-500;
-        border-radius: 8px;
+        border-radius: 10px;
         background: $ehxd_background_color_white;
         &:hover{
             box-shadow: 0 0 0 0.5px $ehxd-neutral-400 inset;
@@ -44,7 +44,7 @@
 .el-button--primary{
     background-color: $ehx_primary_btn !important;
     border: $ehx_primary_btn !important;
-    border-radius: 8px !important;
+    border-radius: 10px !important;
 }
 .el-button--primary:hover{
     background-color: $ehx_primary_btn_hover !important;
@@ -68,7 +68,7 @@
 
        input{
         border: none !important;
-        border-radius: 4px;
+        border-radius: 10px;
         padding: 8px 12px;
         font-size: 14px;
         color: #606266;

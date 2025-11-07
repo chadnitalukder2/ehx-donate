@@ -52,7 +52,7 @@
 }
 
 .el-input__wrapper, .el-textarea__inner {
-  border-radius: 8px !important;
+  border-radius: 10px !important;
 }
 .el-input__wrapper .el-input__inner, .el-textarea__inner .el-input__inner {
   height: 44px !important;
@@ -76,7 +76,7 @@
 }
 .lmt_input textarea, .lmt_input select, .lmt_input input {
   border: 1px solid #E3E6EF;
-  border-radius: 8px;
+  border-radius: 10px;
   background: white;
 }
 .lmt_input textarea:hover, .lmt_input select:hover, .lmt_input input:hover {
@@ -105,7 +105,7 @@
 .el-button--primary {
   background-color: #1a1b1c !important;
   border: #1a1b1c !important;
-  border-radius: 8px !important;
+  border-radius: 10px !important;
 }
 
 .el-button--primary:hover {
@@ -131,7 +131,7 @@
 
 input {
   border: none !important;
-  border-radius: 4px;
+  border-radius: 10px;
   padding: 8px 12px;
   font-size: 14px;
   color: #606266;
@@ -146,8 +146,8 @@ input:focus {
   background: #067a3b !important;
   border-color: #067a3b !important;
   transition: all 0.3s ease !important;
-  padding: 20px 15px !important;
-  font-size: 16px !important;
+  padding: 18px 20px !important;
+  font-size: 14px !important;
   font-weight: 500 !important;
   border-radius: 10px !important;
 }
@@ -162,8 +162,8 @@ input:focus {
   border: 1px solid #dcdfe6 !important;
   transition: all 0.3s ease !important;
   border-radius: 10px !important;
-  padding: 20px 15px !important;
-  font-size: 16px !important;
+  padding: 18px 20px !important;
+  font-size: 14px !important;
   font-weight: 500 !important;
 }
 .el-button--info:hover {

@@ -9,20 +9,21 @@ import Reports from './module/reports/Reports.vue';
 import Transitions from './module/transitions/Transitions.vue';
 import Subscriptions from './module/subscriptions/Subscriptions.vue';
 import SettingsIndex from './module/settings/SettingsIndex.vue';
+import General from './module/settings/setting_component/General.vue';
 // Create router
 const router = createRouter({
     history: createWebHashHistory(),
     routes: [
-      
-        { 
-            path: '/dashboard', 
+
+        {
+            path: '/dashboard',
             name: 'dashboard',
             component: DashboardIndex,
             meta: {
                 active_menu: 1
             }
         },
-          { 
+        {
             path: '/campaigns',
             component: AllCampaign,
             name: 'campaigns',
@@ -38,7 +39,7 @@ const router = createRouter({
                 active_menu: 0
             }
         },
-          { 
+        {
             path: '/donations',
             component: AllDonation,
             name: 'donations',
@@ -46,7 +47,7 @@ const router = createRouter({
                 active_menu: 0
             }
         },
-          { 
+        {
             path: '/donors',
             component: AllDonor,
             name: 'donors',
@@ -54,7 +55,7 @@ const router = createRouter({
                 active_menu: 0
             }
         },
-          { 
+        {
             path: '/reports',
             component: Reports,
             name: 'reports',
@@ -62,7 +63,7 @@ const router = createRouter({
                 active_menu: 0
             }
         },
-          { 
+        {
             path: '/transitions',
             component: Transitions,
             name: 'transitions',
@@ -70,7 +71,7 @@ const router = createRouter({
                 active_menu: 0
             }
         },
-         { 
+        {
             path: '/subscriptions',
             component: Subscriptions,
             name: 'subscriptions',
@@ -78,14 +79,27 @@ const router = createRouter({
                 active_menu: 0
             }
         },
-          { 
+        {
             path: '/settings',
-            component: SettingsIndex,
+            component: SettingsIndex, // Parent component
             name: 'settings',
             meta: {
                 active_menu: 0
-            }
+            },
+            children: [
+                {
+                    path: '/settings/general',
+                    component: General,
+                    name: 'general',
+                    meta: {
+                        active_menu: 0
+                    }
+                },
+                
+            ]
         },
+
+
     ]
 });
 
