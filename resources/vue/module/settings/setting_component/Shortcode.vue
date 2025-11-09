@@ -128,7 +128,7 @@ export default {
 .ehxdo-shortcode-container {
     max-width: 100%;
     background-color: #ffffff;
-    padding: 24px 30px;
+    padding: 2rem;
     border-radius: 0px 16px 16px 0px;
     font-family: Inter Tight, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
 }
