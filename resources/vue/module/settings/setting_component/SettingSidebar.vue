@@ -4,8 +4,14 @@
       <router-link :to="{ name: 'general' }" class="ehxdo_menu_item">
         General
       </router-link>
-      <router-link to="/#" class="ehxdo_menu_item">
-        Payment
+      <router-link :to="{ name: 'shortcode' }" class="ehxdo_menu_item">
+        Shortcode
+      </router-link>
+      <router-link :to="{ name: 'email' }" class="ehxdo_menu_item">
+        Email
+      </router-link>
+       <router-link :to="{ name: 'integration' }"class="ehxdo_menu_item">
+        Integration
       </router-link>
 
      
@@ -20,6 +26,7 @@
 <style scoped lang="scss">
 .ehxdo-sidebar {
   width: 200px;
+  height: 100vh;
   background-color: #fff;
   border-right: 1px solid #e5e5e5;
   box-shadow: none;

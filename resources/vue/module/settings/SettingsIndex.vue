@@ -61,7 +61,6 @@ export default {
         .ehxdo_settings_details {
             width: 100%;
             border-radius: 0px 16px 16px 0px;
-            padding: 24px;
             background: #fff;
         }
     }

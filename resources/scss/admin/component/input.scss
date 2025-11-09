@@ -1,4 +1,4 @@
-.el-input__wrapper, .el-textarea__inner{
+.el-input__wrapper, .el-textarea__inner, .el-select__wrapper {
     border-radius: 10px !important;
 
     .el-input__inner {
@@ -11,7 +11,7 @@
     }
 }
 
-.el-input__wrapper {
+.el-input__wrapper, .el-select__wrapper {
     height: 44px !important;
 }
 .el-form-item__content{

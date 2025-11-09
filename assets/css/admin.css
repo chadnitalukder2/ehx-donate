@@ -51,19 +51,19 @@
   border: 1px solid rgba(138, 138, 138, 0.2705882353);
 }
 
-.el-input__wrapper, .el-textarea__inner {
+.el-input__wrapper, .el-textarea__inner, .el-select__wrapper {
   border-radius: 10px !important;
 }
-.el-input__wrapper .el-input__inner, .el-textarea__inner .el-input__inner {
+.el-input__wrapper .el-input__inner, .el-textarea__inner .el-input__inner, .el-select__wrapper .el-input__inner {
   height: 44px !important;
   border: none;
 }
-.el-input__wrapper .el-input__inner:focus, .el-textarea__inner .el-input__inner:focus {
+.el-input__wrapper .el-input__inner:focus, .el-textarea__inner .el-input__inner:focus, .el-select__wrapper .el-input__inner:focus {
   border: none;
   box-shadow: none;
 }
 
-.el-input__wrapper {
+.el-input__wrapper, .el-select__wrapper {
   height: 44px !important;
 }
 

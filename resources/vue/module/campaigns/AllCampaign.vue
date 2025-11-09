@@ -107,7 +107,13 @@
                         {{ scope.$index + 1 }}
                     </template>
                 </el-table-column>
-                <el-table-column prop="title" label="Title" />
+                <el-table-column prop="title" label="Title">
+                    <template #default="{ row }">
+                        <router-link :to="{ name: 'edit_campaign', params: { id: row.id } }" class="ehxdo-title-link">
+                            {{ row.title }}
+                        </router-link>
+                    </template>
+                </el-table-column>
                 <el-table-column prop="goal_amount" label="Goal Amount" />
                 <el-table-column prop="donation" label="Donation">
                     <template #default="{ row }">
@@ -294,7 +300,7 @@ export default {
             const id = this.active_id;
 
             try {
-                  const response = await axios.delete(`${this.rest_api}api/deleteCampaign/${id}`,{
+                const response = await axios.delete(`${this.rest_api}api/deleteCampaign/${id}`, {
                     headers: {
                         'Content-Type': 'application/json',
                         'X-WP-Nonce': this.nonce
@@ -573,16 +579,18 @@ export default {
         border-radius: 50px;
     }
 }
-.ehxd-table-filter{
-    
-}
+
+.ehxd-table-filter {}
+
 :deep(.el-select__wrapper) {
     min-height: 38px !important;
 }
-:deep(.el-input__wrapper){
-     height: 38px !important;
+
+:deep(.el-input__wrapper) {
+    height: 38px !important;
 }
-:deep(.el-input__wrapper .el-input__inner){
-        height: 38px !important;
+
+:deep(.el-input__wrapper .el-input__inner) {
+    height: 38px !important;
 }
 </style>
