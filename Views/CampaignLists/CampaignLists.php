@@ -1,4 +1,8 @@
+  <?php
   
+  dd($data, 'hello');
+  
+  ?>
   
   
   <div class="ehxdo-campaign_listing_container">

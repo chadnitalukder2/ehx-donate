@@ -21,8 +21,13 @@ class CampaignListShortcode
         wp_enqueue_style( 'ehx-donate-public',  EHXDonate_URL . 'assets/css/frontend/campaign_list.css', [],  EHXDonate_VERSION  );
         
         
-        $campaigns = Campaign::all();
+      $campaigns = (new Campaign())
+    ->where('status', 'active')
+    ->orderBy('id', 'DESC')
+    ->get();
 
-        return View::make('CampaignLists/CampaignLists', []);
+        return View::make('CampaignLists/CampaignLists', [
+            'data' => $campaigns,
+        ]);
     }
 }

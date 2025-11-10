@@ -420,20 +420,47 @@ abstract class Model
     /**
      * Get records with a where clause
      */
-    public static function where(string $column, $operator, $value = null): array
+    public function where(string $column, $operator, $value = null): self
     {
-        $instance = new static();
-        $table = $instance->wpdb->prefix . $instance->table;
-
         if ($value === null) {
             $value = $operator;
             $operator = '=';
         }
 
-        $sql = "SELECT * FROM {$table} WHERE {$column} {$operator} %s";
-        $results = $instance->wpdb->get_results(
-            $instance->wpdb->prepare($sql, $value)
-        );
+        $this->query['where'][] = [$column, $operator, $value];
+        return $this;
+    }
+
+  public function orderBy($column, $direction = 'ASC'): self
+{
+    $this->query['orderBy'] = [$column, strtoupper($direction)];
+    return $this;
+}
+
+    public function get(): array
+    {
+        $table = $this->wpdb->prefix . $this->table;
+        $sql = "SELECT * FROM {$table}";
+        $params = [];
+
+        // Apply WHERE conditions
+        if (!empty($this->query['where'])) {
+            $whereClauses = [];
+            foreach ($this->query['where'] as [$column, $operator, $value]) {
+                $whereClauses[] = "{$column} {$operator} %s";
+                $params[] = $value;
+            }
+            $sql .= " WHERE " . implode(' AND ', $whereClauses);
+        }
+
+        // Apply ORDER BY if defined
+        if (!empty($this->query['orderBy'])) {
+            [$column, $direction] = $this->query['orderBy'];
+            $sql .= " ORDER BY {$column} {$direction}";
+        }
+
+        $prepared = $this->wpdb->prepare($sql, $params);
+        $results = $this->wpdb->get_results($prepared);
 
         $models = [];
         foreach ($results as $result) {
@@ -445,37 +472,6 @@ abstract class Model
 
         return $models;
     }
-
-public static function orderBy($column, $direction = 'ASC')
-{
-    $instance = new static();
-    $instance->query['orderBy'] = [$column, strtoupper($direction)];
-    return $instance;
-}
-
-public function get(): array
-{
-    $table = $this->wpdb->prefix . $this->table;
-    $sql = "SELECT * FROM {$table}";
-
-    // Apply ORDER BY if defined
-    if (!empty($this->query['orderBy'])) {
-        [$column, $direction] = $this->query['orderBy'];
-        $sql .= " ORDER BY {$column} {$direction}";
-    }
-
-    $results = $this->wpdb->get_results($sql);
-
-    $models = [];
-    foreach ($results as $result) {
-        $model = new static();
-        $model->fill((array) $result);
-        $model->exists = true;
-        $models[] = $model;
-    }
-
-    return $models;
-}
 
 
     /**
