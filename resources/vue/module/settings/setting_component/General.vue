@@ -36,11 +36,13 @@
                     <!-- Currency -->
                     <div class="ehxdo-form-group">
                         <el-form-item label="Currency" prop="currency" required>
-                            <el-select v-model="settings.currency" placeholder="Select currency">
-                                <el-option label="Social" value="Social" />
+                            <el-select v-model="settings.currency" placeholder="Select currency" filterable clearable>
+                                <!-- <el-option label="Social" value="Social" />
                                 <el-option label="Technology" value="Technology" />
                                 <el-option label="Finance" value="Finance" />
-                                <el-option label="Healthcare" value="Healthcare" />
+                                <el-option label="Healthcare" value="Healthcare" /> -->
+                                <el-option v-for="(label, value) in currencies" :key="value" :label="label"
+                                    :value="value" />
                             </el-select>
                         </el-form-item>
                     </div>
@@ -110,11 +112,13 @@ export default {
     name: 'AccountDetailsForm',
     data() {
         return {
-            settings: {},
+            settings: {
+            },
             submitting: false,
             statusActive: false,
             statusPending: false,
             statusComplete: false,
+            currencies: window.EHXDonate.currencies,
             nonce: window.EHXDonate?.restNonce || '',
             restUrl: window.EHXDonate?.restUrl || '',
             tagOptions: [],
@@ -270,7 +274,8 @@ export default {
         grid-column: span 2;
     }
 }
-:deep(.el-select__wrapper){
+
+:deep(.el-select__wrapper) {
     height: 44px !important;
 }
 </style>

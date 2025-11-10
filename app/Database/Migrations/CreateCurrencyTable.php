@@ -32,21 +32,16 @@ class CreateCurrencyTable
             'name' => 'bigint(20) UNSIGNED NOT NULL',
             'symbol' => 'decimal(10,2) NOT NULL DEFAULT 0.00',
             'exchange_rate' => 'decimal(16,8) NOT NULL DEFAULT 1.00000000',
-            'currency' => "varchar(10) NOT NULL DEFAULT 'USD'",
-            'status' => 'tinyint(1) NOT NULL DEFAULT 0',
             'code' => 'varchar(255) DEFAULT NULL',
             // 'status' => "enum('pending','processed','failed') NOT NULL DEFAULT 'pending'",
             // 'payout_method' => "enum('bank_transfer','paypal','stripe') DEFAULT NULL",
-            'transaction_id' => 'varchar(255) NOT NULL UNIQUE',
+            // 'transaction_id' => 'varchar(255) NOT NULL UNIQUE',
             'created_at' => 'timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP'
         ];
 
         $options = [
             'primary_key' => 'id',
             'indexes' => [
-                'KEY idx_transaction_id (transaction_id)',
-                'KEY idx_status (status)',
-                'KEY idx_currency (currency)'
             ]
         ];
 
