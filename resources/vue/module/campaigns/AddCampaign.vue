@@ -243,7 +243,7 @@
                             <el-select-v2 v-model="form.categories" :options="categoryOptions"
                                 placeholder="Choose categories"
                                 style="width: 100%; margin-right: 16px; vertical-align: middle" allow-create
-                                default-first-option filterable multiple clearable />
+                                default-first-option filterable multiple clearable :reserve-keyword="false" />
                         </el-card>
                     </div>
 
@@ -257,7 +257,7 @@
                             </template>
                             <el-select-v2 v-model="form.tags" :options="tagOptions" placeholder="Choose keywords"
                                 style="width: 100%; margin-right: 16px; vertical-align: middle" allow-create
-                                default-first-option filterable multiple clearable />
+                                default-first-option filterable multiple clearable :reserve-keyword="false" />
                         </el-card>
                     </div>
 
