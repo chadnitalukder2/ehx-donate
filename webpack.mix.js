@@ -1,9 +1,10 @@
 const mix = require('laravel-mix');
-const path = require('path'); // Added missing path import
+const path = require('path'); 
 
 mix.js('resources/js/admin.js', 'assets/js/admin.js')
    .vue({ version: 3 }) // Ensure Vue 3 compatibility
    .sass('resources/scss/admin/admin.scss', 'assets/css/admin.css')
+    .sass('resources/scss/frontend/campaign_list.scss', 'assets/css/frontend/campaign_list.css')
 //    .copy('resources/images', 'assets/images')
    .sourceMaps();
 

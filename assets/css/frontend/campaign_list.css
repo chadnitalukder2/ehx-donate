@@ -1,0 +1,134 @@
+.ehxdo-campaign_listing_container {
+  max-width: 1200px !important;
+  margin: 0 auto;
+  font-family: Inter Tight, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+}
+.ehxdo-campaign_listing_container .ehxdo-header {
+  margin-bottom: 40px;
+}
+.ehxdo-campaign_listing_container .ehxdo-header .ehxdo-title {
+  font-family: Inter Tight, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+  font-size: 32px;
+  font-weight: 600;
+  letter-spacing: 0.45px;
+  color: #101828;
+  margin-bottom: 0px;
+}
+.ehxdo-campaign_listing_container .ehxdo-header .ehxdo-subtitle {
+  font-size: 16px;
+  color: #4A5565;
+  margin: 0px;
+}
+.ehxdo-campaign_listing_container .ehxdo-campaigns-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 24px;
+}
+.ehxdo-campaign_listing_container .ehxdo-campaign-card {
+  background: white;
+  border-radius: 16px;
+  overflow: hidden;
+  box-shadow: 0 0px 2px 0px rgba(0, 0, 0, 0.1);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+.ehxdo-campaign_listing_container .ehxdo-campaign-card:hover {
+  box-shadow: 0 0px 6px rgba(0, 0, 0, 0.15);
+}
+.ehxdo-campaign_listing_container .ehxdo-campaign-image {
+  width: 100%;
+  height: 200px;
+  overflow: hidden;
+}
+.ehxdo-campaign_listing_container .ehxdo-campaign-image img {
+  width: 100%;
+  height: 100%;
+  -o-object-fit: cover;
+     object-fit: cover;
+}
+.ehxdo-campaign_listing_container .ehxdo-campaign-content {
+  padding: 24px;
+}
+.ehxdo-campaign_listing_container .ehxdo-campaign-title {
+  font-family: Inter Tight, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+  font-size: 22px;
+  font-weight: 600;
+  color: #222222;
+  margin-bottom: 10px;
+  margin-top: 0px;
+}
+.ehxdo-campaign_listing_container .ehxdo-campaign-description {
+  font-family: Inter Tight, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+  font-size: 14px;
+  color: #666;
+  line-height: 1.6;
+  margin-top: 0px;
+  margin-bottom: 40px;
+}
+.ehxdo-campaign_listing_container .ehxdo-progress-section {
+  margin-bottom: 24px;
+  border-bottom: 1px solid #F3F3F3;
+  padding-bottom: 20px;
+}
+.ehxdo-campaign_listing_container .ehxdo-progress-bar {
+  width: 100%;
+  height: 12px;
+  background-color: #F3F3F3;
+  border-radius: 16px;
+  overflow: hidden;
+  margin-bottom: 10px;
+}
+.ehxdo-campaign_listing_container .ehxdo-progress-fill {
+  height: 100%;
+  background: linear-gradient(90deg, #4ade80 0%, #13c655 100%);
+  border-radius: 4px;
+  transition: width 0.3s ease;
+}
+.ehxdo-campaign_listing_container .ehxdo-campaign-stats {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.ehxdo-campaign_listing_container .ehxdo-stat-item {
+  display: flex;
+  text-align: center;
+  align-items: center;
+  gap: 4px;
+}
+.ehxdo-campaign_listing_container .ehxdo-stat-label {
+  font-size: 14px;
+  color: rgba(31, 45, 54, 0.6);
+  font-weight: 400;
+}
+.ehxdo-campaign_listing_container .ehxdo-stat-value {
+  font-size: 14px;
+  color: #4DD16D;
+  padding-left: 2px;
+  font-weight: 600;
+}
+.ehxdo-campaign_listing_container .ehxdo-time-left {
+  font-size: 14px;
+  color: rgba(31, 45, 54, 0.6);
+}
+.ehxdo-campaign_listing_container .ehxdo-donate-btn {
+  width: 100%;
+  padding: 14px;
+  background: #4DD16D;
+  color: #0E100F;
+  font-size: 16px;
+  font-weight: 600;
+  border: none;
+  border-radius: 12px;
+  cursor: pointer;
+  transition: opacity 0.3s ease, transform 0.2s ease;
+}
+.ehxdo-campaign_listing_container .ehxdo-donate-btn:hover {
+  opacity: 0.9;
+}
+@media (max-width: 768px) {
+  .ehxdo-campaigns-grid {
+    grid-template-columns: 1fr;
+  }
+  .ehxdo-header .ehxdo-title {
+    font-size: 28px;
+  }
+}

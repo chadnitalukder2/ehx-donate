@@ -14,6 +14,7 @@ class Action
     {
         // Register custom post types
         add_action('init', [new CPTHandler(), 'registerCPT']);
-         add_action('init', [new Shortcodes\CampaignShortCode(), 'register']);
+        add_action('init', [new Shortcodes\CampaignShortCode(), 'register']);
+        add_action('init', [new Shortcodes\CampaignListShortcode(), 'register']);
     }
 }
