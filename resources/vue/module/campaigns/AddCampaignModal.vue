@@ -32,9 +32,14 @@
                         <el-option v-for="item in categories" :key="item?.term_id" :label="item.name"
                             :value="item?.term_id" />
                     </el-select> -->
-                        <el-select-v2 v-model="form.categories"
+                        <!-- <el-select-v2 v-model="form.categories"
                             :options="categories.map(item => ({ label: item.name, value: item.term_id }))" multiple
-                            placeholder="Select categories" filterable clearable allow-create style="width: 100%;" />
+                            placeholder="Select categories" filterable clearable allow-create style="width: 100%;" /> -->
+
+                        <el-select-v2 v-model="form.categories" :options="categoriesOptions" multiple filterable
+                            allow-create clearable placeholder="Select categories" style="width: 100%;"
+                            ref="categorySelect" @keyup.enter.native="onEnter" />
+
                     </el-form-item>
 
                     <!-- <el-form-item label="Tags" prop="tags">
@@ -121,7 +126,16 @@ export default {
             },
         };
     },
+    computed: {
+        categoriesOptions() {
+            return this.categories.map(item => ({
+                label: item.name,
+                value: item.term_id,
+            }));
+        },
+    },
     methods: {
+
         openDialog() {
             this.dialogVisible = true;
         },
@@ -190,6 +204,26 @@ export default {
         },
         resetForm() {
             this.$refs.campaignForm.resetFields();
+        },
+
+         onEnter(event) {
+            const inputValue = event.target.value.trim();
+            if (!inputValue) return;
+
+            let category = this.categories.find(c => c.name === inputValue);
+            if (!category) {
+                category = { term_id: Date.now(), name: inputValue };
+                this.categories.push(category);
+            }
+
+            if (!this.form.categories.includes(category.term_id)) {
+                this.form.categories.push(category.term_id);
+            }
+
+            this.$refs.categorySelect.blur();
+            this.$nextTick(() => {
+                this.$refs.categorySelect.focus();
+            });
         },
     },
 };
@@ -272,5 +306,4 @@ export default {
 :deep(.el-select__input) {
     height: 38px !important;
 }
-
 </style>
