@@ -1,3 +1,6 @@
+  
+  
+  
   <div class="ehxdo-campaign_listing_container">
         <div class="ehxdo-header">
             <h1 class="ehxdo-title">Active Campaigns</h1>
@@ -5,6 +8,7 @@
         </div>
 
         <div class="ehxdo-campaigns-grid">
+
             <!-- Clean Water Project -->
             <div class="ehxdo-campaign-card">
                 <div class="ehxdo-campaign-image">
@@ -88,5 +92,6 @@
                     <button class="ehxdo-donate-btn">Donate Now</button>
                 </div>
             </div>
+
         </div>
     </div>

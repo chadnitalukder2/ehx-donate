@@ -270,4 +270,7 @@ export default {
         grid-column: span 2;
     }
 }
+:deep(.el-select__wrapper){
+    height: 44px !important;
+}
 </style>

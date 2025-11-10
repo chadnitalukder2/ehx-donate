@@ -583,7 +583,7 @@ export default {
 .ehxd-table-filter {}
 
 :deep(.el-select__wrapper) {
-    min-height: 38px !important;
+    min-height: 36px !important;
 }
 
 :deep(.el-input__wrapper) {

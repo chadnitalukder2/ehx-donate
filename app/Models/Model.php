@@ -446,13 +446,35 @@ abstract class Model
         return $models;
     }
 
-   public static function orderBy($column, $direction = 'ASC')
+public static function orderBy($column, $direction = 'ASC')
 {
-   
     $instance = new static();
     $instance->query['orderBy'] = [$column, strtoupper($direction)];
-   
     return $instance;
+}
+
+public function get(): array
+{
+    $table = $this->wpdb->prefix . $this->table;
+    $sql = "SELECT * FROM {$table}";
+
+    // Apply ORDER BY if defined
+    if (!empty($this->query['orderBy'])) {
+        [$column, $direction] = $this->query['orderBy'];
+        $sql .= " ORDER BY {$column} {$direction}";
+    }
+
+    $results = $this->wpdb->get_results($sql);
+
+    $models = [];
+    foreach ($results as $result) {
+        $model = new static();
+        $model->fill((array) $result);
+        $model->exists = true;
+        $models[] = $model;
+    }
+
+    return $models;
 }
 
 

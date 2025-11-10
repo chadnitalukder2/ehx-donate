@@ -16,7 +16,7 @@ class CampaignController extends Controller
     public function index(): void
     {
 
-        $campaigns = Campaign::all();
+        $campaigns = Campaign::orderBy('created_at', 'DESC')->get();;
 
         $this->success([
             'campaigns' => array_map(function ($campaign) {
