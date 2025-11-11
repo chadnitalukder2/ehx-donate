@@ -1,5 +1,6 @@
 {
     "/assets/js/admin.js": "/assets/js/admin.js",
+    "/assets/css/frontend/campaign_details.css": "/assets/css/frontend/campaign_details.css",
     "/assets/css/frontend/campaign_list.css": "/assets/css/frontend/campaign_list.css",
     "/assets/css/admin.css": "/assets/css/admin.css"
 }

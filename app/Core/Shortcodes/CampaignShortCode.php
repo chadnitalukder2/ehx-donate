@@ -15,6 +15,7 @@ class CampaignShortCode
 
     public function handelShortcodeCall($shortcodeAttributes)
     {
+          wp_enqueue_style('ehx-donate-public',  EHXDonate_URL . 'assets/css/frontend/campaign_details.css', [],  EHXDonate_VERSION);
         $post_id = $shortcodeAttributes['post_id'] ?? 0;
       
           return View::make('CampaignDetails/CampaignDetails', [

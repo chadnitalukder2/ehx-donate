@@ -1,0 +1,539 @@
+/* Variables */
+:root {
+  --ehxdo-primary-color: #2563eb;
+  --ehxdo-primary-hover: #1d4ed8;
+  --ehxdo-success-color: #10b981;
+  --ehxdo-purple-color: #a855f7;
+  --ehxdo-text-dark: #1f2937;
+  --ehxdo-text-gray: #6b7280;
+  --ehxdo-text-light: #9ca3af;
+  --ehxdo-border-color: #e5e7eb;
+  --ehxdo-bg-light: #f9fafb;
+  --ehxdo-white: #ffffff;
+}
+
+/* Reset & Base */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  background-color: var(--ehxdo-bg-light);
+  color: var(--ehxdo-text-dark);
+  line-height: 1.6;
+}
+
+/* Container */
+.ehxdo-container {
+  display: grid;
+  grid-template-columns: 1fr 500px;
+  gap: 2rem;
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 2rem;
+}
+
+@media (max-width: 1024px) {
+  .ehxdo-container {
+    grid-template-columns: 1fr;
+  }
+}
+/* Left Section */
+.ehxdo-left-section {
+  background: var(--ehxdo-white);
+  border-radius: 12px;
+  padding: 2rem;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+.ehxdo-back-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  color: var(--ehxdo-text-gray);
+  text-decoration: none;
+  font-size: 0.875rem;
+  margin-bottom: 1.5rem;
+  transition: color 0.2s;
+}
+
+.ehxdo-back-link:hover {
+  color: var(--ehxdo-text-dark);
+}
+
+.ehxdo-back-arrow {
+  font-size: 1.25rem;
+}
+
+.ehxdo-campaign-header {
+  margin-bottom: 2rem;
+}
+
+.ehxdo-campaign-image {
+  width: 100%;
+  height: 300px;
+  -o-object-fit: cover;
+     object-fit: cover;
+  border-radius: 8px;
+  margin-bottom: 1rem;
+}
+
+.ehxdo-campaign-title {
+  font-size: 1.5rem;
+  font-weight: 600;
+  color: var(--ehxdo-text-dark);
+}
+
+/* Stats */
+.ehxdo-stats-container {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 2rem;
+  margin-bottom: 2rem;
+}
+
+.ehxdo-stat-item {
+  text-align: center;
+}
+
+.ehxdo-stat-value {
+  font-size: 1.75rem;
+  font-weight: 700;
+  margin-bottom: 0.25rem;
+}
+
+.ehxdo-stat-raised .ehxdo-stat-value {
+  color: var(--ehxdo-primary-color);
+}
+
+.ehxdo-stat-goal .ehxdo-stat-value {
+  color: var(--ehxdo-success-color);
+}
+
+.ehxdo-stat-donors .ehxdo-stat-value {
+  color: var(--ehxdo-purple-color);
+}
+
+.ehxdo-stat-label {
+  font-size: 0.875rem;
+  color: var(--ehxdo-text-gray);
+}
+
+/* Progress Bar */
+.ehxdo-progress-container {
+  margin-bottom: 2rem;
+}
+
+.ehxdo-progress-label {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 0.5rem;
+  font-size: 0.875rem;
+  color: var(--ehxdo-text-gray);
+}
+
+.ehxdo-progress-percent {
+  font-weight: 600;
+  color: var(--ehxdo-text-dark);
+}
+
+.ehxdo-progress-bar {
+  width: 100%;
+  height: 8px;
+  background-color: var(--ehxdo-border-color);
+  border-radius: 4px;
+  overflow: hidden;
+}
+
+.ehxdo-progress-fill {
+  height: 100%;
+  background-color: var(--ehxdo-success-color);
+  transition: width 0.3s ease;
+}
+
+/* About Section */
+.ehxdo-about-section {
+  margin-bottom: 2rem;
+}
+
+.ehxdo-about-title {
+  font-size: 1.25rem;
+  font-weight: 600;
+  margin-bottom: 1rem;
+  color: var(--ehxdo-text-dark);
+}
+
+.ehxdo-about-text {
+  font-size: 0.9375rem;
+  color: var(--ehxdo-text-gray);
+  margin-bottom: 1rem;
+  line-height: 1.7;
+}
+
+/* Campaign Meta */
+.ehxdo-campaign-meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1.5rem;
+  padding-top: 1.5rem;
+  border-top: 1px solid var(--ehxdo-border-color);
+}
+
+.ehxdo-meta-item {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.875rem;
+  color: var(--ehxdo-text-gray);
+}
+
+.ehxdo-meta-icon {
+  font-size: 1rem;
+}
+
+.ehxdo-featured {
+  color: #ef4444;
+}
+
+/* Right Section */
+.ehxdo-right-section {
+  position: sticky;
+  top: 2rem;
+  height: -moz-fit-content;
+  height: fit-content;
+}
+
+.ehxdo-view-toggle {
+  display: flex;
+  gap: 0.5rem;
+  margin-bottom: 1rem;
+}
+
+.ehxdo-view-btn {
+  flex: 1;
+  padding: 0.625rem 1rem;
+  background: var(--ehxdo-white);
+  border: 1px solid var(--ehxdo-border-color);
+  border-radius: 6px;
+  font-size: 0.875rem;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.ehxdo-view-btn:hover {
+  background: var(--ehxdo-bg-light);
+}
+
+.ehxdo-view-btn.ehxdo-active {
+  background: var(--ehxdo-text-dark);
+  color: var(--ehxdo-white);
+  border-color: var(--ehxdo-text-dark);
+}
+
+/* Donation Card */
+.ehxdo-donation-card {
+  background: var(--ehxdo-white);
+  border-radius: 12px;
+  padding: 2rem;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+.ehxdo-donation-card.ehxdo-hidden {
+  display: none;
+}
+
+.ehxdo-card-title {
+  font-size: 1.25rem;
+  font-weight: 600;
+  margin-bottom: 1.5rem;
+  color: var(--ehxdo-text-dark);
+}
+
+/* Donation Type */
+.ehxdo-donation-type {
+  margin-bottom: 1.5rem;
+}
+
+.ehxdo-label {
+  display: block;
+  font-size: 0.875rem;
+  font-weight: 500;
+  margin-bottom: 0.75rem;
+  color: var(--ehxdo-text-dark);
+}
+
+.ehxdo-radio-group {
+  display: flex;
+  gap: 1rem;
+}
+
+.ehxdo-radio-label {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.75rem;
+  border: 2px solid var(--ehxdo-border-color);
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.ehxdo-radio-label input[type=radio] {
+  margin-right: 0.5rem;
+}
+
+.ehxdo-radio-label:has(input:checked) {
+  border-color: var(--ehxdo-primary-color);
+  background: rgba(37, 99, 235, 0.05);
+}
+
+/* Amount Selection */
+.ehxdo-amount-section {
+  margin-bottom: 1.5rem;
+}
+
+.ehxdo-amount-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 0.75rem;
+  margin-bottom: 1rem;
+}
+
+.ehxdo-amount-btn {
+  padding: 0.875rem;
+  background: var(--ehxdo-white);
+  border: 2px solid var(--ehxdo-border-color);
+  border-radius: 8px;
+  font-size: 0.9375rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.ehxdo-amount-btn:hover {
+  border-color: var(--ehxdo-primary-color);
+}
+
+.ehxdo-amount-btn.ehxdo-selected {
+  background: var(--ehxdo-primary-color);
+  color: var(--ehxdo-white);
+  border-color: var(--ehxdo-primary-color);
+}
+
+.ehxdo-custom-amount {
+  width: 100%;
+  padding: 0.875rem;
+  border: 2px solid var(--ehxdo-border-color);
+  border-radius: 8px;
+  font-size: 0.9375rem;
+  transition: border-color 0.2s;
+}
+
+.ehxdo-custom-amount:focus {
+  outline: none;
+  border-color: var(--ehxdo-primary-color);
+}
+
+/* Taxpayer Info */
+.ehxdo-taxpayer-info {
+  background: rgba(37, 99, 235, 0.05);
+  border-radius: 8px;
+  padding: 1rem;
+  margin-bottom: 1.5rem;
+}
+
+.ehxdo-info-text {
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: var(--ehxdo-text-dark);
+  margin-bottom: 0.25rem;
+}
+
+.ehxdo-info-subtext {
+  font-size: 0.8125rem;
+  color: var(--ehxdo-text-gray);
+}
+
+/* Donate Button */
+.ehxdo-donate-btn {
+  width: 100%;
+  padding: 1rem;
+  background: var(--ehxdo-primary-color);
+  color: var(--ehxdo-white);
+  border: none;
+  border-radius: 8px;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.2s;
+  margin-bottom: 0.75rem;
+}
+
+.ehxdo-donate-btn:hover {
+  background: var(--ehxdo-primary-hover);
+}
+
+.ehxdo-disclaimer {
+  font-size: 0.75rem;
+  color: var(--ehxdo-text-light);
+  text-align: center;
+  margin-bottom: 1.5rem;
+}
+
+/* Form */
+.ehxdo-form {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+}
+
+.ehxdo-form-group {
+  display: flex;
+  flex-direction: column;
+}
+
+.ehxdo-form-row {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 1rem;
+}
+
+.ehxdo-input {
+  width: 100%;
+  padding: 0.75rem;
+  border: 1px solid var(--ehxdo-border-color);
+  border-radius: 6px;
+  font-size: 0.875rem;
+  transition: border-color 0.2s;
+}
+
+.ehxdo-input:focus {
+  outline: none;
+  border-color: var(--ehxdo-primary-color);
+}
+
+select.ehxdo-input {
+  cursor: pointer;
+}
+
+/* Gift Aid Section */
+.ehxdo-gift-aid {
+  background: rgba(16, 185, 129, 0.05);
+  border-radius: 8px;
+  padding: 1rem;
+}
+
+/* Summary */
+.ehxdo-summary {
+  background: var(--ehxdo-bg-light);
+  border-radius: 8px;
+  padding: 1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.ehxdo-summary-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 0.875rem;
+}
+
+.ehxdo-summary-row.ehxdo-highlight {
+  font-weight: 600;
+  color: var(--ehxdo-primary-color);
+  padding-top: 0.75rem;
+  border-top: 1px solid var(--ehxdo-border-color);
+}
+
+.ehxdo-amount {
+  font-weight: 600;
+}
+
+/* Section Navigation */
+.ehxdo-section-nav {
+  display: flex;
+  gap: 0.75rem;
+  margin-top: 1.5rem;
+  padding-top: 1.5rem;
+  border-top: 1px solid var(--ehxdo-border-color);
+}
+
+.ehxdo-nav-btn {
+  flex: 1;
+  padding: 0.875rem;
+  border: 1px solid var(--ehxdo-border-color);
+  border-radius: 8px;
+  font-size: 0.9375rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s;
+  background: var(--ehxdo-white);
+}
+
+.ehxdo-nav-btn:hover:not(:disabled) {
+  background: var(--ehxdo-bg-light);
+}
+
+.ehxdo-nav-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.ehxdo-nav-btn.ehxdo-next,
+.ehxdo-nav-btn.ehxdo-submit {
+  background: var(--ehxdo-primary-color);
+  color: var(--ehxdo-white);
+  border-color: var(--ehxdo-primary-color);
+}
+
+.ehxdo-nav-btn.ehxdo-next:hover,
+.ehxdo-nav-btn.ehxdo-submit:hover {
+  background: var(--ehxdo-primary-hover);
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .ehxdo-stats-container {
+    grid-template-columns: 1fr;
+    gap: 1rem;
+  }
+  .ehxdo-amount-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  .ehxdo-form-row {
+    grid-template-columns: 1fr;
+  }
+  .ehxdo-campaign-meta {
+    flex-direction: column;
+    gap: 0.75rem;
+  }
+  .ehxdo-donation-card {
+    padding: 1.5rem;
+  }
+  .ehxdo-left-section {
+    padding: 1.5rem;
+  }
+}
+@media (max-width: 480px) {
+  .ehxdo-container {
+    padding: 1rem;
+  }
+  .ehxdo-campaign-image {
+    height: 200px;
+  }
+  .ehxdo-stat-value {
+    font-size: 1.5rem;
+  }
+  .ehxdo-amount-grid {
+    grid-template-columns: 1fr;
+  }
+  .ehxdo-view-toggle {
+    flex-direction: column;
+  }
+}
