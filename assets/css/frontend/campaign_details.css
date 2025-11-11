@@ -5,7 +5,7 @@
   --ehxdo-success-color: #00A63E;
   --ehxdo-purple-color: #9810FA;
   --ehxdo-text-dark: #101828;
-  --ehxdo-text-gray: #6b7280;
+  --ehxdo-text-gray: #4A5565;
   --ehxdo-text-light: #9ca3af;
   --ehxdo-border-color: #e5e7eb;
   --ehxdo-bg-light: #f9fafb;
@@ -13,6 +13,7 @@
 }
 
 .ehxdo_campaign_list_wrapper {
+  font-family: Inter Tight, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
   max-width: 1200px !important;
   padding: 20px;
 }
@@ -136,26 +137,27 @@
   display: flex;
   justify-content: space-between;
   margin-bottom: 0.5rem;
-  font-size: 0.875rem;
+  font-size: 14px;
+  font-weight: 400;
   color: var(--ehxdo-text-gray);
 }
 
 .ehxdo-progress-percent {
-  font-weight: 600;
-  color: var(--ehxdo-text-dark);
+  font-weight: 400;
+  color: #155DFC;
 }
 
 .ehxdo-progress-bar {
   width: 100%;
-  height: 8px;
-  background-color: var(--ehxdo-border-color);
-  border-radius: 4px;
+  height: 12px;
+  background-color: rgba(3, 2, 19, 0.2);
+  border-radius: 10px;
   overflow: hidden;
 }
 
 .ehxdo-progress-fill {
   height: 100%;
-  background-color: var(--ehxdo-success-color);
+  background-color: #030213;
   transition: width 0.3s ease;
 }
 
@@ -165,8 +167,9 @@
 }
 
 .ehxdo-about-title {
-  font-size: 1.25rem;
-  font-weight: 600;
+  font-family: Inter Tight, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+  font-size: 20px;
+  font-weight: 500;
   margin-bottom: 1rem;
   color: var(--ehxdo-text-dark);
 }
