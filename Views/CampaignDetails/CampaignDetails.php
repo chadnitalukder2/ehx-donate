@@ -6,7 +6,7 @@ $campaign = [
     'goal' => 20000,
     'donors' => 156,
     'end_date' => '12/31/2024',
-    'image' => 'campaign-image.jpg',
+    'image' => 'https://cdn.optinmonster.com/wp-content/uploads/2023/03/how-to-create-an-email-campaign-facebook.png',
     'description' => [
         'Feeding hungry families and ensuring no one goes to bed hungry.',
         'Your generous donation will help us continue our mission to make a real difference in the lives of those who need it most. Every contribution, no matter the size, brings us closer to our goal and helps create lasting positive change.',
@@ -40,93 +40,90 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         'post_code' => $_POST['post_code'] ?? '',
         'gift_aid' => isset($_POST['gift_aid']) ? true : false
     ];
-    
+
     // Here you would process the payment and save to database
     // For now, just redirect to a thank you page
     // header('Location: thank-you.php');
     // exit;
 }
 ?>
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title><?php echo htmlspecialchars($campaign['title']); ?> - Donation Campaign</title>
-    <link rel="stylesheet" href="style.css">
-</head>
-<body>
-    <div class="ehxdo-container">
+<div class="ehxdo_campaign_list_wrapper">
+    <a href="campaigns.php" class="ehxdo-back-link">
+        <span class="ehxdo-back-arrow">←</span> Back to Campaigns
+    </a>
+
+    <div class="ehxdo-campaign_details_container">
         <!-- Left Section -->
+
         <div class="ehxdo-left-section">
-            <a href="campaigns.php" class="ehxdo-back-link">
-                <span class="ehxdo-back-arrow">←</span> Back to Campaigns
-            </a>
 
-            <div class="ehxdo-campaign-header">
-                <img src="<?php echo htmlspecialchars($campaign['image']); ?>" 
-                     alt="<?php echo htmlspecialchars($campaign['title']); ?>" 
-                     class="ehxdo-campaign-image">
-                <h1 class="ehxdo-campaign-title"><?php echo htmlspecialchars($campaign['title']); ?></h1>
+
+            <div class="ehxdo-campaign-header-image">
+                <img src="<?php echo htmlspecialchars($campaign['image']); ?>"
+                    alt="<?php echo htmlspecialchars($campaign['title']); ?>"
+                    class="ehxdo-campaign-image">
             </div>
+            <div class="ehxdo_details_campaign_list">
 
-            <div class="ehxdo-stats-container">
-                <div class="ehxdo-stat-item ehxdo-stat-raised">
-                    <div class="ehxdo-stat-value">$<?php echo number_format($campaign['raised']); ?></div>
-                    <div class="ehxdo-stat-label">Raised</div>
-                </div>
-                <div class="ehxdo-stat-item ehxdo-stat-goal">
-                    <div class="ehxdo-stat-value">$<?php echo number_format($campaign['goal']); ?></div>
-                    <div class="ehxdo-stat-label">Goal</div>
-                </div>
-                <div class="ehxdo-stat-item ehxdo-stat-donors">
-                    <div class="ehxdo-stat-value"><?php echo $campaign['donors']; ?></div>
-                    <div class="ehxdo-stat-label">Donors</div>
-                </div>
-            </div>
 
-            <div class="ehxdo-progress-container">
-                <div class="ehxdo-progress-label">
-                    <span>Campaign Progress</span>
-                    <span class="ehxdo-progress-percent"><?php echo $progress; ?>%</span>
+                <div class="ehxdo_campaign_title_section">
+                    <h1 class="ehxdo-campaign-title"><?php echo htmlspecialchars($campaign['title']); ?></h1>
                 </div>
-                <div class="ehxdo-progress-bar">
-                    <div class="ehxdo-progress-fill" style="width: <?php echo $progress; ?>%"></div>
+
+                <div class="ehxdo-stats-container">
+                    <div class="ehxdo-stat-item ehxdo-stat-raised">
+                        <div class="ehxdo-stat-value">$<?php echo number_format($campaign['raised']); ?></div>
+                        <div class="ehxdo-stat-label">Raised</div>
+                    </div>
+                    <div class="ehxdo-stat-item ehxdo-stat-goal">
+                        <div class="ehxdo-stat-value">$<?php echo number_format($campaign['goal']); ?></div>
+                        <div class="ehxdo-stat-label">Goal</div>
+                    </div>
+                    <div class="ehxdo-stat-item ehxdo-stat-donors">
+                        <div class="ehxdo-stat-value"><?php echo $campaign['donors']; ?></div>
+                        <div class="ehxdo-stat-label">Donors</div>
+                    </div>
                 </div>
-            </div>
 
-            <div class="ehxdo-about-section">
-                <h2 class="ehxdo-about-title">About This Campaign</h2>
-                <?php foreach ($campaign['description'] as $paragraph): ?>
-                    <p class="ehxdo-about-text"><?php echo htmlspecialchars($paragraph); ?></p>
-                <?php endforeach; ?>
-            </div>
+                <div class="ehxdo-progress-container">
+                    <div class="ehxdo-progress-label">
+                        <span>Campaign Progress</span>
+                        <span class="ehxdo-progress-percent"><?php echo $progress; ?>%</span>
+                    </div>
+                    <div class="ehxdo-progress-bar">
+                        <div class="ehxdo-progress-fill" style="width: <?php echo $progress; ?>%"></div>
+                    </div>
+                </div>
 
-            <div class="ehxdo-campaign-meta">
-                <span class="ehxdo-meta-item">
-                    <span class="ehxdo-meta-icon">📅</span> Ends <?php echo htmlspecialchars($campaign['end_date']); ?>
-                </span>
-                <span class="ehxdo-meta-item">
-                    <span class="ehxdo-meta-icon">👥</span> <?php echo $campaign['donors']; ?> Supporters
-                </span>
-                <span class="ehxdo-meta-item ehxdo-featured">
-                    <span class="ehxdo-meta-icon">❤️</span> Featured Campaign
-                </span>
+                <div class="ehxdo-about-section">
+                    <h2 class="ehxdo-about-title">About This Campaign</h2>
+                    <?php foreach ($campaign['description'] as $paragraph): ?>
+                        <p class="ehxdo-about-text"><?php echo htmlspecialchars($paragraph); ?></p>
+                    <?php endforeach; ?>
+                </div>
+
+                <div class="ehxdo-campaign-meta">
+                    <span class="ehxdo-meta-item">
+                        <span class="ehxdo-meta-icon">📅</span> Ends <?php echo htmlspecialchars($campaign['end_date']); ?>
+                    </span>
+                    <span class="ehxdo-meta-item">
+                        <span class="ehxdo-meta-icon">👥</span> <?php echo $campaign['donors']; ?> Supporters
+                    </span>
+                    <span class="ehxdo-meta-item ehxdo-featured">
+                        <span class="ehxdo-meta-icon">❤️</span> Featured Campaign
+                    </span>
+                </div>
             </div>
         </div>
 
         <!-- Right Section -->
         <div class="ehxdo-right-section">
-            <div class="ehxdo-view-toggle">
-                <button class="ehxdo-view-btn">Frontend View</button>
-                <button class="ehxdo-view-btn ehxdo-active">Admin View</button>
-            </div>
 
             <form method="POST" action="<?php echo htmlspecialchars($_SERVER['PHP_SELF']); ?>" id="ehxdo-donation-form">
                 <!-- Section 1: Make a Donation -->
                 <div class="ehxdo-donation-card" id="ehxdo-section-1">
                     <h3 class="ehxdo-card-title">Make a Donation</h3>
-                    
+
                     <div class="ehxdo-donation-type">
                         <label class="ehxdo-label">Donation Type</label>
                         <div class="ehxdo-radio-group">
@@ -146,17 +143,17 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                         <input type="hidden" name="amount" id="ehxdo-selected-amount" value="<?php echo $default_amount; ?>">
                         <div class="ehxdo-amount-grid">
                             <?php foreach ($preset_amounts as $amount): ?>
-                                <button type="button" 
-                                        class="ehxdo-amount-btn <?php echo $amount === $default_amount ? 'ehxdo-selected' : ''; ?>" 
-                                        data-amount="<?php echo $amount; ?>">
+                                <button type="button"
+                                    class="ehxdo-amount-btn <?php echo $amount === $default_amount ? 'ehxdo-selected' : ''; ?>"
+                                    data-amount="<?php echo $amount; ?>">
                                     $<?php echo $amount; ?>
                                 </button>
                             <?php endforeach; ?>
                         </div>
-                        <input type="text" 
-                               placeholder="Custom amount" 
-                               class="ehxdo-custom-amount" 
-                               id="ehxdo-custom-amount">
+                        <input type="text"
+                            placeholder="Custom amount"
+                            class="ehxdo-custom-amount"
+                            id="ehxdo-custom-amount">
                     </div>
 
                     <div class="ehxdo-taxpayer-info">
@@ -179,7 +176,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 <!-- Section 2: Personal Information -->
                 <div class="ehxdo-donation-card ehxdo-hidden" id="ehxdo-section-2">
                     <h3 class="ehxdo-card-title">Personal Information</h3>
-                    
+
                     <div class="ehxdo-form">
                         <div class="ehxdo-form-group">
                             <label class="ehxdo-label">Title *</label>
@@ -276,92 +273,4 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             </form>
         </div>
     </div>
-
-    <script>
-        // Section Navigation
-        const sections = document.querySelectorAll('.ehxdo-donation-card');
-        let currentSection = 0;
-
-        function showSection(index) {
-            sections.forEach((section, i) => {
-                if (i === index) {
-                    section.classList.remove('ehxdo-hidden');
-                } else {
-                    section.classList.add('ehxdo-hidden');
-                }
-            });
-
-            // Update button states
-            const prevBtns = document.querySelectorAll('.ehxdo-prev');
-            const nextBtns = document.querySelectorAll('.ehxdo-next');
-            
-            prevBtns.forEach(btn => {
-                btn.disabled = index === 0;
-            });
-
-            nextBtns.forEach(btn => {
-                btn.style.display = index === sections.length - 1 ? 'none' : 'inline-block';
-            });
-        }
-
-        document.querySelectorAll('.ehxdo-next').forEach(btn => {
-            btn.addEventListener('click', () => {
-                if (currentSection < sections.length - 1) {
-                    currentSection++;
-                    showSection(currentSection);
-                }
-            });
-        });
-
-        document.querySelectorAll('.ehxdo-prev').forEach(btn => {
-            btn.addEventListener('click', () => {
-                if (currentSection > 0) {
-                    currentSection--;
-                    showSection(currentSection);
-                }
-            });
-        });
-
-        // Amount selection
-        const amountInput = document.getElementById('ehxdo-selected-amount');
-        const donateBtn = document.getElementById('ehxdo-donate-btn');
-        const customAmountInput = document.getElementById('ehxdo-custom-amount');
-        const summaryAmount = document.getElementById('ehxdo-summary-amount');
-        const summaryTotal = document.getElementById('ehxdo-summary-total');
-
-        function updateAmount(amount) {
-            amountInput.value = amount;
-            donateBtn.textContent = `💳 Donate $${amount}`;
-            summaryAmount.textContent = `£${amount}.00`;
-            summaryTotal.textContent = `£${amount}.00`;
-        }
-
-        document.querySelectorAll('.ehxdo-amount-btn').forEach(btn => {
-            btn.addEventListener('click', function() {
-                document.querySelectorAll('.ehxdo-amount-btn').forEach(b => b.classList.remove('ehxdo-selected'));
-                this.classList.add('ehxdo-selected');
-                customAmountInput.value = '';
-                
-                const amount = this.getAttribute('data-amount');
-                updateAmount(amount);
-            });
-        });
-
-        customAmountInput.addEventListener('input', function() {
-            const customAmount = parseFloat(this.value) || 0;
-            if (customAmount > 0) {
-                document.querySelectorAll('.ehxdo-amount-btn').forEach(b => b.classList.remove('ehxdo-selected'));
-                updateAmount(customAmount);
-            }
-        });
-
-        // Donate button click (goes to next section)
-        donateBtn.addEventListener('click', () => {
-            if (currentSection < sections.length - 1) {
-                currentSection++;
-                showSection(currentSection);
-            }
-        });
-    </script>
-</body>
-</html>
+</div>

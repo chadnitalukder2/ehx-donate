@@ -42,8 +42,6 @@
 .ehxdo-campaign_listing_container .ehxdo-campaign-image img {
   width: 100%;
   height: 100%;
-  -o-object-fit: cover;
-     object-fit: cover;
 }
 .ehxdo-campaign_listing_container .ehxdo-campaign-content {
   padding: 24px;

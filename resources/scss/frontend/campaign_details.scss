@@ -1,10 +1,10 @@
 /* Variables */
 :root {
-  --ehxdo-primary-color: #2563eb;
+  --ehxdo-primary-color: #155DFC;
   --ehxdo-primary-hover: #1d4ed8;
-  --ehxdo-success-color: #10b981;
-  --ehxdo-purple-color: #a855f7;
-  --ehxdo-text-dark: #1f2937;
+  --ehxdo-success-color: #00A63E;
+  --ehxdo-purple-color: #9810FA;
+  --ehxdo-text-dark: #101828;
   --ehxdo-text-gray: #6b7280;
   --ehxdo-text-light: #9ca3af;
   --ehxdo-border-color: #e5e7eb;
@@ -12,87 +12,98 @@
   --ehxdo-white: #ffffff;
 }
 
-/* Reset & Base */
-* {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
-}
+.ehxdo_campaign_list_wrapper {
+  max-width: 1200px !important;
+  padding: 20px;
 
-body {
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
-  background-color: var(--ehxdo-bg-light);
-  color: var(--ehxdo-text-dark);
-  line-height: 1.6;
-}
+  .ehxdo-back-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    color: var(--ehxdo-text-gray);
+    text-decoration: none;
+    font-size: 0.875rem;
+    margin-bottom: 1.5rem;
+    transition: color 0.2s;
+  }
 
-/* Container */
-.ehxdo-container {
-  display: grid;
-  grid-template-columns: 1fr 500px;
-  gap: 2rem;
-  max-width: 1400px;
-  margin: 0 auto;
-  padding: 2rem;
+  .ehxdo-back-link:hover {
+    color: var(--ehxdo-text-dark);
+  }
+
+  .ehxdo-back-arrow {
+    font-size: 1.25rem;
+  }
+
 }
 
 @media (max-width: 1024px) {
-  .ehxdo-container {
+  .ehxdo_campaign_list_wrapper {
     grid-template-columns: 1fr;
   }
 }
 
-/* Left Section */
+.ehxdo-campaign_details_container {
+  display: grid;
+  grid-template-columns: 7fr 3fr;
+  // grid-template-columns: repeat(2, 1fr);
+  gap: 30px;
+
+}
+
+
+
+
 .ehxdo-left-section {
   background: var(--ehxdo-white);
-  border-radius: 12px;
-  padding: 2rem;
+  border-radius: 16px;
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+
+
+
+  .ehxdo-campaign-header-image {
+    height: 350px;
+    border-radius: 16px 16px 0px 0px;
+    overflow: hidden;
+
+    .ehxdo-campaign-image {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+  }
+
+  .ehxdo_details_campaign_list {
+    padding: 30px;
+
+    .ehxdo_campaign_title_section {
+      .ehxdo-campaign-title {
+        font-size: 16px;
+        font-weight: 400;
+        margin: 0px;
+        color: var(--ehxdo-text-dark);
+      }
+    }
+
+  }
+
+
+
 }
 
-.ehxdo-back-link {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.5rem;
-  color: var(--ehxdo-text-gray);
-  text-decoration: none;
-  font-size: 0.875rem;
-  margin-bottom: 1.5rem;
-  transition: color 0.2s;
-}
 
-.ehxdo-back-link:hover {
-  color: var(--ehxdo-text-dark);
-}
 
-.ehxdo-back-arrow {
-  font-size: 1.25rem;
-}
 
-.ehxdo-campaign-header {
-  margin-bottom: 2rem;
-}
 
-.ehxdo-campaign-image {
-  width: 100%;
-  height: 300px;
-  object-fit: cover;
-  border-radius: 8px;
-  margin-bottom: 1rem;
-}
 
-.ehxdo-campaign-title {
-  font-size: 1.5rem;
-  font-weight: 600;
-  color: var(--ehxdo-text-dark);
-}
 
 /* Stats */
 .ehxdo-stats-container {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
-  gap: 2rem;
-  margin-bottom: 2rem;
+  gap: 20px;
+  margin-bottom: 30px;
+  margin-top: 30px;
 }
 
 .ehxdo-stat-item {
@@ -105,16 +116,41 @@ body {
   margin-bottom: 0.25rem;
 }
 
-.ehxdo-stat-raised .ehxdo-stat-value {
-  color: var(--ehxdo-primary-color);
+.ehxdo-stat-raised {
+  background: #EFF6FF;
+  border-radius: 10px;
+  padding: 10px;
+
+  .ehxdo-stat-value {
+    font-size: 24px;
+    font-weight: 400;
+    color: var(--ehxdo-primary-color);
+  }
 }
 
-.ehxdo-stat-goal .ehxdo-stat-value {
-  color: var(--ehxdo-success-color);
+
+.ehxdo-stat-goal {
+  background: #F0FDF4;
+  border-radius: 10px;
+  padding: 10px;
+
+  .ehxdo-stat-value {
+    font-size: 24px;
+    font-weight: 400;
+    color: var(--ehxdo-success-color);
+  }
 }
 
-.ehxdo-stat-donors .ehxdo-stat-value {
-  color: var(--ehxdo-purple-color);
+.ehxdo-stat-donors {
+  background: #FAF5FF;
+  border-radius: 10px;
+  padding: 10px;
+
+  .ehxdo-stat-value {
+     font-size: 24px;
+    font-weight: 400;
+    color: var(--ehxdo-purple-color);
+  }
 }
 
 .ehxdo-stat-label {
@@ -205,32 +241,6 @@ body {
   height: fit-content;
 }
 
-.ehxdo-view-toggle {
-  display: flex;
-  gap: 0.5rem;
-  margin-bottom: 1rem;
-}
-
-.ehxdo-view-btn {
-  flex: 1;
-  padding: 0.625rem 1rem;
-  background: var(--ehxdo-white);
-  border: 1px solid var(--ehxdo-border-color);
-  border-radius: 6px;
-  font-size: 0.875rem;
-  cursor: pointer;
-  transition: all 0.2s;
-}
-
-.ehxdo-view-btn:hover {
-  background: var(--ehxdo-bg-light);
-}
-
-.ehxdo-view-btn.ehxdo-active {
-  background: var(--ehxdo-text-dark);
-  color: var(--ehxdo-white);
-  border-color: var(--ehxdo-text-dark);
-}
 
 /* Donation Card */
 .ehxdo-donation-card {
