@@ -18,13 +18,13 @@ class CampaignListShortcode
 
     public function handelShortcodeCall($shortcodeAttributes)
     {
-        wp_enqueue_style( 'ehx-donate-public',  EHXDonate_URL . 'assets/css/frontend/campaign_list.css', [],  EHXDonate_VERSION  );
-        
-        
-      $campaigns = (new Campaign())
-    ->where('status', 'active')
-    ->orderBy('id', 'DESC')
-    ->get();
+        wp_enqueue_style('ehx-donate-public',  EHXDonate_URL . 'assets/css/frontend/campaign_list.css', [],  EHXDonate_VERSION);
+
+
+        $campaigns = (new Campaign())
+            ->where('status', 'active')
+            ->orderBy('id', 'DESC')
+            ->get();
 
         return View::make('CampaignLists/CampaignLists', [
             'data' => $campaigns,
