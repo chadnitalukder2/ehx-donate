@@ -180,21 +180,20 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                             id="ehxdo-custom-amount">
                     </div>
 
-                    <div class="ehxdo-taxpayer-info">
-                        <p class="ehxdo-info-text">I am a UK taxpayer - Add Gift Aid (+25%)</p>
-                        <p class="ehxdo-info-subtext">Boost your donation by 25% at no extra cost. We'll claim Gift Aid on your behalf.</p>
-                    </div>
-
                     <button type="button" class="ehxdo-donate-btn" id="ehxdo-donate-btn">
-                        💳 Donate $<?php echo $default_amount; ?>
+
+
+                        <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M13.3335 3.33331H2.66683C1.93045 3.33331 1.3335 3.93027 1.3335 4.66665V11.3333C1.3335 12.0697 1.93045 12.6666 2.66683 12.6666H13.3335C14.0699 12.6666 14.6668 12.0697 14.6668 11.3333V4.66665C14.6668 3.93027 14.0699 3.33331 13.3335 3.33331Z" stroke="white" stroke-width="1.33333" stroke-linecap="round" stroke-linejoin="round" />
+                            <path d="M1.3335 6.66669H14.6668" stroke="white" stroke-width="1.33333" stroke-linecap="round" stroke-linejoin="round" />
+                        </svg>
+
+
+                        Donate $<?php echo $default_amount; ?>
                     </button>
 
                     <p class="ehxdo-disclaimer">Protected by Google reCAPTCHA. Issues payment via Stripe.</p>
 
-                    <div class="ehxdo-section-nav">
-                        <button type="button" class="ehxdo-nav-btn ehxdo-prev" disabled>Previous</button>
-                        <button type="button" class="ehxdo-nav-btn ehxdo-next">Next</button>
-                    </div>
                 </div>
 
                 <!-- Section 2: Personal Information -->

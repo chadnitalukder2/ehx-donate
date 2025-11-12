@@ -385,8 +385,8 @@
 }
 
 .ehxdo-amount-btn.ehxdo-selected {
-  background: var(--ehxdo-primary-color);
-  color: var(--ehxdo-white);
+  background: #EFF6FF;
+  color: var(--ehxdo-primary-color);
   border-color: var(--ehxdo-primary-color);
 }
 
@@ -396,6 +396,7 @@
   border: 2px solid var(--ehxdo-border-color);
   border-radius: 8px;
   font-size: 0.9375rem;
+  box-sizing: border-box;
   transition: border-color 0.2s;
 }
 
@@ -426,14 +427,20 @@
 
 /* Donate Button */
 .ehxdo-donate-btn {
+  font-family: Inter Tight, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  letter-spacing: 1px;
+  gap: 10px;
   width: 100%;
   padding: 1rem;
   background: var(--ehxdo-primary-color);
   color: var(--ehxdo-white);
   border: none;
-  border-radius: 8px;
-  font-size: 1rem;
-  font-weight: 600;
+  border-radius: 10px;
+  font-size: 14px;
+  font-weight: 500;
   cursor: pointer;
   transition: background 0.2s;
   margin-bottom: 0.75rem;
@@ -464,15 +471,15 @@
 
 .ehxdo-form-row {
   display: grid;
-  grid-template-columns: repeat(2, 1fr);
   gap: 1rem;
 }
 
 .ehxdo-input {
   width: 100%;
-  padding: 0.75rem;
-  border: 1px solid var(--ehxdo-border-color);
-  border-radius: 6px;
+  height: 44px;
+  padding: 0px 12px;
+  border: 1.5px solid var(--ehxdo-border-color);
+  border-radius: 10px;
   font-size: 0.875rem;
   transition: border-color 0.2s;
 }
