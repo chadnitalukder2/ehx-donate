@@ -13,7 +13,7 @@
 }
 
 .ehxdo_campaign_list_wrapper {
-   font-family: Inter Tight, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+  font-family: Inter Tight, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
   max-width: 1200px !important;
   padding: 20px;
 
@@ -46,7 +46,7 @@
 
 .ehxdo-campaign_details_container {
   display: grid;
-  grid-template-columns: 7fr 3fr;
+  grid-template-columns: 6fr 3fr;
   // grid-template-columns: repeat(2, 1fr);
   gap: 30px;
 
@@ -58,7 +58,8 @@
 .ehxdo-left-section {
   background: var(--ehxdo-white);
   border-radius: 16px;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  border: 1px solid #E5E7EB;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
 
 
 
@@ -148,7 +149,7 @@
   padding: 10px;
 
   .ehxdo-stat-value {
-     font-size: 24px;
+    font-size: 24px;
     font-weight: 400;
     color: var(--ehxdo-purple-color);
   }
@@ -198,7 +199,7 @@
 }
 
 .ehxdo-about-title {
-   font-family: Inter Tight, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+  font-family: Inter Tight, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
   font-size: 20px;
   font-weight: 500;
   margin-bottom: 1rem;
@@ -248,9 +249,10 @@
 /* Donation Card */
 .ehxdo-donation-card {
   background: var(--ehxdo-white);
-  border-radius: 12px;
-  padding: 2rem;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  border-radius: 16px;
+  padding: 30px;
+  border: 1px solid #E5E7EB;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
 }
 
 .ehxdo-donation-card.ehxdo-hidden {
@@ -258,8 +260,11 @@
 }
 
 .ehxdo-card-title {
-  font-size: 1.25rem;
-  font-weight: 600;
+  font-family: Inter Tight, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+  ;
+  font-size: 16px;
+  font-weight: 400;
+  margin: 0px;
   margin-bottom: 1.5rem;
   color: var(--ehxdo-text-dark);
 }
@@ -267,41 +272,153 @@
 /* Donation Type */
 .ehxdo-donation-type {
   margin-bottom: 1.5rem;
+
+  .ehxdo-select-type {
+    width: 100%;
+    border-radius: 10px;
+    height: 44px;
+    border: 1.5px solid var(--ehxdo-border-color);
+    cursor: pointer;
+    padding: 10px 12px;
+
+    &:focus-visible {
+      outline: none;
+      border-color: var(--ehxdo-primary-color);
+    }
+  }
+
+  
+        .ehxdo-label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: #1f2937;
+            font-size: 14px;
+        }
+
+        .custom-select {
+            position: relative;
+            width: 100%;
+        }
+
+        .select-display {
+            background-color: #f5f5f5;
+            color: #333;
+            border: 1px solid #ccc;
+            border-radius: 8px;
+            padding: 12px 40px 12px 16px;
+            cursor: pointer;
+            user-select: none;
+            transition: all 0.2s ease;
+            position: relative;
+        }
+
+        .select-display:hover {
+            border-color: #999;
+        }
+
+        .select-display.active {
+            border-color: #151515;
+            border-bottom-left-radius: 0;
+            border-bottom-right-radius: 0;
+        }
+
+        .select-display::after {
+            content: "";
+            position: absolute;
+            top: 50%;
+            right: 16px;
+            width: 0;
+            height: 0;
+            border: 5px solid transparent;
+            border-color: #333 transparent transparent transparent;
+            transform: translateY(-30%);
+            transition: transform 0.2s ease;
+        }
+
+        .select-display.active::after {
+            transform: translateY(-50%) rotate(180deg);
+        }
+
+        .select-options {
+            position: absolute;
+            background-color: #fff;
+            border: 1px solid #151515;
+            border-top: none;
+            border-bottom-left-radius: 8px;
+            border-bottom-right-radius: 8px;
+            top: 100%;
+            left: 0;
+            right: 0;
+            z-index: 99;
+            overflow: hidden;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+            max-height: 0;
+            opacity: 0;
+            transition: all 0.3s ease;
+        }
+
+        .select-options.show {
+            max-height: 300px;
+            opacity: 1;
+        }
+
+        .select-option {
+            color: #333;
+            padding: 12px 16px;
+            cursor: pointer;
+            user-select: none;
+            transition: all 0.2s ease;
+            background-color: #fff;
+        }
+
+        .select-option:hover {
+            background-color: #151515;
+            color: #fff;
+        }
+
+        .select-option.selected {
+            background-color: #111111;
+            color: #fff;
+            font-weight: 600;
+        }
+
+        .select-option.selected:hover {
+            background-color: #000;
+        }
+
+        /* Hidden input */
+        input[type="hidden"] {
+            display: none;
+        }
+
+  // .ehxdo-select-type option {
+  //   background-color: #fff;
+  //   color: #333;
+  // }
+
+  // .ehxdo-select-type option:hover {
+  //   background-color: #151515;
+  //   color: #fff;
+  // }
+
+  // .ehxdo-select-type option:checked {
+  //   background-color: #111111;
+  //   color: #fff;
+  // }
+
+
 }
+
 
 .ehxdo-label {
   display: block;
-  font-size: 0.875rem;
+  font-size: 14px;
   font-weight: 500;
-  margin-bottom: 0.75rem;
+  margin-bottom: 10px;
   color: var(--ehxdo-text-dark);
 }
 
-.ehxdo-radio-group {
-  display: flex;
-  gap: 1rem;
-}
-
-.ehxdo-radio-label {
-  flex: 1;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: 0.75rem;
-  border: 2px solid var(--ehxdo-border-color);
-  border-radius: 8px;
-  cursor: pointer;
-  transition: all 0.2s;
-}
-
-.ehxdo-radio-label input[type="radio"] {
-  margin-right: 0.5rem;
-}
-
-.ehxdo-radio-label:has(input:checked) {
-  border-color: var(--ehxdo-primary-color);
-  background: rgba(37, 99, 235, 0.05);
-}
 
 /* Amount Selection */
 .ehxdo-amount-section {
@@ -316,14 +433,15 @@
 }
 
 .ehxdo-amount-btn {
-  padding: 0.875rem;
+  padding: 12px;
   background: var(--ehxdo-white);
-  border: 2px solid var(--ehxdo-border-color);
-  border-radius: 8px;
-  font-size: 0.9375rem;
-  font-weight: 500;
+  border: 1.5px solid var(--ehxdo-border-color);
+  border-radius: 10px;
+  font-size: 14px;
+  color: #364153;
+  font-weight: 400;
   cursor: pointer;
-  transition: all 0.2s;
+  transition: all 0.3s;
 }
 
 .ehxdo-amount-btn:hover {

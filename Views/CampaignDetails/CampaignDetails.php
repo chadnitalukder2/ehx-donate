@@ -124,9 +124,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
                         </span> <?php echo $campaign['donors']; ?> Supporters
                     </span>
-                    <span class="ehxdo-meta-item ehxdo-featured">
-                        <span class="ehxdo-meta-icon">❤️</span> Featured Campaign
-                    </span>
                 </div>
             </div>
         </div>
@@ -139,18 +136,30 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 <div class="ehxdo-donation-card" id="ehxdo-section-1">
                     <h3 class="ehxdo-card-title">Make a Donation</h3>
 
+                    <!-- <div class="ehxdo-donation-type">
+                        <label for="donation_type" class="ehxdo-label">Donation Type</label>
+                        <select id="donation_type" name="donation_type" class="ehxdo-select-type">
+                            <option value="one-time" selected>One-time</option>
+                            <option value="weekly">Weekly</option>
+                            <option value="monthly">Monthly</option>
+                            <option value="quarterly">Quarterly</option>
+                            <option value="yearly">Yearly</option>
+                        </select>
+                    </div> -->
+
                     <div class="ehxdo-donation-type">
-                        <label class="ehxdo-label">Donation Type</label>
-                        <div class="ehxdo-radio-group">
-                            <label class="ehxdo-radio-label">
-                                <input type="radio" name="donation_type" value="one-time" checked>
-                                <span>One-time</span>
-                            </label>
-                            <label class="ehxdo-radio-label">
-                                <input type="radio" name="donation_type" value="monthly">
-                                <span>Monthly</span>
-                            </label>
+                        <label for="donation_type" class="ehxdo-label">Donation Type</label>
+                        <div class="custom-select">
+                            <div class="select-display">One-time</div>
+                            <div class="select-options">
+                                <div class="select-option selected" data-value="one-time">One-time</div>
+                                <div class="select-option" data-value="weekly">Weekly</div>
+                                <div class="select-option" data-value="monthly">Monthly</div>
+                                <div class="select-option" data-value="quarterly">Quarterly</div>
+                                <div class="select-option" data-value="yearly">Yearly</div>
+                            </div>
                         </div>
+                        <input type="hidden" name="donation_type" id="donation_type" value="one-time">
                     </div>
 
                     <div class="ehxdo-amount-section">
@@ -289,3 +298,143 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         </div>
     </div>
 </div>
+
+<script>
+    const customSelect = document.querySelector('.custom-select');
+    const selectDisplay = customSelect.querySelector('.select-display');
+    const selectOptions = customSelect.querySelector('.select-options');
+    const options = customSelect.querySelectorAll('.select-option');
+    const hiddenInput = document.getElementById('donation_type');
+    const displayValue = document.getElementById('display-value');
+
+    // Toggle dropdown
+    selectDisplay.addEventListener('click', function(e) {
+        e.stopPropagation();
+        selectOptions.classList.toggle('show');
+        this.classList.toggle('active');
+    });
+
+    // Select option
+    options.forEach(option => {
+        option.addEventListener('click', function() {
+            const value = this.getAttribute('data-value');
+            const text = this.textContent;
+
+            // Update display
+            selectDisplay.textContent = text;
+            hiddenInput.value = value;
+            displayValue.textContent = value;
+
+            // Update selected state
+            options.forEach(opt => opt.classList.remove('selected'));
+            this.classList.add('selected');
+
+            // Close dropdown
+            selectOptions.classList.remove('show');
+            selectDisplay.classList.remove('active');
+        });
+    });
+
+    // Close dropdown when clicking outside
+    document.addEventListener('click', function(e) {
+        if (!customSelect.contains(e.target)) {
+            selectOptions.classList.remove('show');
+            selectDisplay.classList.remove('active');
+        }
+    });
+
+    // Close on Escape key
+    document.addEventListener('keydown', function(e) {
+        if (e.key === 'Escape') {
+            selectOptions.classList.remove('show');
+            selectDisplay.classList.remove('active');
+        }
+    });
+</script>
+
+<!-- <script>
+       // Section Navigation
+        const sections = document.querySelectorAll('.ehxdo-donation-card');
+        let currentSection = 0;
+
+        function showSection(index) {
+            sections.forEach((section, i) => {
+                if (i === index) {
+                    section.classList.remove('ehxdo-hidden');
+                } else {
+                    section.classList.add('ehxdo-hidden');
+                }
+            });
+
+            // Update button states
+            const prevBtns = document.querySelectorAll('.ehxdo-prev');
+            const nextBtns = document.querySelectorAll('.ehxdo-next');
+            
+            prevBtns.forEach(btn => {
+                btn.disabled = index === 0;
+            });
+
+            nextBtns.forEach(btn => {
+                btn.style.display = index === sections.length - 1 ? 'none' : 'inline-block';
+            });
+        }
+
+        document.querySelectorAll('.ehxdo-next').forEach(btn => {
+            btn.addEventListener('click', () => {
+                if (currentSection < sections.length - 1) {
+                    currentSection++;
+                    showSection(currentSection);
+                }
+            });
+        });
+
+        document.querySelectorAll('.ehxdo-prev').forEach(btn => {
+            btn.addEventListener('click', () => {
+                if (currentSection > 0) {
+                    currentSection--;
+                    showSection(currentSection);
+                }
+            });
+        });
+
+        // Amount selection
+        const amountInput = document.getElementById('ehxdo-selected-amount');
+        const donateBtn = document.getElementById('ehxdo-donate-btn');
+        const customAmountInput = document.getElementById('ehxdo-custom-amount');
+        const summaryAmount = document.getElementById('ehxdo-summary-amount');
+        const summaryTotal = document.getElementById('ehxdo-summary-total');
+
+        function updateAmount(amount) {
+            amountInput.value = amount;
+            donateBtn.textContent = `💳 Donate $${amount}`;
+            summaryAmount.textContent = `£${amount}.00`;
+            summaryTotal.textContent = `£${amount}.00`;
+        }
+
+        document.querySelectorAll('.ehxdo-amount-btn').forEach(btn => {
+            btn.addEventListener('click', function() {
+                document.querySelectorAll('.ehxdo-amount-btn').forEach(b => b.classList.remove('ehxdo-selected'));
+                this.classList.add('ehxdo-selected');
+                customAmountInput.value = '';
+                
+                const amount = this.getAttribute('data-amount');
+                updateAmount(amount);
+            });
+        });
+
+        customAmountInput.addEventListener('input', function() {
+            const customAmount = parseFloat(this.value) || 0;
+            if (customAmount > 0) {
+                document.querySelectorAll('.ehxdo-amount-btn').forEach(b => b.classList.remove('ehxdo-selected'));
+                updateAmount(customAmount);
+            }
+        });
+
+        // Donate button click (goes to next section)
+        donateBtn.addEventListener('click', () => {
+            if (currentSection < sections.length - 1) {
+                currentSection++;
+                showSection(currentSection);
+            }
+        });
+</script> -->
