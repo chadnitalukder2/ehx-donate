@@ -45,7 +45,7 @@
   gap: 30px;
 }
 
-.ehxdo-left-section {
+.ehxdo-left-section .ehxdo_campaign_details_wrapper {
   background: var(--ehxdo-white);
   border-radius: 16px;
   border: 1px solid #E5E7EB;
