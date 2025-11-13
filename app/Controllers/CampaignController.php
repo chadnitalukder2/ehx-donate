@@ -49,6 +49,8 @@ class CampaignController extends Controller
         ]);
     }
 
+
+
     /**
      * Create a new campaign
      */
@@ -218,7 +220,7 @@ class CampaignController extends Controller
     public function destroy(int $id): void
     {
         $this->requireAuth();
-    
+
         $campaign = Campaign::find($id);
 
         if (!$campaign) {
@@ -291,5 +293,24 @@ class CampaignController extends Controller
                 return $campaign->toArray();
             }, $campaigns)
         ]);
+    }
+
+    public function getCampaignByPostId(int $id)
+    {
+        $campaign = Campaign::getCampaignByPostId($id);
+
+        if (!$campaign) {
+            $this->error('Campaign not found', 404);
+            return;
+        }
+
+        $campaign->settings   = json_decode($campaign->settings, true);
+        $campaign->categories = json_decode($campaign->categories, true);
+        $campaign->tags       = json_decode($campaign->tags, true);
+
+        $post = get_post($campaign->post_id);
+        $campaign->post = $post;
+
+       return $campaign->toArray();
     }
 }

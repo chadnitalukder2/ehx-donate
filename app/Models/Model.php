@@ -473,6 +473,23 @@ abstract class Model
         return $models;
     }
 
+      public static function getCampaignByPostId(int $post_id): ?self
+    {
+        $instance = new static();
+        $table = $instance->wpdb->prefix . $instance->table;
+
+        $result = $instance->wpdb->get_row(
+            $instance->wpdb->prepare("SELECT * FROM {$table} WHERE post_id = %d", $post_id)
+        );
+
+        if ($result) {
+            $instance->fill((array)$result);
+            $instance->exists = true;
+            return $instance;
+        }
+
+        return null;
+    }
 
     /**
      * Magic method to get attributes

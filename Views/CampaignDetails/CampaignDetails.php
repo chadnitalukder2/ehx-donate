@@ -1,51 +1,28 @@
 <?php
-// Configuration
-$campaign = [
-    'title' => 'Food Drive 2024',
-    'raised' => 15200,
-    'goal' => 20000,
-    'donors' => 156,
-    'end_date' => '12/31/2024',
-    'image' => 'https://cdn.optinmonster.com/wp-content/uploads/2023/03/how-to-create-an-email-campaign-facebook.png',
-    'description' => [
-        'Feeding hungry families and ensuring no one goes to bed hungry.',
-        'Your generous donation will help us continue our mission to make a real difference in the lives of those who need it most. Every contribution, no matter the size, brings us closer to our goal and helps create lasting positive change.',
-        'We believe in transparency and accountability. Regular updates will be shared with all donors to show exactly how funds are being utilized to maximize impact.'
-    ]
-];
+// dd($campaign);
+// dd($campaign['settings']['description']);
+// $campaign = [
+//     'title' => 'Food Drive 2024',
+//     'raised' => 15200,
+//     'goal' => 20000,
+//     'donors' => 156,
+//     'end_date' => '12/31/2024',
+//     'image' => 'https://cdn.optinmonster.com/wp-content/uploads/2023/03/how-to-create-an-email-campaign-facebook.png',
+//     'description' => [
+//         'Feeding hungry families and ensuring no one goes to bed hungry.',
+//         'Your generous donation will help us continue our mission to make a real difference in the lives of those who need it most. Every contribution, no matter the size, brings us closer to our goal and helps create lasting positive change.',
+//         'We believe in transparency and accountability. Regular updates will be shared with all donors to show exactly how funds are being utilized to maximize impact.'
+//     ]
+// ];
 
 // Calculate progress
-$progress = round(($campaign['raised'] / $campaign['goal']) * 100);
+// $progress = round(($campaign['raised'] / $campaign['goal']) * 100);
 
-// Donation amounts
-$preset_amounts = [10, 25, 50, 100, 250];
-$default_amount = 50;
+// // Donation amounts
+// $preset_amounts = [10, 25, 50, 100, 250];
+// $default_amount = 50;
 
-// Handle form submission
-if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    // Process donation
-    $donation_data = [
-        'amount' => $_POST['amount'] ?? $default_amount,
-        'type' => $_POST['donation_type'] ?? 'one-time',
-        'title' => $_POST['title'] ?? '',
-        'first_name' => $_POST['first_name'] ?? '',
-        'last_name' => $_POST['last_name'] ?? '',
-        'email' => $_POST['email'] ?? '',
-        'phone' => $_POST['phone'] ?? '',
-        'address_line_1' => $_POST['address_line_1'] ?? '',
-        'address_line_2' => $_POST['address_line_2'] ?? '',
-        'city' => $_POST['city'] ?? '',
-        'state' => $_POST['state'] ?? '',
-        'country' => $_POST['country'] ?? '',
-        'post_code' => $_POST['post_code'] ?? '',
-        'gift_aid' => isset($_POST['gift_aid']) ? true : false
-    ];
 
-    // Here you would process the payment and save to database
-    // For now, just redirect to a thank you page
-    // header('Location: thank-you.php');
-    // exit;
-}
 ?>
 <div class="ehxdo_campaign_list_wrapper">
     <a href="campaigns.php" class="ehxdo-back-link">
@@ -59,7 +36,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
 
             <div class="ehxdo-campaign-header-image">
-                <img src="<?php echo htmlspecialchars($campaign['image']); ?>"
+                <img src="<?php echo htmlspecialchars($campaign['header_image']); ?>"
                     alt="<?php echo htmlspecialchars($campaign['title']); ?>"
                     class="ehxdo-campaign-image">
             </div>
@@ -76,7 +53,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                         <div class="ehxdo-stat-label">Raised</div>
                     </div>
                     <div class="ehxdo-stat-item ehxdo-stat-goal">
-                        <div class="ehxdo-stat-value">$<?php echo number_format($campaign['goal']); ?></div>
+                        <div class="ehxdo-stat-value">$<?php echo number_format($campaign['goal_amount']); ?></div>
                         <div class="ehxdo-stat-label">Goal</div>
                     </div>
                     <div class="ehxdo-stat-item ehxdo-stat-donors">
@@ -97,9 +74,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
                 <div class="ehxdo-about-section">
                     <h2 class="ehxdo-about-title">About This Campaign</h2>
-                    <?php foreach ($campaign['description'] as $paragraph): ?>
-                        <p class="ehxdo-about-text"><?php echo htmlspecialchars($paragraph); ?></p>
-                    <?php endforeach; ?>
+                    <p class="ehxdo-about-text"><?php echo htmlspecialchars($campaign['short_description']); ?></p>
+                    <p class="ehxdo-about-text"><?php echo htmlspecialchars($campaign['settings']['description']) ?></p>
                 </div>
 
                 <div class="ehxdo-campaign-meta">
@@ -146,34 +122,38 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                             <option value="yearly">Yearly</option>
                         </select>
                     </div> -->
-
-                    <div class="ehxdo-donation-type">
-                        <label for="donation_type" class="ehxdo-label">Donation Type</label>
-                        <div class="custom-select">
-                            <div class="select-display">One-time</div>
-                            <div class="select-options">
-                                <div class="select-option selected" data-value="one-time">One-time</div>
-                                <div class="select-option" data-value="weekly">Weekly</div>
-                                <div class="select-option" data-value="monthly">Monthly</div>
-                                <div class="select-option" data-value="quarterly">Quarterly</div>
-                                <div class="select-option" data-value="yearly">Yearly</div>
+                    <?php if ($campaign['settings']['allow_recurring_amount'] === 'true'): ?>
+                        <div class="ehxdo-donation-type">
+                            <label for="donation_type" class="ehxdo-label">Donation Type</label>
+                            <div class="custom-select">
+                                <div class="select-display">One-time</div>
+                                <div class="select-options">
+                                    <div class="select-option selected" data-value="one-time">One-time</div>
+                                    <div class="select-option" data-value="weekly">Weekly</div>
+                                    <div class="select-option" data-value="monthly">Monthly</div>
+                                    <div class="select-option" data-value="quarterly">Quarterly</div>
+                                    <div class="select-option" data-value="yearly">Yearly</div>
+                                </div>
                             </div>
+                            <input type="hidden" name="donation_type" id="donation_type" value="one-time">
                         </div>
-                        <input type="hidden" name="donation_type" id="donation_type" value="one-time">
-                    </div>
+                    <?php endif; ?>
 
                     <div class="ehxdo-amount-section">
                         <label class="ehxdo-label">Select Amount</label>
                         <input type="hidden" name="amount" id="ehxdo-selected-amount" value="<?php echo $default_amount; ?>">
-                        <div class="ehxdo-amount-grid">
-                            <?php foreach ($preset_amounts as $amount): ?>
-                                <button type="button"
-                                    class="ehxdo-amount-btn <?php echo $amount === $default_amount ? 'ehxdo-selected' : ''; ?>"
-                                    data-amount="<?php echo $amount; ?>">
-                                    $<?php echo $amount; ?>
-                                </button>
-                            <?php endforeach; ?>
-                        </div>
+                        <?php  if ($campaign['settings']['allow_custom_amount'] === true): ?>
+                            <div class="ehxdo-amount-grid">
+                                <?php  foreach ($campaign['settings']['pricing_items'] as $item): ?>
+                                    <button type="button"
+                                        class="ehxdo-amount-btn <?php echo $item['amount'] === $default_amount ? 'ehxdo-selected' : ''; ?>"
+                                        data-amount="<?php echo $item['amount']; ?>">
+                                        $<?php echo $item['amount']; ?>
+                                    </button>
+                                <?php endforeach; ?>
+
+                            </div>
+                        <?php endif; ?>
                         <input type="text"
                             placeholder="Custom amount"
                             class="ehxdo-custom-amount"

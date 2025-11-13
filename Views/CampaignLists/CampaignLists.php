@@ -40,7 +40,7 @@
                       </div>
 
                       <button class="ehxdo-donate-btn"
-                          onclick="window.open('<?php echo esc_url(get_permalink($campaign->post_id)); ?>', '_blank')">
+                          onclick="window.open('<?php echo esc_url(get_permalink($campaign->post_id)); ?>')">
                           Donate Now
                       </button>
                   </div>
