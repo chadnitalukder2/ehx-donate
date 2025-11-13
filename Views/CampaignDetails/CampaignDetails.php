@@ -223,36 +223,35 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                             </div>
                         </div>
 
-                        <div class="ehxdo-form-row">
-                            <div class="ehxdo-form-group">
-                                <label class="ehxdo-label">Email Address *</label>
-                                <input type="email" name="email" class="ehxdo-input" required>
-                            </div>
-                            <div class="ehxdo-form-group">
-                                <label class="ehxdo-label">Phone Number *</label>
-                                <input type="tel" name="phone" class="ehxdo-input" required>
-                            </div>
+
+                        <div class="ehxdo-form-group">
+                            <label class="ehxdo-label">Email Address *</label>
+                            <input type="email" name="email" class="ehxdo-input" required>
+                        </div>
+                        <div class="ehxdo-form-group">
+                            <label class="ehxdo-label">Phone Number *</label>
+                            <input type="tel" name="phone" class="ehxdo-input" required>
                         </div>
 
+
                         <div class="ehxdo-gift-aid">
-                            <label class="ehxdo-label">Gift Aid</label>
-                            <p class="ehxdo-info-text">+£0.00 is an extra cost. We'll claim Gift Aid on your behalf.</p>
-                            <label style="display: flex; align-items: center; gap: 0.5rem; margin-top: 0.5rem;">
-                                <input type="checkbox" name="gift_aid" value="1">
-                                <span style="font-size: 0.875rem;">I am a UK taxpayer and want to add Gift Aid</span>
+                            <!-- <label class="ehxdo-label">Gift Aid</label> -->
+                            <label style="display: flex; align-items: center; gap: 0.5rem; cursor: pointer;">
+                                <input type="checkbox" name="gift_aid" value="1" style="cursor: pointer;">
+                                <span style="font-size: 0.875rem;">Gift Aid</span>
                             </label>
                         </div>
 
-                        <div class="ehxdo-form-row">
-                            <div class="ehxdo-form-group">
-                                <label class="ehxdo-label">Address line 1</label>
-                                <input type="text" name="address_line_1" class="ehxdo-input">
-                            </div>
-                            <div class="ehxdo-form-group">
-                                <label class="ehxdo-label">Address line 2</label>
-                                <input type="text" name="address_line_2" class="ehxdo-input">
-                            </div>
+
+                        <div class="ehxdo-form-group">
+                            <label class="ehxdo-label">Address line 1</label>
+                            <input type="text" name="address_line_1" class="ehxdo-input">
                         </div>
+                        <div class="ehxdo-form-group">
+                            <label class="ehxdo-label">Address line 2</label>
+                            <input type="text" name="address_line_2" class="ehxdo-input">
+                        </div>
+
 
                         <div class="ehxdo-form-row">
                             <div class="ehxdo-form-group">

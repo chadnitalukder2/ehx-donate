@@ -471,11 +471,13 @@
 
 .ehxdo-form-row {
   display: grid;
+  grid-template-columns: repeat(2, 1fr);
   gap: 1rem;
 }
 
 .ehxdo-input {
   width: 100%;
+  box-sizing: border-box;
   height: 44px;
   padding: 0px 12px;
   border: 1.5px solid var(--ehxdo-border-color);
@@ -495,8 +497,8 @@ select.ehxdo-input {
 
 /* Gift Aid Section */
 .ehxdo-gift-aid {
-  background: rgba(16, 185, 129, 0.05);
-  border-radius: 8px;
+  background: #F8F9FC;
+  border-radius: 16px;
   padding: 1rem;
 }
 
