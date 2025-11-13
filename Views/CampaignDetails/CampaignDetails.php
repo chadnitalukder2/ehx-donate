@@ -11,7 +11,7 @@ $progress = min($progress, 100);
 
 ?>
 <div class="ehxdo_campaign_list_wrapper">
-    <a href="campaigns.php" class="ehxdo-back-link">
+    <a href="javascript:history.back()"  class="ehxdo-back-link">
         <span class="ehxdo-back-arrow">←</span> Back to Campaigns
     </a>
 

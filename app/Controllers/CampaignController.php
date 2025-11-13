@@ -112,6 +112,7 @@ class CampaignController extends Controller
         ]);
 
         $data['post_id'] = $post_id;
+        $listingData['post_url'] = get_permalink($post_id);
 
         $data["categories"] = json_encode($data["categories"]);
         $data["tags"] = json_encode($data["tags"]);

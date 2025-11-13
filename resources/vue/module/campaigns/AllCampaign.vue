@@ -260,6 +260,10 @@ export default {
                 params: { id: row.id }
             });
         },
+        viewCampaign(row) {
+            const url = row.post_url || `/campaign/${row.id}`;
+            window.open(url, '_blank');
+        },
         openCampaignAddPage() {
             this.$router.push({ name: 'add_campaign' });
         },
