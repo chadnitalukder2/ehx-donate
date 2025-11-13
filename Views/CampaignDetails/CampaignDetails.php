@@ -112,7 +112,9 @@
                 <div class="ehxdo-donation-card" id="ehxdo-section-1">
                     <h3 class="ehxdo-card-title">Make a Donation</h3>
 
-                    <!-- <div class="ehxdo-donation-type">
+                  
+                    <?php if ($campaign['settings']['allow_recurring_amount'] === true): ?>
+                          <div class="ehxdo-donation-type">
                         <label for="donation_type" class="ehxdo-label">Donation Type</label>
                         <select id="donation_type" name="donation_type" class="ehxdo-select-type">
                             <option value="one-time" selected>One-time</option>
@@ -121,9 +123,9 @@
                             <option value="quarterly">Quarterly</option>
                             <option value="yearly">Yearly</option>
                         </select>
-                    </div> -->
-                    <?php if ($campaign['settings']['allow_recurring_amount'] === 'true'): ?>
-                        <div class="ehxdo-donation-type">
+                    </div>
+
+                        <!-- <div class="ehxdo-donation-type">
                             <label for="donation_type" class="ehxdo-label">Donation Type</label>
                             <div class="custom-select">
                                 <div class="select-display">One-time</div>
@@ -136,7 +138,7 @@
                                 </div>
                             </div>
                             <input type="hidden" name="donation_type" id="donation_type" value="one-time">
-                        </div>
+                        </div> -->
                     <?php endif; ?>
 
                     <div class="ehxdo-amount-section">
