@@ -1,26 +1,12 @@
 <?php
 // dd($campaign);
-// dd($campaign['settings']['description']);
-// $campaign = [
-//     'title' => 'Food Drive 2024',
-//     'raised' => 15200,
-//     'goal' => 20000,
-//     'donors' => 156,
-//     'end_date' => '12/31/2024',
-//     'image' => 'https://cdn.optinmonster.com/wp-content/uploads/2023/03/how-to-create-an-email-campaign-facebook.png',
-//     'description' => [
-//         'Feeding hungry families and ensuring no one goes to bed hungry.',
-//         'Your generous donation will help us continue our mission to make a real difference in the lives of those who need it most. Every contribution, no matter the size, brings us closer to our goal and helps create lasting positive change.',
-//         'We believe in transparency and accountability. Regular updates will be shared with all donors to show exactly how funds are being utilized to maximize impact.'
-//     ]
-// ];
+
 
 // Calculate progress
-// $progress = round(($campaign['raised'] / $campaign['goal']) * 100);
-
-// // Donation amounts
-// $preset_amounts = [10, 25, 50, 100, 250];
-// $default_amount = 50;
+$raised =  20;
+$goal = isset($campaign['goal_amount']) ? (float) $campaign['goal_amount'] : 0;
+$progress = ($goal > 0) ? round(($raised / $goal) * 100) : 0;
+$progress = min($progress, 100);
 
 
 ?>
