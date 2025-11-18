@@ -11,6 +11,7 @@ import Subscriptions from './module/subscriptions/Subscriptions.vue';
 import SettingsIndex from './module/settings/SettingsIndex.vue';
 import General from './module/settings/setting_component/General.vue';
 import Shortcode from './module/settings/setting_component/Shortcode.vue';
+import Color from './module/settings/setting_component/Color.vue';
 import Email from './module/settings/setting_component/Email.vue';
 import Integration from './module/settings/setting_component/Instigation.vue';
 // Create router
@@ -104,6 +105,12 @@ const router = createRouter({
                     path: 'shortcode-page',
                     component: Shortcode,
                     name: 'shortcode',
+                    meta: { active_menu: 0 }
+                },
+                {
+                    path: 'color',
+                    component: Color,
+                    name: 'color',
                     meta: { active_menu: 0 }
                 },
                 {
