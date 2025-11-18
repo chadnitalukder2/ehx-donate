@@ -1,6 +1,6 @@
   <?php
 
-    //   dd($data, 'hello');
+      dd($data, 'hello');
 
     ?>
 
@@ -16,7 +16,7 @@
           <?php foreach ($data as $campaign): ?>
               <div class="ehxdo-campaign-card">
                   <div class="ehxdo-campaign-image">
-                      <img src="<?php echo esc_url($campaign->header_image ?: 'https://placehold.co/400x250'); ?>" alt="<?php echo esc_attr($campaign->title); ?>">
+                      <img src="<?php echo esc_url($campaign->header_image ?: 'https://placehold.co/500x260'); ?>" alt="<?php echo esc_attr($campaign->title); ?>">
                   </div>
                   <div class="ehxdo-campaign-content">
                       <h2 class="ehxdo-campaign-title"><?php echo esc_html($campaign->title); ?></h2>

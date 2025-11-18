@@ -112,8 +112,8 @@ class CampaignController extends Controller
         ]);
 
         $data['post_id'] = $post_id;
-        $listingData['post_url'] = get_permalink($post_id);
-
+      
+        $data['post_url'] = get_permalink($post_id);
         $data["categories"] = json_encode($data["categories"]);
         $data["tags"] = json_encode($data["tags"]);
         $data["settings"] = json_encode($data["settings"]);
@@ -299,7 +299,6 @@ class CampaignController extends Controller
     public function getCampaignByPostId(int $id)
     {
         $campaign = Campaign::getCampaignByPostId($id);
-
         if (!$campaign) {
             $this->error('Campaign not found', 404);
             return;
