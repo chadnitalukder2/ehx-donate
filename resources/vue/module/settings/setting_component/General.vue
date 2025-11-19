@@ -37,10 +37,6 @@
                     <div class="ehxdo-form-group">
                         <el-form-item label="Currency" prop="currency" required>
                             <el-select v-model="settings.currency" placeholder="Select currency" filterable clearable>
-                                <!-- <el-option label="Social" value="Social" />
-                                <el-option label="Technology" value="Technology" />
-                                <el-option label="Finance" value="Finance" />
-                                <el-option label="Healthcare" value="Healthcare" /> -->
                                 <el-option v-for="(label, value) in currencies" :key="value" :label="label"
                                     :value="value" />
                             </el-select>
