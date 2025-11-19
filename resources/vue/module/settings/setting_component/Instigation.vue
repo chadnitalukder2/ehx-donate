@@ -39,7 +39,7 @@
                     <label class="ehxdo-form-label">Client key</label>
                     <div class="ehxdo-input-wrapper">
                         <el-input v-model="settings.clientKey" placeholder="Stripe client key"
-                            class="ehxdo-input-field" />
+                            class="ehxdo-input-field"  autocomplete="off"/>
                     </div>
                 </div>
 
@@ -48,7 +48,7 @@
                     <label class="ehxdo-form-label">Client secret</label>
                     <div class="ehxdo-input-wrapper">
                         <el-input v-model="settings.clientSecret" type="password" placeholder="Stripe client secret"
-                            show-password class="ehxdo-input-field" />
+                            show-password class="ehxdo-input-field"  autocomplete="off" />
                     </div>
                 </div>
             </div>
@@ -136,51 +136,6 @@ export default {
 .ehxdo-input-wrapper {
     width: 100%;
 }
-
-/* Element Plus overrides */
-/* .ehxdo-input-wrapper :deep(.el-input__wrapper) {
-    padding: 10px 14px;
-    border: 1px solid #d1d5db;
-    border-radius: 4px;
-    background-color: #ffffff;
-    box-shadow: none;
-    transition: border-color 0.15s ease-in-out;
-} */
-
-/* .ehxdo-input-wrapper :deep(.el-input__wrapper:hover) {
-    border-color: #9ca3af;
-} */
-/* 
-.ehxdo-input-wrapper :deep(.el-input__wrapper.is-focus) {
-    border-color: #3b82f6;
-    box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
-} */
-
-/* .ehxdo-input-wrapper :deep(.el-input__inner) {
-    font-size: 14px;
-    color: #111827;
-} */
-
-/* .ehxdo-input-wrapper :deep(.el-input__inner::placeholder) {
-    color: #9ca3af;
-} */
-
-/* Switch styling */
-/* .ehxdo-input-wrapper :deep(.el-switch) {
-    --el-switch-on-color: #3b82f6;
-    --el-switch-off-color: #d1d5db;
-} */
-/* 
-.ehxdo-input-wrapper :deep(.el-switch__core) {
-    height: 28px;
-    min-width: 52px;
-    border: none;
-} */
-
-/* .ehxdo-input-wrapper :deep(.el-switch__action) {
-    width: 22px;
-    height: 22px;
-} */
 
 /* Checkbox styling */
 .ehxdo-checkbox-wrapper {
