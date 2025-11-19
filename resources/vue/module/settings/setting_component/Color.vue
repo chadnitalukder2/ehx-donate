@@ -1,16 +1,15 @@
 <template>
     <div class="ehxdo-container">
-        <h1 class="ehxdo-main-title">Color & Typography Template</h1>
+        <!-- <h1 class="ehxdo-main-title">Color & Typography Template</h1> -->
 
         <!-- Color Picker Section -->
         <div class="ehxdo-section">
             <h2 class="ehxdo-section-title">Primary Colors</h2>
             <el-row :gutter="20">
-                <el-col :span="6">
+                <el-col :span="12">
                     <div class="ehxdo-color-item">
                         <label class="ehxdo-label">Primary Color</label>
                         <el-color-picker v-model="colors.primary" class="ehxdo-picker" />
-                        <el-input v-model="colors.primary" class="ehxdo-input" readonly />
                     </div>
                 </el-col>
                 <!-- <el-col :span="6">
@@ -84,7 +83,7 @@
                                 :value="font.value" />
                         </el-select>
                         <div class="ehxdo-font-preview" :style="{ fontFamily: fonts.primary }">
-                            Lekha - The quick brown fox jumps over the lazy dog
+                            Font preview sample text.
                         </div>
                     </div>
                 </el-col>
@@ -132,7 +131,7 @@ const colors = ref({
 
 // Font families
 const fonts = ref({
-    primary: '"Helvetica Neue", Helvetica, "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", Arial, sans-serif',
+    primary: '" Inter Tight ", Arial, sans-serif',
     mono: '"Courier New", Courier, monospace'
 })
 
@@ -231,12 +230,13 @@ const copyCSSVariables = () => {
 }
 
 .ehxdo-section-title {
-    font-size: 20px;
+    font-size: 18px;
     font-weight: 500;
     color: #303133;
     margin-bottom: 20px;
     padding-bottom: 10px;
-    border-bottom: 2px solid #EBEEF5;
+    margin-top: 0px;
+    border-bottom: 1px solid #EBEEF5;
 }
 
 .ehxdo-color-item {
@@ -353,7 +353,10 @@ const copyCSSVariables = () => {
 }
 
 :deep(.el-color-picker) {
-    width: 240px !important;
-    height: 55px !important;
+    width: 100% !important;
+    height: 45px !important;
+}
+:deep(.el-select .el-select__wrapper){
+    height: 44px !important;
 }
 </style>

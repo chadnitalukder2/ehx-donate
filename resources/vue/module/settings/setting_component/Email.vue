@@ -18,12 +18,13 @@
         <div class="ehxdo-form-row">
           <label class="ehxdo-form-label">Admin Email Address</label>
           <div class="ehxdo-input-wrapper">
-            <input
+            <!-- <input
               type="email"
-              v-model="emailSettings.adminEmail"
+              v-model="settings.adminEmail"
               class="ehxdo-input-field"
               placeholder="example@eh.studio"
-            />
+            /> -->
+              <el-input v-model="settings.adminEmail" placeholder="example@eh.studio" />
           </div>
         </div>
 
@@ -31,12 +32,13 @@
         <div class="ehxdo-form-row">
           <label class="ehxdo-form-label">Mail appears from</label>
           <div class="ehxdo-input-wrapper">
-            <input
+            <!-- <input
               type="text"
-              v-model="emailSettings.mailFromName"
+              v-model="settings.mailFromName"
               class="ehxdo-input-field"
               placeholder="EHx Studio"
-            />
+            /> -->
+            <el-input v-model="settings.mailFromName"  placeholder="EHx Studio" />
           </div>
         </div>
 
@@ -44,12 +46,13 @@
         <div class="ehxdo-form-row">
           <label class="ehxdo-form-label">Mail appears from address</label>
           <div class="ehxdo-input-wrapper">
-            <input
+            <!-- <input
               type="email"
-              v-model="emailSettings.mailFromAddress"
+              v-model="settings.mailFromAddress"
               class="ehxdo-input-field"
               placeholder="example@eh.studio"
-            />
+            /> -->
+             <el-input v-model="settings.mailFromAddress"   placeholder="example@eh.studio" />
           </div>
         </div>
       </div>
@@ -69,7 +72,7 @@
               <input
                 type="checkbox"
                 id="enableHtml"
-                v-model="emailSettings.enableHtml"
+                v-model="settings.enableHtml"
                 class="ehxdo-checkbox-input"
               />
               <label for="enableHtml" class="ehxdo-checkbox-label">
@@ -92,7 +95,7 @@ import { ref } from 'vue';
 export default {
   name: 'EmailNotificationsSettings',
   setup() {
-    const emailSettings = ref({
+    const settings = ref({
       adminEmail: 'example@eh.studio',
       mailFromName: 'EHx Studio',
       mailFromAddress: 'example@eh.studio',
@@ -100,7 +103,7 @@ export default {
     });
 
     return {
-      emailSettings
+      settings
     };
   }
 };
@@ -167,7 +170,6 @@ export default {
   font-size: 14px;
   font-weight: 500;
   color: #374151;
-  padding-top: 10px;
 }
 
 .ehxdo-input-wrapper {
@@ -178,7 +180,7 @@ export default {
   width: 100%;
   padding: 10px 14px;
   font-size: 14px;
-  border: 1px solid #d1d5db;
+  border: 1px solid #d1d5db !important;
   border-radius: 4px;
   background-color: #ffffff;
   color: #111827;
@@ -211,7 +213,7 @@ export default {
 .ehxdo-checkbox-input {
   width: 18px;
   height: 18px;
-  border: 2px solid #d1d5db;
+  border: 2px solid #d1d5db !important;
   border-radius: 3px;
   cursor: pointer;
   accent-color: #3b82f6;

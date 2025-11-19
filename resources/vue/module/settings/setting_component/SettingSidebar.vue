@@ -29,7 +29,8 @@
 <style scoped lang="scss">
 .ehxdo-sidebar {
   width: 200px;
-  height: 98%;
+  height: 100%;
+  box-sizing: border-box;
   background-color: #fff;
   border-right: 1px solid #e5e5e5;
   box-shadow: none;
