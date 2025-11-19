@@ -129,6 +129,10 @@
                 <!-- Status column -->
                 <el-table-column prop="status" label="Status">
                     <template #default="{ row }">
+                        <el-switch v-model="row.status" v-if="row.status !== 'completed'" @change="updateStatus(row)"
+                            active-value="active" inactive-value="pending" size="small"
+                            style="--el-switch-on-color: #00A63E; --el-switch-off-color: #D39C3D" />
+
                         <span :class="[
                             'status-badge',
                             row.status === 'active' ? 'ehxdo_status-active' :
@@ -137,6 +141,7 @@
                         ]">
                             {{ row.status }}
                         </span>
+
                     </template>
                 </el-table-column>
                 <el-table-column label="Actions" width="75">
@@ -339,6 +344,52 @@ export default {
             }
         },
 
+        async updateStatus(row) {
+            try {
+                await this.$confirm(
+                    `Are you sure you want to change the status to "${row.status}"?`,
+                    'Confirm Status Update',
+                    {
+                        confirmButtonText: 'Yes, Update',
+                        cancelButtonText: 'Cancel',
+                        type: 'warning'
+                    }
+                );
+
+                console.log('Updating status for row:', row);
+                const response = await axios.post(
+                    `${this.rest_api}api/updateCampaignStatus/${row.id}`,
+                    {
+                        status: row.status
+                    },
+                    {
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'X-WP-Nonce': this.nonce
+                        }
+                    }
+                );
+
+                if (response.data.success) {
+                    this.$notify({
+                        title: 'Success',
+                        message: 'Status updated!',
+                        type: 'success'
+                    });
+                } else {
+                    throw new Error("Failed");
+                }
+            } catch (error) {
+                this.$notify({
+                    title: 'Error',
+                    message: 'Could not update status!',
+                    type: 'error'
+                });
+
+                // revert switch UI
+                row.status = row.status === "active" ? "pending" : "active";
+            }
+        },
 
         handleAddedCampaign(newCampaign) {
             this.getAllCampaigns();
@@ -424,6 +475,7 @@ export default {
     text-transform: capitalize;
     font-size: 12px;
     font-weight: 500;
+    margin-left: 8px;
     padding: 3px 8px 4px 8px;
 }
 

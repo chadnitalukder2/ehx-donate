@@ -112,7 +112,7 @@ class CampaignController extends Controller
         ]);
 
         $data['post_id'] = $post_id;
-      
+
         $data['post_url'] = get_permalink($post_id);
         $data["categories"] = json_encode($data["categories"]);
         $data["tags"] = json_encode($data["tags"]);
@@ -269,14 +269,27 @@ class CampaignController extends Controller
     /**
      * Get campaigns by status
      */
-    public function byStatus(string $status): void
+    public function updateCampaignStatus(string $id): void
     {
-        $campaigns = Campaign::getByStatus($status);
+        $this->requireAuth();
+
+        $status = $this->validate([
+            'status' => 'required|in:active,pending,completed',
+        ])['status'];
+
+        $campaign = Campaign::find($id);
+
+        if (!$campaign) {
+            $this->error('Campaign not found', 404);
+            return;
+        }
+
+        $campaign->status = $status;
+        $campaign->save();
 
         $this->success([
-            'campaigns' => array_map(function ($campaign) {
-                return $campaign->toArray();
-            }, $campaigns)
+            'message' => 'Status updated successfully',
+            'campaign' => $campaign->toArray(),
         ]);
     }
 
@@ -311,6 +324,6 @@ class CampaignController extends Controller
         $post = get_post($campaign->post_id);
         $campaign->post = $post;
 
-       return $campaign->toArray();
+        return $campaign->toArray();
     }
 }
