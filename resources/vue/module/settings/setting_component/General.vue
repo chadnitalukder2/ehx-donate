@@ -9,19 +9,24 @@
                     <p class="ehxdo-description">Your users will use this information to contact you.</p>
                 </div>
 
-                <div class="ehxdo-fields-container">
-                    <!-- Company Name -->
-                    <div class="ehxdo-form-group">
-                        <el-form-item label="Company Name" prop="company_name" required>
-                            <el-input v-model="settings.company_name" />
-                        </el-form-item>
+                <el-form
+                    ref="formRef"
+                    :model="settings"
+                    :rules="rules"
+                    label-position="top"
+                >
+                    <div class="ehxdo-fields-container">
 
-                    </div>
+                        <!-- Company Name -->
+                        <div class="ehxdo-form-group">
+                            <el-form-item label="Company Name" prop="company_name">
+                                <el-input v-model="settings.company_name" />
+                            </el-form-item>
+                        </div>
 
-                    <!-- Industry -->
-                    <div class="ehxdo-form-group">
-                        <div class="ehxdo-select-wrapper">
-                            <el-form-item label="Industry" prop="industry" required>
+                        <!-- Industry -->
+                        <div class="ehxdo-form-group">
+                            <el-form-item label="Industry" prop="industry">
                                 <el-select v-model="settings.industry" placeholder="Select industry">
                                     <el-option label="Social" value="Social" />
                                     <el-option label="Technology" value="Technology" />
@@ -29,20 +34,24 @@
                                     <el-option label="Healthcare" value="Healthcare" />
                                 </el-select>
                             </el-form-item>
-
                         </div>
-                    </div>
 
-                    <!-- Currency -->
-                    <div class="ehxdo-form-group">
-                        <el-form-item label="Currency" prop="currency" required>
-                            <el-select v-model="settings.currency" placeholder="Select currency" filterable clearable>
-                                <el-option v-for="(label, value) in currencies" :key="value" :label="label"
-                                    :value="value" />
-                            </el-select>
-                        </el-form-item>
+                        <!-- Currency -->
+                        <div class="ehxdo-form-group">
+                            <el-form-item label="Currency" prop="currency">
+                                <el-select v-model="settings.currency" placeholder="Select currency"  clearable>
+                                    <el-option
+                                        v-for="(label, value) in currencies"
+                                        :key="value"
+                                        :label="label"
+                                        :value="value"
+                                    />
+                                </el-select>
+                            </el-form-item>
+                        </div>
+
                     </div>
-                </div>
+                </el-form>
             </div>
 
             <!-- Address Section -->
@@ -52,87 +61,107 @@
                     <p class="ehxdo-description">This address will appear on your invoice.</p>
                 </div>
 
-                <div class="ehxdo-fields-container">
-                    <!-- Address Name -->
-                    <div class="ehxdo-form-group">
-                        <el-form-item label="Address Name " prop="address_name">
-                            <el-input v-model="settings.address_name" />
-                        </el-form-item>
-                    </div>
+                <el-form
+                    ref="addressForm"
+                    :model="settings"
+                    :rules="rules"
+                    label-position="top"
+                >
+                    <div class="ehxdo-fields-container">
 
-                    <!-- Country or Region -->
-                    <div class="ehxdo-form-group">
-                        <el-form-item label="Country or Region" prop="country">
-                            <el-select v-model="settings.country" placeholder="Select industry">
-                                <el-option label="United States" value="United States" />
-                                <el-option label="United Kingdom" value="United Kingdom" />
-                                <el-option label="Canada" value="Canada" />
-                                <el-option label="Australia" value="Australia" />
-                            </el-select>
-                        </el-form-item>
-                    </div>
-
-                    <!-- City -->
-                    <div class="ehxdo-form-group">
-                        <el-form-item label="City" prop="city">
-                            <el-input v-model="settings.city" />
-                        </el-form-item>
-
-                    </div>
-
-                    <!-- Address and Postal Code -->
-                    <div class="ehxdo-grid-container">
-                        <div class="ehxdo-form-group ehxdo-grid-col-2">
-                            <el-form-item label="Address" prop="address">
-                                <el-input v-model="settings.address" />
-                            </el-form-item>
-                        </div>
-
+                        <!-- Address Name -->
                         <div class="ehxdo-form-group">
-                            <el-form-item label="Postal Code" prop="code">
-                                <el-input v-model="settings.postal_code" />
+                            <el-form-item label="Address Name" prop="address_name">
+                                <el-input v-model="settings.address_name" />
                             </el-form-item>
                         </div>
-                    </div>
-                </div>
-            </div>
 
+                        <!-- Country -->
+                        <div class="ehxdo-form-group">
+                            <el-form-item label="Country or Region" prop="country">
+                                <el-select v-model="settings.country" placeholder="Select country">
+                                    <el-option label="United States" value="United States" />
+                                    <el-option label="United Kingdom" value="United Kingdom" />
+                                    <el-option label="Canada" value="Canada" />
+                                    <el-option label="Australia" value="Australia" />
+                                </el-select>
+                            </el-form-item>
+                        </div>
+
+                        <!-- City -->
+                        <div class="ehxdo-form-group">
+                            <el-form-item label="City" prop="city">
+                                <el-input v-model="settings.city" />
+                            </el-form-item>
+                        </div>
+
+                        <!-- Address + Postal Code -->
+                        <div class="ehxdo-grid-container">
+                            <div class="ehxdo-form-group ehxdo-grid-col-2">
+                                <el-form-item label="Address" prop="address">
+                                    <el-input v-model="settings.address" />
+                                </el-form-item>
+                            </div>
+
+                            <div class="ehxdo-form-group">
+                                <el-form-item label="Postal Code" prop="postal_code">
+                                    <el-input v-model="settings.postal_code" />
+                                </el-form-item>
+                            </div>
+                        </div>
+
+                    </div>
+                </el-form>
+            </div>
         </div>
     </div>
 </template>
 
 <script>
-import { ref } from 'vue';
-
 export default {
     name: 'AccountDetailsForm',
+    props: {
+        settings: {
+            type: Object,
+            default: {}
+        },
+        loading: {
+            type: Boolean,
+            default: false
+        }
+    },
+
     data() {
         return {
-            settings: {
-            },
-            submitting: false,
-            statusActive: false,
-            statusPending: false,
-            statusComplete: false,
+            // settings: {
+            //     company_name: '',
+            //     industry: 'Social',
+            //     country: 'United States',
+            //     currency: 'USD',
+            //     address_name: '',
+            //     address: '',
+            //     city: '',
+            //     postal_code: '',
+            // },
+
             currencies: window.EHXDonate.currencies,
             nonce: window.EHXDonate?.restNonce || '',
             restUrl: window.EHXDonate?.restUrl || '',
-            tagOptions: [],
-            categoryOptions: [],
 
             rules: {
-                title: [
-                    { required: true, message: "Title is required.", trigger: "blur" },
+                company_name: [
+                    { required: true, message: "Company name is required.", trigger: "blur" },
                 ],
-                goal_amount: [
-                    { required: true, message: "Goal amount is required.", trigger: "blur" },
-                    { type: "number", min: 1, message: "Goal amount must be greater than 0", trigger: "blur" },
+                industry: [
+                    { required: true, message: "Industry is required.", trigger: "change" },
                 ],
-                short_description: [
-                    { required: true, message: "Short Description is required. ", trigger: "blur" },
+                currency: [
+                    { required: true, message: "Currency is required.", trigger: "change" },
                 ],
-
-            },
+                country: [
+                    { required: true, message: "Country is required.", trigger: "change" },
+                ],
+            }
         };
     },
 };
@@ -189,70 +218,6 @@ export default {
 .ehxdo-form-group {
     display: flex;
     flex-direction: column;
-}
-
-.ehxdo-label {
-    display: block;
-    font-size: 0.875rem;
-    font-weight: 400;
-    color: #374151;
-    margin-bottom: 0.5rem;
-}
-
-.ehxdo-required {
-    color: #ef4444;
-}
-
-.ehxdo-input {
-    width: 100%;
-    padding: 0.625rem 0.75rem;
-    font-size: 0.9375rem;
-    border: 1px solid #e5e7eb;
-    border-radius: 0.375rem;
-    background-color: #ffffff;
-    color: #111827;
-    outline: none;
-    transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
-    box-sizing: border-box;
-}
-
-.ehxdo-input:focus {
-    border-color: #3b82f6;
-    box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
-}
-
-.ehxdo-select-wrapper {
-    position: relative;
-    width: 100%;
-}
-
-.ehxdo-select {
-    width: 100%;
-    padding: 0.625rem 2.5rem 0.625rem 0.75rem;
-    font-size: 0.9375rem;
-    border: 1px solid #e5e7eb;
-    border-radius: 0.375rem;
-    background-color: #ffffff;
-    color: #111827;
-    outline: none;
-    appearance: none;
-    cursor: pointer;
-    transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
-    box-sizing: border-box;
-}
-
-.ehxdo-select:focus {
-    border-color: #3b82f6;
-    box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
-}
-
-.ehxdo-select-icon {
-    position: absolute;
-    right: 0.75rem;
-    top: 50%;
-    transform: translateY(-50%);
-    color: #6b7280;
-    pointer-events: none;
 }
 
 .ehxdo-grid-container {

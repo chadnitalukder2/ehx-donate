@@ -30,7 +30,7 @@ export default {
 }
 </script>
 
-<style lang="scss" scoped>
+<style lang="scss">
 .ehxdo_app_content {
   font-family: Inter Tight, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
   background: #F8F9FC;
@@ -38,12 +38,16 @@ export default {
 
   .ehxdo_app_main_content {
     display: flex;
-    gap: 20px;
-    padding: 20px 20px 20px 20px;
   }
 
   .ehxdo_main_content {
     flex: 1;
+    width: 100%;
+    box-sizing: border-box;
+    .ehxd_wrapper {
+        padding: 20px;
+        box-sizing: border-box;
+    }
   }
 }
 </style>

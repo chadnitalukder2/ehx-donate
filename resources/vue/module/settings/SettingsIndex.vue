@@ -21,7 +21,7 @@
                 <SettingSidebar />
             </div>
             <div class="ehxdo_settings_details">
-                <RouterView @update-settings="updateSettings" :settings="settings" :loading="loading" />
+                <RouterView :settings="settings" :loading="loading" />
             </div>
         </div>
     </div>
@@ -46,26 +46,40 @@ export default {
             restUrl: window.EHXDonate?.restUrl || ''
         };
     },
+    watch: {
+        $route: {
+            immediate: true,
+            handler() {
+                this.loadSettings(this.$route.name);
+            }
+        }
+    },
     mounted() {
-        this.loadSettings();
+        
+        this.loadSettings(this.$route.name);
     },
     methods: {
-        async loadSettings() {
+        async loadSettings(key) {
+
+            if(key == 'shortcode' || key == 'index') {
+                return false;
+            }
+
             this.loading = true;
             try {
-                const response = await fetch(`${this.restUrl}ehxdonate/v1/settings`, {
+                const response = await fetch(`${this.restUrl}api/settings/${key}`, {
                     method: 'GET',
                     headers: {
                         'Content-Type': 'application/json',
-                        'X-WP-Nonce': this.nonce
+                        'X-WP-Nonce': this.nonce,
                     }
                 });
 
                 const result = await response.json();
                 
                 if (result.success) {
-                    this.settings = { ...result.data };
-                    this.originalSettings = JSON.parse(JSON.stringify(result.data));
+                    this.settings = { ...result.data?.settings };
+                    this.originalSettings = JSON.parse(JSON.stringify(result.data?.settings));
                 }
             } catch (error) {
                 console.error('Error loading settings:', error);
@@ -74,21 +88,16 @@ export default {
                 this.loading = false;
             }
         },
-
-        updateSettings(newSettings) {
-            this.settings = { ...this.settings, ...newSettings };
-        },
-
-        async handleSave() {
+        async handleSave(settings, key) {
             this.saving = true;
             try {
-                const response = await fetch(`${this.restUrl}ehxdonate/v1/settings`, {
+                const response = await fetch(`${this.restUrl}api/settings/${this.$route.name}`, {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
                         'X-WP-Nonce': this.nonce
                     },
-                    body: JSON.stringify(this.settings)
+                    body: JSON.stringify({settings : JSON.stringify(this.settings)})
                 });
 
                 const result = await response.json();
@@ -126,7 +135,9 @@ export default {
         text-align: center;
         align-items: center;
         gap: 20px;
-        padding: 24px 0px;
+        padding: 20px;
+        background: #fff;
+        border-bottom: 1px solid #e5e7eb;
 
         .ehxdo_settings_title {
             h3 {
@@ -143,8 +154,9 @@ export default {
 
         .ehxdo_settings_details {
             width: 100%;
-            border-radius: 0px 16px 16px 0px;
             background: #fff;
+            margin: 20px;
+            border-radius: 12px;
         }
     }
 }

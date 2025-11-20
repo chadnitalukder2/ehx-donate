@@ -34,7 +34,6 @@
   background-color: #fff;
   border-right: 1px solid #e5e5e5;
   box-shadow: none;
-  border-radius: 16px 0px 0px 16px;
 }
 
 .ehxdo-sidebar-title {

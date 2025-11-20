@@ -90,22 +90,18 @@
 </template>
 
 <script>
-import { ref } from 'vue';
 
 export default {
-  name: 'EmailNotificationsSettings',
-  setup() {
-    const settings = ref({
-      adminEmail: 'example@eh.studio',
-      mailFromName: 'EHx Studio',
-      mailFromAddress: 'example@eh.studio',
-      enableHtml: true
-    });
-
-    return {
-      settings
-    };
-  }
+    props: {
+        settings: {
+            type: Object,
+            default: {}
+        },
+        loading: {
+            type: Boolean,
+            default: false
+        }
+    }
 };
 </script>
 

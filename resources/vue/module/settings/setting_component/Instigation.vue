@@ -1,54 +1,56 @@
 <template>
     <div class="ehxdo-stripe-settings-container">
         <!-- Stripe Integration Section -->
-        <div class="ehxdo-section">
-            <h2 class="ehxdo-section-title">Stripe</h2>
-            <p class="ehxdo-section-description">
-                Configuration for Stripe payment gateway integration.
-            </p>
-        </div>
+         <div class="ehxdo-section ehxdo-section-spacing" v-for="(settingItem, value) in settings">
+            <div class="ehxdo-section">
+                <h2 class="ehxdo-section-title">{{ settingItem.title }}</h2>
+                <p class="ehxdo-section-description">
+                    {{ settingItem.description }}
+                </p>
+            </div>
 
-        <!-- Integration Settings Form -->
-        <div class="ehxdo-section ehxdo-section-spacing">
-            <div class="ehxdo-form-container">
-                <!-- Enable Toggle -->
-                <div class="ehxdo-form-row">
-                    <label class="ehxdo-form-label">Enabled</label>
-                    <div class="ehxdo-input-wrapper">
-                        <!-- <el-switch v-model="settings.enabled" size="medium"
-                            :active-color="settings.enabled ? '#00A63E' : '#d1d5db'" /> -->
-                        <el-switch v-model="settings.enabled" class="ml-2"
-                            style="--el-switch-on-color: #00A63E; --el-switch-off-color: #d1d5db" />
-                    </div>
-                </div>
-
-                <!-- Enable Checkbox -->
-                <div class="ehxdo-form-row ehxdo-checkbox-row">
-                    <label class="ehxdo-form-label">Enabled</label>
-                    <div class="ehxdo-checkbox-wrapper">
-                        <div class="ehxdo-checkbox-container">
-                            <el-checkbox v-model="settings.enabledOption" class="ehxdo-checkbox-input">
-                                Enable Stripe as a payment option on the platform.
-                            </el-checkbox>
+            <!-- Integration Settings Form -->
+            <div class="ehxdo-section ehxdo-section-spacing">
+                <div class="ehxdo-form-container">
+                    <!-- Enable Toggle -->
+                    <div class="ehxdo-form-row">
+                        <label class="ehxdo-form-label">Enabled</label>
+                        <div class="ehxdo-input-wrapper">
+                            <!-- <el-switch v-model="settings.enabled" size="medium"
+                                :active-color="settings.enabled ? '#00A63E' : '#d1d5db'" /> -->
+                            <el-switch v-model="settingItem.enabled" class="ml-2"
+                                style="--el-switch-on-color: #00A63E; --el-switch-off-color: #d1d5db" />
                         </div>
                     </div>
-                </div>
 
-                <!-- Client Key -->
-                <div class="ehxdo-form-row">
-                    <label class="ehxdo-form-label">Client key</label>
-                    <div class="ehxdo-input-wrapper">
-                        <el-input v-model="settings.clientKey" placeholder="Stripe client key"
-                            class="ehxdo-input-field"  autocomplete="off"/>
+                    <!-- Enable Checkbox -->
+                    <div class="ehxdo-form-row ehxdo-checkbox-row">
+                        <label class="ehxdo-form-label">Enabled</label>
+                        <div class="ehxdo-checkbox-wrapper">
+                            <div class="ehxdo-checkbox-container">
+                                <el-checkbox v-model="settingItem.enabledOption" class="ehxdo-checkbox-input">
+                                    Enable Stripe as a payment option on the platform.
+                                </el-checkbox>
+                            </div>
+                        </div>
                     </div>
-                </div>
 
-                <!-- Client Secret -->
-                <div class="ehxdo-form-row">
-                    <label class="ehxdo-form-label">Client secret</label>
-                    <div class="ehxdo-input-wrapper">
-                        <el-input v-model="settings.clientSecret" type="password" placeholder="Stripe client secret"
-                            show-password class="ehxdo-input-field"  autocomplete="off" />
+                    <!-- Client Key -->
+                    <div class="ehxdo-form-row">
+                        <label class="ehxdo-form-label">Client key</label>
+                        <div class="ehxdo-input-wrapper">
+                            <el-input v-model="settingItem.clientKey" placeholder="Stripe client key"
+                                class="ehxdo-input-field"  autocomplete="off"/>
+                        </div>
+                    </div>
+
+                    <!-- Client Secret -->
+                    <div class="ehxdo-form-row">
+                        <label class="ehxdo-form-label">Client secret</label>
+                        <div class="ehxdo-input-wrapper">
+                            <el-input v-model="settingItem.clientSecret" type="password" placeholder="Stripe client secret"
+                                show-password class="ehxdo-input-field"  autocomplete="off" />
+                        </div>
                     </div>
                 </div>
             </div>
@@ -61,17 +63,15 @@ import { ref } from 'vue';
 
 export default {
     name: 'StripeIntegrationSettings',
-    setup() {
-        const settings = ref({
-            enabled: false,
-            enabledOption: true,
-            clientKey: '',
-            clientSecret: ''
-        });
-
-        return {
-            settings
-        };
+    props: {
+        settings: {
+            type: Object,
+            default: {}
+        },
+        loading: {
+            type: Boolean,
+            default: false
+        }
     }
 };
 </script>
