@@ -57,7 +57,7 @@ export default {
     max-width: 100%;
     background-color: #ffffff;
     padding: 2rem;
-    border-radius: 0px 16px 16px 0px;
+    border-radius:16px;
     font-family: Inter Tight, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
 }
 

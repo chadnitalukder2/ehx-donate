@@ -39,13 +39,23 @@
                         <!-- Currency -->
                         <div class="ehxdo-form-group">
                             <el-form-item label="Currency" prop="currency">
-                                <el-select v-model="settings.currency" placeholder="Select currency"  clearable>
+                                <el-select v-model="settings.currency" placeholder="Select currency" searchable clearable>
                                     <el-option
                                         v-for="(label, value) in currencies"
                                         :key="value"
                                         :label="label"
                                         :value="value"
                                     />
+                                </el-select>
+                            </el-form-item>
+                        </div>
+
+                         <!-- Currency Position -->
+                        <div class="ehxdo-form-group">
+                            <el-form-item label="Currency Position" prop="currency_position">
+                                <el-select v-model="settings.currency_position" placeholder="Select currency position">
+                                    <el-option label="Before"  value="Before" />
+                                    <el-option label="After" selected value="After" />
                                 </el-select>
                             </el-form-item>
                         </div>
@@ -80,10 +90,12 @@
                         <div class="ehxdo-form-group">
                             <el-form-item label="Country or Region" prop="country">
                                 <el-select v-model="settings.country" placeholder="Select country">
-                                    <el-option label="United States" value="United States" />
-                                    <el-option label="United Kingdom" value="United Kingdom" />
-                                    <el-option label="Canada" value="Canada" />
-                                    <el-option label="Australia" value="Australia" />
+                                    <el-option
+                                        v-for="(label, value) in countries"
+                                        :key="value"
+                                        :label="label"
+                                        :value="value"
+                                    />
                                 </el-select>
                             </el-form-item>
                         </div>
@@ -133,18 +145,8 @@ export default {
 
     data() {
         return {
-            // settings: {
-            //     company_name: '',
-            //     industry: 'Social',
-            //     country: 'United States',
-            //     currency: 'USD',
-            //     address_name: '',
-            //     address: '',
-            //     city: '',
-            //     postal_code: '',
-            // },
-
             currencies: window.EHXDonate.currencies,
+            countries: window.EHXDonate.countries,
             nonce: window.EHXDonate?.restNonce || '',
             restUrl: window.EHXDonate?.restUrl || '',
 
@@ -164,6 +166,9 @@ export default {
             }
         };
     },
+    mounted() {
+        console.log('General.vue loaded', window)
+    },
 };
 </script>
 
@@ -179,7 +184,7 @@ export default {
 .ehxdo-card {
     margin: 0 auto;
     background-color: #ffffff;
-    border-radius: 0.5rem;
+    border-radius: 16px;
     box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
 }
 

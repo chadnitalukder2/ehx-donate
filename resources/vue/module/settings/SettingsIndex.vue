@@ -119,7 +119,7 @@ export default {
         handleCancel() {
             this.settings = JSON.parse(JSON.stringify(this.originalSettings));
             ElMessage.info('Changes cancelled');
-            this.$router.go(-1); // Or navigate to a specific route
+            this.$router.go(-1);
         }
     }
 }
@@ -151,11 +151,12 @@ export default {
 
     .ehxdo_settings_main_content {
         display: flex;
+        margin-bottom: 50px;
 
         .ehxdo_settings_details {
             width: 100%;
             background: #fff;
-            margin: 20px;
+            margin: 20px 20px 0px 20px;
             border-radius: 12px;
         }
     }

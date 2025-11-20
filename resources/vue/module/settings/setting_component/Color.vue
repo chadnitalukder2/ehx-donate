@@ -8,74 +8,24 @@
             <el-row :gutter="20">
                 <el-col :span="12">
                     <div class="ehxdo-color-item">
-                        <label class="ehxdo-label">Primary Color</label>
+                        <label class="ehxdo-label">Button Color</label>
                         <el-color-picker v-model="colors.primary" class="ehxdo-picker" />
                     </div>
                 </el-col>
-                <!-- <el-col :span="6">
+                <el-col :span="12">
                     <div class="ehxdo-color-item">
-                        <label class="ehxdo-label">Success Color</label>
+                        <label class="ehxdo-label">Button Text Color</label>
                         <el-color-picker v-model="colors.success" class="ehxdo-picker" />
-                        <el-input v-model="colors.success" class="ehxdo-input" readonly />
                     </div>
                 </el-col>
-                <el-col :span="6">
-                    <div class="ehxdo-color-item">
-                        <label class="ehxdo-label">Warning Color</label>
-                        <el-color-picker v-model="colors.warning" class="ehxdo-picker" />
-                        <el-input v-model="colors.warning" class="ehxdo-input" readonly />
-                    </div>
-                </el-col>
-                <el-col :span="6">
-                    <div class="ehxdo-color-item">
-                        <label class="ehxdo-label">Danger Color</label>
-                        <el-color-picker v-model="colors.danger" class="ehxdo-picker" />
-                        <el-input v-model="colors.danger" class="ehxdo-input" readonly />
-                    </div>
-                </el-col> -->
             </el-row>
         </div>
-
-        <!-- Text Colors Section -->
-        <!-- <div class="ehxdo-section">
-      <h2 class="ehxdo-section-title">Text Colors</h2>
-      <el-row :gutter="20">
-        <el-col :span="6">
-          <div class="ehxdo-color-item">
-            <label class="ehxdo-label">Primary Text</label>
-            <el-color-picker v-model="colors.textPrimary" class="ehxdo-picker" />
-            <el-input v-model="colors.textPrimary" class="ehxdo-input" readonly />
-          </div>
-        </el-col>
-        <el-col :span="6">
-          <div class="ehxdo-color-item">
-            <label class="ehxdo-label">Regular Text</label>
-            <el-color-picker v-model="colors.textRegular" class="ehxdo-picker" />
-            <el-input v-model="colors.textRegular" class="ehxdo-input" readonly />
-          </div>
-        </el-col>
-        <el-col :span="6">
-          <div class="ehxdo-color-item">
-            <label class="ehxdo-label">Secondary Text</label>
-            <el-color-picker v-model="colors.textSecondary" class="ehxdo-picker" />
-            <el-input v-model="colors.textSecondary" class="ehxdo-input" readonly />
-          </div>
-        </el-col>
-        <el-col :span="6">
-          <div class="ehxdo-color-item">
-            <label class="ehxdo-label">Placeholder</label>
-            <el-color-picker v-model="colors.textPlaceholder" class="ehxdo-picker" />
-            <el-input v-model="colors.textPlaceholder" class="ehxdo-input" readonly />
-          </div>
-        </el-col>
-      </el-row>
-    </div> -->
 
         <!-- Font Family Section -->
         <div class="ehxdo-section">
             <h2 class="ehxdo-section-title">Font Family</h2>
             <el-row :gutter="20">
-                <el-col :span="12">
+                <el-col :span="24">
                     <div class="ehxdo-font-item">
                         <label class="ehxdo-label">Primary Font</label>
                         <el-select v-model="fonts.primary" class="ehxdo-select" placeholder="Select font family">
@@ -234,7 +184,7 @@ const copyCSSVariables = () => {
     font-weight: 500;
     color: #303133;
     margin-bottom: 20px;
-    padding-bottom: 10px;
+    padding-bottom: 20px;
     margin-top: 0px;
     border-bottom: 1px solid #EBEEF5;
 }
@@ -271,10 +221,11 @@ const copyCSSVariables = () => {
 
 .ehxdo-font-preview {
     padding: 16px;
-    background-color: #F5F7FA;
-    border-radius: 4px;
-    border: 1px solid #DCDFE6;
-    font-size: 16px;
+    background-color: #F8F9FC;
+    border-radius: 10px;
+    border: 1px solid #efefef;
+    font-size: 14px;
+    margin-top: 10px;
     color: #303133;
 }
 

@@ -4,7 +4,9 @@
     <div class="ehxdo-section">
       <h2 class="ehxdo-section-title">Email notifications</h2>
       <p class="ehxdo-section-description">
-        Email notifications sent from Ehx Donate are listed below. Click on an email to configure it. Emails should be sent from an email using your website's domain name. We highly recommend using a SMTP service email delivery. Please see this doc for more information.
+        Email notifications sent from Ehx Donate are listed below. Click on an email to configure it. Emails should be
+        sent from an email using your website's domain name. We highly recommend using a SMTP service email delivery.
+        Please see this doc for more information.
       </p>
     </div>
 
@@ -24,7 +26,7 @@
               class="ehxdo-input-field"
               placeholder="example@eh.studio"
             /> -->
-              <el-input v-model="settings.adminEmail" placeholder="example@eh.studio" />
+            <el-input v-model="settings.adminEmail" placeholder="example@eh.studio" />
           </div>
         </div>
 
@@ -38,7 +40,7 @@
               class="ehxdo-input-field"
               placeholder="EHx Studio"
             /> -->
-            <el-input v-model="settings.mailFromName"  placeholder="EHx Studio" />
+            <el-input v-model="settings.mailFromName" placeholder="EHx Studio" />
           </div>
         </div>
 
@@ -52,7 +54,7 @@
               class="ehxdo-input-field"
               placeholder="example@eh.studio"
             /> -->
-             <el-input v-model="settings.mailFromAddress"   placeholder="example@eh.studio" />
+            <el-input v-model="settings.mailFromAddress" placeholder="example@eh.studio" />
           </div>
         </div>
       </div>
@@ -69,18 +71,14 @@
           <label class="ehxdo-form-label">Content type</label>
           <div class="ehxdo-checkbox-wrapper">
             <div class="ehxdo-checkbox-container">
-              <input
-                type="checkbox"
-                id="enableHtml"
-                v-model="settings.enableHtml"
-                class="ehxdo-checkbox-input"
-              />
+              <input type="checkbox" id="enableHtml" v-model="settings.enableHtml" class="ehxdo-checkbox-input" />
               <label for="enableHtml" class="ehxdo-checkbox-label">
                 Enable HTML for Emails
               </label>
             </div>
             <p class="ehxdo-checkbox-description">
-              If you plan use emails with HTML, please make sure that this option is enabled. Otherwise, HTML will be displayed as plain text.
+              If you plan use emails with HTML, please make sure that this option is enabled. Otherwise, HTML will be
+              displayed as plain text.
             </p>
           </div>
         </div>
@@ -92,16 +90,16 @@
 <script>
 
 export default {
-    props: {
-        settings: {
-            type: Object,
-            default: {}
-        },
-        loading: {
-            type: Boolean,
-            default: false
-        }
+  props: {
+    settings: {
+      type: Object,
+      default: {}
+    },
+    loading: {
+      type: Boolean,
+      default: false
     }
+  }
 };
 </script>
 
@@ -109,6 +107,7 @@ export default {
 .ehxdo-email-settings-container {
   max-width: 100%;
   padding: 2rem;
+  border-radius: 16px;
   background-color: #ffffff;
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
   color: #1f2937;
@@ -155,7 +154,7 @@ export default {
   display: grid;
   grid-template-columns: 200px 1fr;
   gap: 20px;
-  align-items: start;
+  align-items: center;
 }
 
 .ehxdo-checkbox-row {
@@ -212,7 +211,7 @@ export default {
   border: 2px solid #d1d5db !important;
   border-radius: 3px;
   cursor: pointer;
-  accent-color: #3b82f6;
+  accent-color: #067a3b ;
 }
 
 .ehxdo-checkbox-label {
