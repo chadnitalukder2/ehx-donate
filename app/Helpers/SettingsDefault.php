@@ -10,8 +10,9 @@ class SettingsDefault
             'general' => [
                 'company_name' => '',
                 'industry' => 'Social',
-                'country' => 'USA',
-                'currency' => 'USD',
+                'country' => 'GB',
+                'currency' => 'GBP',
+                'currency_position' => 'Before',
                 'address_name' => '',
                 'address_line_1' => '',
                 'address_line_2' => '',
