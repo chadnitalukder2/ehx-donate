@@ -347,12 +347,13 @@ export default {
         async updateStatus(row) {
             try {
                 await this.$confirm(
-                    `Are you sure you want to change the status to "${row.status}"?`,
+                    `Are you sure you want to change the status.`,
                     'Confirm Status Update',
                     {
                         confirmButtonText: 'Yes, Update',
                         cancelButtonText: 'Cancel',
-                        type: 'warning'
+                        type: 'warning',
+                        iconClass: '',
                     }
                 );
 
@@ -649,4 +650,12 @@ export default {
 :deep(.el-input__wrapper .el-input__inner) {
     height: 38px !important;
 }
+.custom-confirm-dialog .el-message-box__message {
+    padding: 24px 32px; /* increase padding */
+}
+
+.custom-confirm-dialog .el-message-box__status {
+    display: none; /* hides the icon */
+}
+
 </style>
