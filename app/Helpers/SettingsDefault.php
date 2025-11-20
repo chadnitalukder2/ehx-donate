@@ -38,7 +38,7 @@ class SettingsDefault
             'color' => [
                 'primary_btn' => '#067a3b',
                 'primary_btn_text' => '#FFFFFF',
-                'fontFamily' => 'Inter Tight',
+                'fontFamily' =>  'Inter Tight, Arial, sans-serif',
             ],
         ];
     }

@@ -2,7 +2,6 @@
     <div class="ehxdo-container">
         <!-- Color Picker Section -->
         <div class="ehxdo-section">
-            {{ settings }} settings
             <h2 class="ehxdo-section-title">Primary Colors</h2>
             <el-row :gutter="20">
                 <el-col :span="12">

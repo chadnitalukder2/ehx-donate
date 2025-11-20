@@ -35,8 +35,8 @@ class SettingsController extends Controller
         ]);
 
         $settings = json_decode($settings['settings'], true);
-
-        update_option($settings_key, $settings, false);
+        delete_option($settings_key);
+        // update_option($settings_key, $settings, false);
 
         $this->success([
             'message' => 'Settings updated successfully'
