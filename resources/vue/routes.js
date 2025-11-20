@@ -69,7 +69,7 @@ const router = createRouter({
         },
         {
             path: '/transitions',
-            component: Integration,
+            component: Transitions,
             name: 'transitions',
             meta: {
                 active_menu: 0

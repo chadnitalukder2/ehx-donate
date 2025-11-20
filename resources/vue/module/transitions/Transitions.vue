@@ -1,16 +1,10 @@
 <template>
     <div class="ehxd_wrapper">
 
-        <AppModal :title="'Add New Category'" :width="700" :showFooter="false" ref="add_category_modal">
-            <template #body>
-                <!-- <AddCategory @updateDataAfterNewAdd="handleAddedCategory" /> -->
-            </template>
-        </AppModal>
-
         <AppTable :tableData="categories" v-loading="loading">
             <template #header>
                 <div class="ehxd_title">
-                    <h1 class="table-title">All Transition</h1>
+                    <h1 class="table-title">All Transactions</h1>
                 </div>
                 <!-- <el-button @click="openCategoryAddModal()" size="large" type="primary" icon="Plus" class="ltm_button">
                     Add New Campaign

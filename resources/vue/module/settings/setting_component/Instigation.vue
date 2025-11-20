@@ -2,7 +2,7 @@
     <div class="ehxdo-stripe-settings-container">
         <!-- Stripe Integration Section -->
          <div class=" ehxdo-section-spacing" v-for="(settingItem, value) in settings">
-            <div class="ehxdo-section">
+            <div class="ehxdo-section" style="margin-bottom: 20px;">
                 <h2 class="ehxdo-section-title">{{ settingItem.title }}</h2>
                 <p class="ehxdo-section-description">
                     {{ settingItem.description }}
@@ -78,6 +78,7 @@ export default {
 .ehxdo-stripe-settings-container {
     max-width: 100%;
     padding: 2rem;
+    border-radius: 16px;
     background-color: #ffffff;
     font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
     color: #1f2937;
@@ -88,10 +89,6 @@ export default {
     border-bottom: 1px solid #e5e7eb;
 }
 
-.ehxdo-section-spacing {
-    padding-top: 20px;
- 
-}
 
 .ehxdo-section-title {
     font-size: 18px;
