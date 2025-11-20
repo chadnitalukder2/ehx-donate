@@ -262,6 +262,7 @@ class Plugin
                 'hide_empty' => false,
             ]),
             'currencies' => Currency::getAll(),
+            'currencySymbols' => Currency::getCurrencySymbol(''),
             'countries' => Country::getAll(),
             'fonts' => Font::getAll(),
         ]);

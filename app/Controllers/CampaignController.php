@@ -17,11 +17,13 @@ class CampaignController extends Controller
     {
 
         $campaigns = (new Campaign())->orderBy('created_at', 'DESC')->get();
+        $generalSettings = get_option('ehx_donate_settings_general', []);
 
         $this->success([
             'campaigns' => array_map(function ($campaign) {
                 return $campaign->toArray();
-            }, $campaigns)
+            }, $campaigns),
+            'generalSettings' => $generalSettings,
         ]);
     }
 

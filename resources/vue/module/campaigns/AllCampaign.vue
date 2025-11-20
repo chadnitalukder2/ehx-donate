@@ -102,6 +102,7 @@
             </template>
 
             <template #columns>
+
                 <el-table-column label="ID" width="80">
                     <template #default="scope">
                         {{ scope.$index + 1 }}
@@ -114,7 +115,13 @@
                         </router-link>
                     </template>
                 </el-table-column>
-                <el-table-column prop="goal_amount" label="Goal Amount" />
+                <el-table-column prop="goal_amount" label="Goal Amount">
+                    <template #default="{ row }">
+                        {{ formatCurrency(row.goal_amount) }}
+                    </template>
+                </el-table-column>
+
+
                 <el-table-column prop="donation" label="Donation">
                     <template #default="{ row }">
                         {{ row.donation ?? 0 }}
@@ -123,7 +130,7 @@
 
                 <el-table-column prop="raised" label="Raised">
                     <template #default="{ row }">
-                        {{ row.raised ?? 0 }}
+                        {{ formatCurrency(row.raised) }}
                     </template>
                 </el-table-column>
                 <!-- Status column -->
@@ -223,6 +230,9 @@ export default {
         return {
             search: '',
             campaigns: [],
+            generalSettings: {},
+            currencies: window.EHXDonate.currencies,
+            currencySymbols: window.EHXDonate.currencySymbols,
             campaign: {},
             total_campaign: 0,
             loading: false,
@@ -258,8 +268,22 @@ export default {
             const options = { day: 'numeric', month: 'long', year: 'numeric' };
             return new Date(date).toLocaleDateString('en-GB', options);
         },
+        formatCurrency(amount) {
+            const currency = this.generalSettings?.currency || 'GBP';
+            const position = this.generalSettings?.currency_position || 'Before';
+
+            const symbol = this.currencySymbols[currency] || currency;
+            const formattedAmount = parseFloat(amount || 0).toLocaleString('en-US', {
+                minimumFractionDigits: 2,
+                maximumFractionDigits: 2
+            });
+            if (position === 'Before') {
+                return `${symbol} ${formattedAmount}`;
+            } else {
+                return `${formattedAmount} ${symbol}`;
+            }
+        },
         editCampaign(row) {
-            // Assuming row contains the campaign data
             this.$router.push({
                 name: 'edit_campaign',
                 params: { id: row.id }
@@ -289,8 +313,9 @@ export default {
                     },
                     withCredentials: true
                 });
-                console.log('Campaigns response:', response.data.data.campaigns);
+                console.log('Campaigns response:', response.data.data);
                 this.campaigns = response?.data?.data?.campaigns;
+                this.generalSettings = response?.data?.data?.generalSettings || {};
                 // this.total_campaign = response?.data?.total || 0;
                 // this.last_page = response?.data?.last_page || 1;
                 this.loading = false;
@@ -357,7 +382,6 @@ export default {
                     }
                 );
 
-                console.log('Updating status for row:', row);
                 const response = await axios.post(
                     `${this.rest_api}api/updateCampaignStatus/${row.id}`,
                     {
@@ -394,13 +418,12 @@ export default {
 
         handleAddedCampaign(newCampaign) {
             this.getAllCampaigns();
-            // this.$refs.add_campaign_modal.handleClose();
         }
 
     },
 
     mounted() {
-        console.log('window', this.campaigns);
+        console.log('Mounted AllCampaign.vue', window.EHXDonate);
         this.getAllCampaigns();
     },
 
@@ -650,12 +673,14 @@ export default {
 :deep(.el-input__wrapper .el-input__inner) {
     height: 38px !important;
 }
+
 .custom-confirm-dialog .el-message-box__message {
-    padding: 24px 32px; /* increase padding */
+    padding: 24px 32px;
+    /* increase padding */
 }
 
 .custom-confirm-dialog .el-message-box__status {
-    display: none; /* hides the icon */
+    display: none;
+    /* hides the icon */
 }
-
 </style>
