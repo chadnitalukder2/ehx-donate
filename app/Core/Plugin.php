@@ -8,6 +8,7 @@ use EHXDonate\Services\ServiceContainer;
 use EHXDonate\Core\Action;
 use EHXDonate\Helpers\Currency;
 use EHXDonate\Helpers\Country;
+use EHXDonate\Helpers\Font;
 
 /**
  * Main Plugin class - Bootstrap and service container
@@ -262,6 +263,7 @@ class Plugin
             ]),
             'currencies' => Currency::getAll(),
             'countries' => Country::getAll(),
+            'fonts' => Font::getAll(),
         ]);
     }
 

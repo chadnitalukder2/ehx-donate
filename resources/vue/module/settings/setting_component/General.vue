@@ -92,7 +92,7 @@
                                 <el-select v-model="settings.country" placeholder="Select country">
                                     <el-option
                                         v-for="(label, value) in countries"
-                                        :key="value"
+                                        :key="value"  
                                         :label="label"
                                         :value="value"
                                     />

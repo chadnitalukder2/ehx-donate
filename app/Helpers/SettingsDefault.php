@@ -36,16 +36,9 @@ class SettingsDefault
                 'enableHtml' => true,
             ],
             'color' => [
-                'primary' => '#409EFF',
-                'success' => '#67C23A',
-                'warning' => '#E6A23C',
-                'danger' => '#F56C6C',
-                'textPrimary' => '#303133',
-                'textRegular' => '#606266',
-                'textSecondary' => '#909399',
-                'textPlaceholder' => '#C0C4CC',
-                'fontFamily' => 'Inter Tight, Arial, sans-serif',
-                'fontFamilyMono' => 'Courier New, Courier, monospace',
+                'primary_btn' => '#067a3b',
+                'primary_btn_text' => '#FFFFFF',
+                'fontFamily' => 'Inter Tight',
             ],
         ];
     }
