@@ -10,8 +10,9 @@
         "production": "mix --production"
     },
     "dependencies": {
-        "@element-plus/icons-vue": "^2.3.1",
+        "@element-plus/icons-vue": "^2.3.2",
         "axios": "^0.21.4",
+        "echarts": "^6.0.0",
         "element-plus": "^2.9.5",
         "vue": "^3.2.0",
         "vue-draggable-next": "^2.3.0",
