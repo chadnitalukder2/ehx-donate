@@ -82,10 +82,8 @@
                             <div class="ehxdo-form-group">
                                 <el-form-item label="Goal Amount" prop="goal_amount">
                                     <el-input v-model="form.goal_amount" class="ehxdo-input" placeholder="100,000.00"
-                                        :formatter="(value) => `$ ${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',')"
-                                        :parser="(value) => value.replace(/\$\s?|(,*)/g, '')" />
+                                        :formatter="formatCurrency" :parser="parseCurrency" />
                                 </el-form-item>
-
                             </div>
 
                             <!-- Allow Custom Amount -->
@@ -137,9 +135,8 @@
                                             <el-input v-model="item.name" class="ehxdo-input" placeholder="Basic" />
                                         </div>
                                         <div class="ehxdo-table-cell">
-                                            <el-input v-model="item.amount" class="ehxdo-input" placeholder="$ 5"
-                                                :formatter="(value) => `$ ${value}`"
-                                                :parser="(value) => value.replace(/\$\s?/g, '')" />
+                                            <el-input v-model="item.amount" class="ehxdo-input" placeholder="5"
+                                                :formatter="formatCurrency" :parser="parseCurrency" />
                                         </div>
                                         <div class="ehxdo-table-cell-action">
                                             <el-button class="ehxdo-delete-btn" text @click="removePricing(index)">
@@ -301,10 +298,12 @@ export default {
     data() {
         return {
             form: {},
+            generalSettings: {},
             submitting: false,
             statusActive: false,
             statusPending: false,
             statusComplete: false,
+            currencySymbols: window.EHXDonate?.currencySymbols || {},
             nonce: window.EHXDonate?.restNonce || '',
             restUrl: window.EHXDonate?.restUrl || '',
             tagOptions: [],
@@ -360,6 +359,19 @@ export default {
             }
         },
 
+        formatCurrency(value) {
+            const currency = this.generalSettings?.currency || 'GBP';
+            const symbol = this.currencySymbols[currency] || '$';
+
+            if (!value) return '';
+            const cleanValue = value.toString().replace(/[^0-9.]/g, '');
+            return `${symbol} ${cleanValue}`;
+        },
+
+        parseCurrency(value) {
+            return value.replace(/[^0-9.]/g, '');
+        },
+
         // onMediaUploaded(images) {
         //     this.form.settings.images = images;
         // },
@@ -411,6 +423,7 @@ export default {
 
                 const data = await response.json();
                 this.form = data.data.campaign;
+                this.generalSettings = data.data.generalSettings || {};
                 if (this.form.status === 'active') {
                     this.statusActive = true;
                 } else if (this.form.status === 'pending') {
