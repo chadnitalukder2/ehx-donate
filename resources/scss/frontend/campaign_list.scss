@@ -1,13 +1,13 @@
 .ehxdo-campaign_listing_container {
     max-width: 1200px !important;
     margin: 0 auto;
-     font-family: var(--ehxdo-font-family);
+    font-family: var(--ehxdo-font-family);
 
     .ehxdo-header {
         margin-bottom: 40px;
 
         .ehxdo-title {
-             font-family: var(--ehxdo-font-family);
+            font-family: var(--ehxdo-font-family);
             font-size: 32px;
             font-weight: 600;
             letter-spacing: 0.45px;
@@ -57,7 +57,7 @@
     }
 
     .ehxdo-campaign-title {
-         font-family: var(--ehxdo-font-family);
+        font-family: var(--ehxdo-font-family);
         font-size: 22px;
         font-weight: 600;
         color: #222222;
@@ -66,7 +66,7 @@
     }
 
     .ehxdo-campaign-description {
-         font-family: var(--ehxdo-font-family);
+        font-family: var(--ehxdo-font-family);
         font-size: 14px;
         color: #666;
         line-height: 1.6;
@@ -91,9 +91,9 @@
 
     .ehxdo-progress-fill {
         height: 100%;
-     background: linear-gradient(90deg, 
-          color-mix(in srgb, var(--ehxdo-progress-bar-color) 70%, white) 0%,
-          var(--ehxdo-progress-bar-color) 100%);
+        background: linear-gradient(90deg,
+                color-mix(in srgb, var(--ehxdo-progress-bar-color) 70%, white) 0%,
+                var(--ehxdo-progress-bar-color) 100%);
         border-radius: 4px;
         transition: width 0.3s ease;
     }

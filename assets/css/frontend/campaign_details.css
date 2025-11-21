@@ -1,4 +1,3 @@
-/* Variables */
 :root {
   --ehxdo-primary-color: #155DFC;
   --ehxdo-primary-hover: #1d4ed8;
@@ -13,7 +12,7 @@
 }
 
 .ehxdo_campaign_list_wrapper {
-  font-family: Inter Tight, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+  font-family: var(--ehxdo-font-family);
   max-width: 1200px !important;
   padding: 20px;
 }
@@ -144,8 +143,8 @@
 }
 
 .ehxdo-progress-percent {
-  font-weight: 400;
-  color: #155DFC;
+  font-weight: 600;
+  color: var(--ehxdo-primary-btn);
 }
 
 .ehxdo-progress-bar {
@@ -168,7 +167,7 @@
 }
 
 .ehxdo-about-title {
-  font-family: Inter Tight, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+  font-family: var(--ehxdo-font-family);
   font-size: 20px;
   font-weight: 500;
   margin-bottom: 1rem;
@@ -229,7 +228,7 @@
 }
 
 .ehxdo-card-title {
-  font-family: Inter Tight, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+  font-family: var(--ehxdo-font-family);
   font-size: 16px;
   font-weight: 400;
   margin: 0px;
@@ -252,7 +251,7 @@
 }
 .ehxdo-donation-type .ehxdo-select-type:focus-visible {
   outline: none;
-  border-color: var(--ehxdo-primary-color);
+  border-color: var(--ehxdo-primary-btn);
 }
 .ehxdo-donation-type .ehxdo-label {
   display: block;
@@ -381,16 +380,17 @@
 }
 
 .ehxdo-amount-btn:hover {
-  border-color: var(--ehxdo-primary-color);
+  border-color: var(--ehxdo-primary-btn);
 }
 
 .ehxdo-amount-btn.ehxdo-selected {
-  background: #EFF6FF;
-  color: var(--ehxdo-primary-color);
-  border-color: var(--ehxdo-primary-color);
+  background: var(--ehxdo-primary-btn);
+  color: var(--ehxdo-primary-btn-text);
+  border-color: var(--ehxdo-primary-btn);
 }
 
 .ehxdo-custom-amount {
+  font-family: var(--ehxdo-font-family);
   width: 100%;
   padding: 0.875rem;
   border: 2px solid var(--ehxdo-border-color);
@@ -402,7 +402,7 @@
 
 .ehxdo-custom-amount:focus {
   outline: none;
-  border-color: var(--ehxdo-primary-color);
+  border-color: var(--ehxdo-primary-btn);
 }
 
 /* Taxpayer Info */
@@ -427,7 +427,7 @@
 
 /* Donate Button */
 .ehxdo-donate-btn {
-  font-family: Inter Tight, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+  font-family: var(--ehxdo-font-family);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -435,19 +435,19 @@
   gap: 10px;
   width: 100%;
   padding: 1rem;
-  background: var(--ehxdo-primary-color);
+  background: var(--ehxdo-primary-btn);
   color: var(--ehxdo-white);
   border: none;
   border-radius: 10px;
-  font-size: 14px;
-  font-weight: 500;
+  font-size: 16px;
+  font-weight: 600;
   cursor: pointer;
-  transition: background 0.2s;
+  transition: all 0.3s;
   margin-bottom: 0.75rem;
 }
 
 .ehxdo-donate-btn:hover {
-  background: var(--ehxdo-primary-hover);
+  opacity: 0.9;
 }
 
 .ehxdo-disclaimer {
@@ -488,7 +488,7 @@
 
 .ehxdo-input:focus {
   outline: none;
-  border-color: var(--ehxdo-primary-color);
+  border-color: var(--ehxdo-primary-btn);
 }
 
 select.ehxdo-input {
@@ -500,6 +500,7 @@ select.ehxdo-input {
   background: #F8F9FC;
   border-radius: 16px;
   padding: 1rem;
+  border: 1px solid #e1e1e1;
 }
 
 /* Summary */
@@ -521,7 +522,7 @@ select.ehxdo-input {
 
 .ehxdo-summary-row.ehxdo-highlight {
   font-weight: 600;
-  color: var(--ehxdo-primary-color);
+  color: var(--ehxdo-primary-btn);
   padding-top: 0.75rem;
   border-top: 1px solid var(--ehxdo-border-color);
 }
@@ -537,6 +538,9 @@ select.ehxdo-input {
   margin-top: 1.5rem;
   padding-top: 1.5rem;
   border-top: 1px solid var(--ehxdo-border-color);
+}
+.ehxdo-section-nav .ehxdo-prev {
+  font-family: var(--ehxdo-font-family);
 }
 
 .ehxdo-nav-btn {
@@ -562,14 +566,15 @@ select.ehxdo-input {
 
 .ehxdo-nav-btn.ehxdo-next,
 .ehxdo-nav-btn.ehxdo-submit {
-  background: var(--ehxdo-primary-color);
+  font-family: var(--ehxdo-font-family);
+  background: var(--ehxdo-primary-btn);
   color: var(--ehxdo-white);
-  border-color: var(--ehxdo-primary-color);
+  border-color: var(--ehxdo-primary-btn);
 }
 
 .ehxdo-nav-btn.ehxdo-next:hover,
 .ehxdo-nav-btn.ehxdo-submit:hover {
-  background: var(--ehxdo-primary-hover);
+  background: color-mix(in srgb, var(--ehxdo-primary-btn) 90%, white);
 }
 
 /* Responsive Design */

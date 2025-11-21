@@ -1,4 +1,8 @@
 <?php
+$primaryBtnColor = $colorSettings['primary_btn'] ?? '#079455';
+$primaryBtnTextColor = $colorSettings['primary_btn_text'] ?? '#ececec';
+$fontFamily = $colorSettings['fontFamily'] ?? 'Inter Tight, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen, Ubuntu, Cantarell, sans-serif';
+
 $raised = 20;
 $goal = isset($campaign['goal_amount']) ? (float) $campaign['goal_amount'] : 0;
 $progress = ($goal > 0) ? round(($raised / $goal) * 100) : 0;
@@ -15,10 +19,19 @@ function formatAmount($amount, $symbol, $position)
 }
 
 ?>
+
+<style>
+    :root {
+        --ehxdo-primary-btn: <?php echo $primaryBtnColor; ?>;
+        --ehxdo-primary-btn-text: <?php echo $primaryBtnTextColor; ?>;
+        --ehxdo-font-family: <?php echo $fontFamily; ?>;
+    }
+</style>
+
 <div class="ehxdo_campaign_list_wrapper">
-    <a href="javascript:history.back()" class="ehxdo-back-link">
+    <!-- <a href="javascript:history.back()" class="ehxdo-back-link">
         <span class="ehxdo-back-arrow">←</span> Back to Campaigns
-    </a>
+    </a> -->
 
     <div class="ehxdo-campaign_details_container">
         <!-- Left Section -->
