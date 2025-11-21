@@ -135,9 +135,8 @@ export default {
         text-align: center;
         align-items: center;
         gap: 20px;
-        padding: 20px;
-        background: #fff;
-        border-bottom: 1px solid #e5e7eb;
+        padding: 35px 20px 0px 20px;
+        // border-bottom: 1px solid #e5e7eb;
 
         .ehxdo_settings_title {
             h3 {
@@ -152,12 +151,12 @@ export default {
     .ehxdo_settings_main_content {
         display: flex;
         margin-bottom: 50px;
+        padding: 20px 20px 0px 20px;
 
         .ehxdo_settings_details {
             width: 100%;
             background: #fff;
-            margin: 20px 20px 0px 20px;
-            border-radius: 12px;
+            border-radius: 0px 16px 16px 0px;
         }
     }
 }

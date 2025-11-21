@@ -30,6 +30,7 @@
 .ehxdo-sidebar {
   width: 200px;
   height: 100%;
+  border-radius: 16px 0px 0px 16px;
   box-sizing: border-box;
   background-color: #fff;
   border-right: 1px solid #e5e5e5;

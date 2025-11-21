@@ -184,7 +184,7 @@ export default {
 .ehxdo-card {
     margin: 0 auto;
     background-color: #ffffff;
-    border-radius: 16px;
+    border-radius:0px 16px 16px 0px;
     box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
 }
 

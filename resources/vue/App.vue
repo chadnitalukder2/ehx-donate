@@ -38,6 +38,9 @@ export default {
 
   .ehxdo_app_main_content {
     display: flex;
+    .ehxdo_sidebar_content{
+      padding: 20px 0px 20px 20px;
+    }
   }
 
   .ehxdo_main_content {
