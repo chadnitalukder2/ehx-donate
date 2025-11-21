@@ -256,7 +256,7 @@
 .ehxdo-donation-type .ehxdo-label {
   display: block;
   margin-bottom: 8px;
-  font-weight: 600;
+  font-weight: 500;
   color: #1f2937;
   font-size: 14px;
 }
@@ -495,7 +495,6 @@ select.ehxdo-input {
   cursor: pointer;
 }
 
-/* Gift Aid Section */
 .ehxdo-gift-aid {
   background: #F8F9FC;
   border-radius: 16px;
@@ -503,7 +502,6 @@ select.ehxdo-input {
   border: 1px solid #e1e1e1;
 }
 
-/* Summary */
 .ehxdo-summary {
   background: var(--ehxdo-bg-light);
   border-radius: 8px;
