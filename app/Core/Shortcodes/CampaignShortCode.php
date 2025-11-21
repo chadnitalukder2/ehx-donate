@@ -4,6 +4,7 @@ namespace EHXDonate\Core\Shortcodes;
 
 use EHXDonate\Controllers\CampaignController;
 use EHXDonate\View;
+use EHXDonate\Helpers\Currency;
 
 class CampaignShortCode
 {
@@ -26,9 +27,13 @@ class CampaignShortCode
         } else {
             $getCampaign = $controller->getCampaignByPostId($post_id);
         }
+        $generalSettings = get_option('ehx_donate_settings_general', []);
+        $currencySymbols = Currency::getCurrencySymbol('');
 
         return View::make('CampaignDetails/CampaignDetails', [
             'campaign'=> $getCampaign,
+            'generalSettings' => $generalSettings,
+            'currencySymbols' => $currencySymbols,
         ]);
     }
 }

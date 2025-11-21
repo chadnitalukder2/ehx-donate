@@ -30,7 +30,21 @@
                           <div class="ehxdo-campaign-stats">
                               <div class="ehxdo-stat-item">
                                   <span class="ehxdo-stat-label">Goals</span>
-                                  <span class="ehxdo-stat-value">$<?php echo number_format($campaign->goal_amount, 2); ?></span>
+                                  <span class="ehxdo-stat-value">
+                                      <?php
+                                        $currency = $generalSettings['currency'] ?? 'USD';
+                                        $currencySymbol = $currencySymbols[$currency] ?? '$';
+                                        $position = $generalSettings['currency_position'] ?? 'Before';
+                                        $amount = number_format($campaign->goal_amount, 2);
+
+                                        if ($position === 'Before') {
+                                            echo esc_html($currencySymbol . $amount);
+                                        } else {
+                                            echo esc_html($amount . $currencySymbol);
+                                        }
+                                        ?>
+                                      <!-- $<?php echo number_format($campaign->goal_amount, 2); ?> -->
+                                  </span>
                               </div>
                               <div class="ehxdo-stat-item">
                                   <span class="ehxdo-time-left">Started: <?php echo date('M d, Y', strtotime($campaign->start_date)); ?></span>

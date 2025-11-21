@@ -46,6 +46,7 @@ class CampaignController extends Controller
         $post = get_post($campaign->post_id);
         $campaign->post = $post;
         $generalSettings = get_option('ehx_donate_settings_general', []);
+        $colorSettings = get_option('ehx_donate_settings_colors', []);
         $this->success([
             'campaign' => $campaign->toArray(),
             'generalSettings' => $generalSettings,

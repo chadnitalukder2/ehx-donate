@@ -1,5 +1,19 @@
 jQuery(document).ready(function($) {
 
+    // Get currency settings from hidden inputs or data attributes
+    const currencySymbol = $('input[name="currency_symbol"]').val() || '£';
+    const currencyPosition = $('input[name="currency_position"]').val() || 'Before';
+    
+    // Helper function to format currency
+    function formatCurrency(amount) {
+        const formatted = parseFloat(amount).toFixed(2);
+        if (currencyPosition === 'Before') {
+            return currencySymbol + formatted;
+        } else {
+            return formatted + currencySymbol;
+        }
+    }
+ 
     // Section Navigation
     const $sections = $('.ehxdo-donation-card');
     let currentSection = 0;
@@ -36,10 +50,21 @@ jQuery(document).ready(function($) {
     const $summaryTotal = $('#ehxdo-summary-total');
 
     function updateAmount(amount) {
+        const formattedAmount = formatCurrency(amount);
+        
         $amountInput.val(amount);
-        $donateBtn.text(`💳 Donate $${amount}`);
-        $summaryAmount.text(`£${amount}.00`);
-        $summaryTotal.text(`£${amount}.00`);
+        
+        // Update donate button with icon
+        $donateBtn.html(`
+            <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M13.3335 3.33331H2.66683C1.93045 3.33331 1.3335 3.93027 1.3335 4.66665V11.3333C1.3335 12.0697 1.93045 12.6666 2.66683 12.6666H13.3335C14.0699 12.6666 14.6668 12.0697 14.6668 11.3333V4.66665C14.6668 3.93027 14.0699 3.33331 13.3335 3.33331Z" stroke="white" stroke-width="1.33333" stroke-linecap="round" stroke-linejoin="round" />
+                <path d="M1.3335 6.66669H14.6668" stroke="white" stroke-width="1.33333" stroke-linecap="round" stroke-linejoin="round" />
+            </svg>
+            Donate ${formattedAmount}
+        `);
+        
+        $summaryAmount.text(formattedAmount);
+        $summaryTotal.text(formattedAmount);
     }
 
     $('.ehxdo-amount-btn').on('click', function() {

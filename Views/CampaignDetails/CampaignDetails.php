@@ -1,17 +1,22 @@
 <?php
-// dd($campaign);
-
-
-// Calculate progress
-$raised =  20;
+$raised = 20;
 $goal = isset($campaign['goal_amount']) ? (float) $campaign['goal_amount'] : 0;
 $progress = ($goal > 0) ? round(($raised / $goal) * 100) : 0;
 $progress = min($progress, 100);
 
+$currency = $generalSettings['currency'] ?? 'GBP';
+$currencySymbol = $currencySymbols[$currency] ?? '£';
+$position = $generalSettings['currency_position'] ?? 'Before';
+
+function formatAmount($amount, $symbol, $position)
+{
+    $formatted = number_format($amount, 2);
+    return $position === 'Before' ? $symbol  . $formatted : $formatted . $symbol;
+}
 
 ?>
 <div class="ehxdo_campaign_list_wrapper">
-    <a href="javascript:history.back()"  class="ehxdo-back-link">
+    <a href="javascript:history.back()" class="ehxdo-back-link">
         <span class="ehxdo-back-arrow">←</span> Back to Campaigns
     </a>
 
@@ -35,11 +40,16 @@ $progress = min($progress, 100);
 
                     <div class="ehxdo-stats-container">
                         <div class="ehxdo-stat-item ehxdo-stat-raised">
-                            <div class="ehxdo-stat-value">$<?php echo number_format($campaign['raised']); ?></div>
+                            <div class="ehxdo-stat-value">
+                                <?php echo formatAmount($campaign['raised'], $currencySymbol, $position); ?>
+                            </div>
+
                             <div class="ehxdo-stat-label">Raised</div>
                         </div>
                         <div class="ehxdo-stat-item ehxdo-stat-goal">
-                            <div class="ehxdo-stat-value">$<?php echo number_format($campaign['goal_amount']); ?></div>
+                             <div class="ehxdo-stat-value">
+                                <?php echo formatAmount($campaign['goal_amount'], $currencySymbol, $position); ?>
+                            </div>
                             <div class="ehxdo-stat-label">Goal</div>
                         </div>
                         <div class="ehxdo-stat-item ehxdo-stat-donors">
@@ -129,21 +139,25 @@ $progress = min($progress, 100);
                         </div> -->
                     <?php endif; ?>
 
-                    <div class="ehxdo-amount-section">
+                      <div class="ehxdo-amount-section">
                         <label class="ehxdo-label">Select Amount</label>
                         <input type="hidden" name="amount" id="ehxdo-selected-amount" value="<?php echo $default_amount; ?>">
+                        <input type="hidden" name="currency" value="<?php echo $currency; ?>">
+                        <input type="hidden" name="currency_symbol" value="<?php echo $currencySymbol; ?>">
+                        <input type="hidden" name="currency_position" value="<?php echo $position; ?>">
+                        
                         <?php if ($campaign['settings']['allow_custom_amount'] === true): ?>
                             <div class="ehxdo-amount-grid">
                                 <?php foreach ($campaign['settings']['pricing_items'] as $item): ?>
                                     <button type="button"
                                         class="ehxdo-amount-btn <?php echo $item['amount'] === $default_amount ? 'ehxdo-selected' : ''; ?>"
                                         data-amount="<?php echo $item['amount']; ?>">
-                                        $<?php echo $item['amount']; ?>
+                                        <?php echo formatAmount($item['amount'], $currencySymbol, $position); ?>
                                     </button>
                                 <?php endforeach; ?>
-
                             </div>
                         <?php endif; ?>
+                        
                         <input type="text"
                             placeholder="Custom amount"
                             class="ehxdo-custom-amount"
@@ -151,15 +165,11 @@ $progress = min($progress, 100);
                     </div>
 
                     <button type="button" class="ehxdo-donate-btn" id="ehxdo-donate-btn">
-
-
                         <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
                             <path d="M13.3335 3.33331H2.66683C1.93045 3.33331 1.3335 3.93027 1.3335 4.66665V11.3333C1.3335 12.0697 1.93045 12.6666 2.66683 12.6666H13.3335C14.0699 12.6666 14.6668 12.0697 14.6668 11.3333V4.66665C14.6668 3.93027 14.0699 3.33331 13.3335 3.33331Z" stroke="white" stroke-width="1.33333" stroke-linecap="round" stroke-linejoin="round" />
                             <path d="M1.3335 6.66669H14.6668" stroke="white" stroke-width="1.33333" stroke-linecap="round" stroke-linejoin="round" />
                         </svg>
-
-
-                        Donate $<?php echo $default_amount; ?>
+                        Donate <span id="donate-amount-display"><?php echo formatAmount($default_amount, $currencySymbol, $position); ?></span>
                     </button>
 
                     <p class="ehxdo-disclaimer">Protected by Google reCAPTCHA. Issues payment via Stripe.</p>
@@ -248,11 +258,15 @@ $progress = min($progress, 100);
                         <div class="ehxdo-summary">
                             <div class="ehxdo-summary-row">
                                 <span>Due Directly from You:</span>
-                                <span class="ehxdo-amount" id="ehxdo-summary-amount">£<?php echo $default_amount; ?>.00</span>
+                             <span class="ehxdo-amount" id="ehxdo-summary-amount">
+                                <?php echo formatAmount($default_amount, $currencySymbol, $position); ?>
+                            </span>
                             </div>
                             <div class="ehxdo-summary-row ehxdo-highlight">
                                 <span>Your Contribution with Gift Aid:</span>
-                                <span class="ehxdo-amount" id="ehxdo-summary-total">£<?php echo $default_amount; ?>.00</span>
+                             <span class="ehxdo-amount" id="ehxdo-summary-total">
+                                <?php echo formatAmount($default_amount, $currencySymbol, $position); ?>
+                            </span>
                             </div>
                         </div>
 
