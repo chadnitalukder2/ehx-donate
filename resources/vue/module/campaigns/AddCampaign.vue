@@ -520,7 +520,7 @@ export default {
 
 <style lang="scss" scoped>
 .ehxdo_edit_campaign_wrapper {
-    padding: 20px 0px;
+    padding: 35px 20px 20px 20px;
 }
 
 .ehxdo-container {
