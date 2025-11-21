@@ -1,13 +1,13 @@
 .ehxdo-campaign_listing_container {
   max-width: 1200px !important;
   margin: 0 auto;
-  font-family: Inter Tight, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+  font-family: var(--ehxdo-font-family, Inter Tight, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen, Ubuntu, Cantarell, sans-serif);
 }
 .ehxdo-campaign_listing_container .ehxdo-header {
   margin-bottom: 40px;
 }
 .ehxdo-campaign_listing_container .ehxdo-header .ehxdo-title {
-  font-family: Inter Tight, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+  font-family: var(--ehxdo-font-family, Inter Tight, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen, Ubuntu, Cantarell, sans-serif);
   font-size: 32px;
   font-weight: 600;
   letter-spacing: 0.45px;
@@ -48,7 +48,7 @@
   padding: 24px;
 }
 .ehxdo-campaign_listing_container .ehxdo-campaign-title {
-  font-family: Inter Tight, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+  font-family: var(--ehxdo-font-family, Inter Tight, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen, Ubuntu, Cantarell, sans-serif);
   font-size: 22px;
   font-weight: 600;
   color: #222222;
@@ -56,7 +56,7 @@
   margin-top: 0px;
 }
 .ehxdo-campaign_listing_container .ehxdo-campaign-description {
-  font-family: Inter Tight, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+  font-family: var(--ehxdo-font-family, Inter Tight, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen, Ubuntu, Cantarell, sans-serif);
   font-size: 14px;
   color: #666;
   line-height: 1.6;
@@ -78,7 +78,7 @@
 }
 .ehxdo-campaign_listing_container .ehxdo-progress-fill {
   height: 100%;
-  background: linear-gradient(90deg, #4ade80 0%, #13c655 100%);
+  background: linear-gradient(90deg, var(--ehxdo-progress-bar-color) 0%, var(--ehxdo-progress-bar-color) 100%);
   border-radius: 4px;
   transition: width 0.3s ease;
 }
@@ -100,7 +100,7 @@
 }
 .ehxdo-campaign_listing_container .ehxdo-stat-value {
   font-size: 14px;
-  color: #4DD16D;
+  color: var(--ehxdo-goals-amount-color);
   padding-left: 2px;
   font-weight: 600;
 }
@@ -111,8 +111,8 @@
 .ehxdo-campaign_listing_container .ehxdo-donate-btn {
   width: 100%;
   padding: 14px;
-  background: #4DD16D;
-  color: #0E100F;
+  background: var(--ehxdo-primary-btn);
+  color: var(--ehxdo-primary-btn-text);
   font-size: 16px;
   font-weight: 600;
   border: none;
@@ -123,6 +123,7 @@
 .ehxdo-campaign_listing_container .ehxdo-donate-btn:hover {
   opacity: 0.9;
 }
+
 @media (max-width: 768px) {
   .ehxdo-campaigns-grid {
     grid-template-columns: 1fr;

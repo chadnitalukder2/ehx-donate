@@ -28,11 +28,13 @@ class CampaignListShortcode
             ->get();
         $generalSettings = get_option('ehx_donate_settings_general', []);
         $currencySymbols = Currency::getCurrencySymbol('');
+        $colorSettings = get_option('ehx_donate_settings_color', []);
    
         return View::make('CampaignLists/CampaignLists', [
             'data' => $campaigns,
             'generalSettings' => $generalSettings,
             'currencySymbols' => $currencySymbols,
+            'colorSettings' => $colorSettings,
         ]);
     }
 }
