@@ -29,9 +29,15 @@ function formatAmount($amount, $symbol, $position)
 </style>
 
 <div class="ehxdo_campaign_list_wrapper">
-    <!-- <a href="javascript:history.back()" class="ehxdo-back-link">
-        <span class="ehxdo-back-arrow">←</span> Back to Campaigns
-    </a> -->
+
+    <?php if ($isTestMode && $stripeEnabled): ?>
+        <div class="ehxdo_test_mode_container">
+            <p class="ehxdo-back-link">
+                Test Mode
+            </p>
+        </div>
+    <?php endif; ?>
+
 
     <div class="ehxdo-campaign_details_container">
         <!-- Left Section -->
@@ -70,17 +76,17 @@ function formatAmount($amount, $symbol, $position)
                             <div class="ehxdo-stat-label">Donors</div>
                         </div>
                     </div>
-                <?php if ($generalSettings['progressbar'] ?? true): ?>
-                    <div class="ehxdo-progress-container">
-                        <div class="ehxdo-progress-label">
-                            <span>Campaign Progress</span>
-                            <span class="ehxdo-progress-percent"><?php echo $progress; ?>%</span>
+                    <?php if ($generalSettings['progressbar'] ?? true): ?>
+                        <div class="ehxdo-progress-container">
+                            <div class="ehxdo-progress-label">
+                                <span>Campaign Progress</span>
+                                <span class="ehxdo-progress-percent"><?php echo $progress; ?>%</span>
+                            </div>
+                            <div class="ehxdo-progress-bar">
+                                <div class="ehxdo-progress-fill" style="width: <?php echo $progress; ?>%"></div>
+                            </div>
                         </div>
-                        <div class="ehxdo-progress-bar">
-                            <div class="ehxdo-progress-fill" style="width: <?php echo $progress; ?>%"></div>
-                        </div>
-                    </div>
-                <?php endif; ?>
+                    <?php endif; ?>
                     <div class="ehxdo-about-section">
                         <h2 class="ehxdo-about-title">About This Campaign</h2>
                         <p class="ehxdo-about-text"><?php echo htmlspecialchars($campaign['short_description']); ?></p>
@@ -178,19 +184,19 @@ function formatAmount($amount, $symbol, $position)
                     </div>
 
                     <div class="ehxdo-summary" style="padding-top: 20px; margin-bottom: 20px;">
-                            <div class="ehxdo-summary-row">
-                                <span>Total Payable Amount :</span>
-                                <span class="ehxdo-amount" id="ehxdo-summary-amount">
-                                    <?php echo formatAmount($default_amount, $currencySymbol, $position); ?>
-                                </span>
-                            </div>
-                            <div class="ehxdo-summary-row ehxdo-highlight">
-                                <span>Final Payable with Fee :</span>
-                                <span class="ehxdo-amount" id="ehxdo-summary-total">
-                                    <?php echo formatAmount($default_amount, $currencySymbol, $position); ?>
-                                </span>
-                            </div>
+                        <div class="ehxdo-summary-row">
+                            <span>Total Payable Amount :</span>
+                            <span class="ehxdo-amount" id="ehxdo-summary-amount">
+                                <?php echo formatAmount($default_amount, $currencySymbol, $position); ?>
+                            </span>
                         </div>
+                        <div class="ehxdo-summary-row ehxdo-highlight">
+                            <span>Final Payable with Fee :</span>
+                            <span class="ehxdo-amount" id="ehxdo-summary-total">
+                                <?php echo formatAmount($default_amount, $currencySymbol, $position); ?>
+                            </span>
+                        </div>
+                    </div>
 
                     <button type="button" class="ehxdo-donate-btn" id="ehxdo-donate-btn">
                         <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">

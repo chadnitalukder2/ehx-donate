@@ -25,10 +25,7 @@ class SettingsDefault
             ],
             'integration' => [
                 'stripe' => [
-                    'title' => 'Stripe',
-                    'description' => 'Configuration for Stripe payment gateway integration',
-                    'enabled' => false,
-                    'enabledOption' => true,
+                    'test_mode' => true,
                     'clientKey' => '',
                     'clientSecret' => '',
                 ]

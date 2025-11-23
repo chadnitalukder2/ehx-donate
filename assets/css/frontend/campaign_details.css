@@ -16,19 +16,6 @@
   max-width: 1200px !important;
   padding: 20px;
 }
-.ehxdo_campaign_list_wrapper .ehxdo-back-link {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.5rem;
-  color: var(--ehxdo-text-gray);
-  text-decoration: none;
-  font-size: 0.875rem;
-  margin-bottom: 1.5rem;
-  transition: color 0.2s;
-}
-.ehxdo_campaign_list_wrapper .ehxdo-back-link:hover {
-  color: var(--ehxdo-text-dark);
-}
 .ehxdo_campaign_list_wrapper .ehxdo-back-arrow {
   font-size: 1.25rem;
 }
@@ -573,6 +560,17 @@ select.ehxdo-input {
 .ehxdo-nav-btn.ehxdo-next:hover,
 .ehxdo-nav-btn.ehxdo-submit:hover {
   background: color-mix(in srgb, var(--ehxdo-primary-btn) 90%, white);
+}
+
+.ehxdo_test_mode_container p {
+  color: var(--ehxdo-primary-btn-text);
+  font-size: 14px;
+  display: inline-block;
+  box-sizing: border-box;
+  padding: 3px 12px;
+  border-radius: 6px;
+  font-weight: 500;
+  background: var(--ehxdo-primary-btn);
 }
 
 /* Responsive Design */

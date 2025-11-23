@@ -1,11 +1,11 @@
 <template>
     <div class="ehxdo-stripe-settings-container">
         <!-- Stripe Integration Section -->
-         <div class=" ehxdo-section-spacing" v-for="(settingItem, value) in settings">
+         <div class=" ehxdo-section-spacing" v-for="(settings, value) in settings">
             <div class="ehxdo-section" style="margin-bottom: 20px;">
-                <h2 class="ehxdo-section-title">{{ settingItem.title }}</h2>
+                <h2 class="ehxdo-section-title">{{ settings.title }}</h2>
                 <p class="ehxdo-section-description">
-                    {{ settingItem.description }}
+                    {{ settings.description }}
                 </p>
             </div>
 
@@ -16,7 +16,7 @@
                     <div class="ehxdo-form-row">
                         <label class="ehxdo-form-label">Test Mode</label>
                         <div class="ehxdo-input-wrapper">
-                            <el-switch v-model="settingItem.enabled" class="ml-2"
+                            <el-switch v-model="settings.enabled" class="ml-2"
                                 style="--el-switch-on-color: #00A63E; --el-switch-off-color: #d1d5db" />
                         </div>
                     </div>
@@ -26,7 +26,7 @@
                         <label class="ehxdo-form-label">Enabled</label>
                         <div class="ehxdo-checkbox-wrapper">
                             <div class="ehxdo-checkbox-container">
-                                <el-checkbox v-model="settingItem.enabledOption" class="ehxdo-checkbox-input">
+                                <el-checkbox v-model="settings.enabledOption" class="ehxdo-checkbox-input">
                                     Enable Stripe as a payment option on the platform.
                                 </el-checkbox>
                             </div>
@@ -37,8 +37,8 @@
                     <div class="ehxdo-form-row">
                         <label class="ehxdo-form-label">Client key</label>
                         <div class="ehxdo-input-wrapper">
-                            <el-input v-model="settingItem.clientKey" placeholder="Stripe client key"
-                                class="ehxdo-input-field"  autocomplete="off" :disabled="settingItem.enabled"/>
+                            <el-input v-model="settings.clientKey" placeholder="Stripe client key"
+                                class="ehxdo-input-field"  autocomplete="off" :disabled="settings.enabled"/>
                         </div>
                     </div>
 
@@ -46,8 +46,8 @@
                     <div class="ehxdo-form-row">
                         <label class="ehxdo-form-label">Client secret</label>
                         <div class="ehxdo-input-wrapper">
-                            <el-input v-model="settingItem.clientSecret" type="password" placeholder="Stripe client secret"
-                                show-password class="ehxdo-input-field"  autocomplete="new-password"  :disabled="settingItem.enabled" />
+                            <el-input v-model="settings.clientSecret" type="password" placeholder="Stripe client secret"
+                                show-password class="ehxdo-input-field"  autocomplete="new-password"  :disabled="settings.enabled" />
                         </div>
                     </div>
                 </div>
