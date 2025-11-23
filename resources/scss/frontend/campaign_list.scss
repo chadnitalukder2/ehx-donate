@@ -57,7 +57,7 @@
     }
 
     .ehxdo-campaign-title {
-        font-family: var(--ehxdo-font-family);
+        font-family: var(--ehxdo-font-family) !important;
         font-size: 22px;
         font-weight: 600;
         color: #222222;
@@ -148,6 +148,7 @@
         }
     }
 }
+
 
 @media (max-width: 768px) {
     .ehxdo-campaigns-grid {

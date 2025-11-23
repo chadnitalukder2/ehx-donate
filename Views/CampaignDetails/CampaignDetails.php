@@ -54,7 +54,7 @@ function formatAmount($amount, $symbol, $position)
 
 
                     <div class="ehxdo_campaign_title_section">
-                        <h1 class="ehxdo-campaign-title"><?php echo htmlspecialchars($campaign['title']); ?></h1>
+                        <p class="ehxdo-campaign-title"><?php echo htmlspecialchars($campaign['title']); ?></p>
                     </div>
 
                     <div class="ehxdo-stats-container">

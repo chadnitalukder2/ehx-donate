@@ -48,7 +48,7 @@
   padding: 24px;
 }
 .ehxdo-campaign_listing_container .ehxdo-campaign-title {
-  font-family: var(--ehxdo-font-family);
+  font-family: var(--ehxdo-font-family) !important;
   font-size: 22px;
   font-weight: 600;
   color: #222222;
