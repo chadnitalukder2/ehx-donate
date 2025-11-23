@@ -60,7 +60,7 @@ function formatAmount($amount, $symbol, $position)
                             <div class="ehxdo-stat-label">Raised</div>
                         </div>
                         <div class="ehxdo-stat-item ehxdo-stat-goal">
-                             <div class="ehxdo-stat-value">
+                            <div class="ehxdo-stat-value">
                                 <?php echo formatAmount($campaign['goal_amount'], $currencySymbol, $position); ?>
                             </div>
                             <div class="ehxdo-stat-label">Goal</div>
@@ -152,13 +152,13 @@ function formatAmount($amount, $symbol, $position)
                         </div> -->
                     <?php endif; ?>
 
-                      <div class="ehxdo-amount-section">
+                    <div class="ehxdo-amount-section">
                         <label class="ehxdo-label">Select Amount</label>
                         <input type="hidden" name="amount" id="ehxdo-selected-amount" value="<?php echo $default_amount; ?>">
                         <input type="hidden" name="currency" value="<?php echo $currency; ?>">
                         <input type="hidden" name="currency_symbol" value="<?php echo $currencySymbol; ?>">
                         <input type="hidden" name="currency_position" value="<?php echo $position; ?>">
-                        
+
                         <?php if ($campaign['settings']['allow_custom_amount'] === true): ?>
                             <div class="ehxdo-amount-grid">
                                 <?php foreach ($campaign['settings']['pricing_items'] as $item): ?>
@@ -170,12 +170,27 @@ function formatAmount($amount, $symbol, $position)
                                 <?php endforeach; ?>
                             </div>
                         <?php endif; ?>
-                        
+
                         <input type="text"
                             placeholder="Custom amount"
                             class="ehxdo-custom-amount"
                             id="ehxdo-custom-amount">
                     </div>
+
+                    <div class="ehxdo-summary" style="padding-top: 20px; margin-bottom: 20px;">
+                            <div class="ehxdo-summary-row">
+                                <span>Total Payable Amount :</span>
+                                <span class="ehxdo-amount" id="ehxdo-summary-amount">
+                                    <?php echo formatAmount($default_amount, $currencySymbol, $position); ?>
+                                </span>
+                            </div>
+                            <div class="ehxdo-summary-row ehxdo-highlight">
+                                <span>Final Payable with Fee :</span>
+                                <span class="ehxdo-amount" id="ehxdo-summary-total">
+                                    <?php echo formatAmount($default_amount, $currencySymbol, $position); ?>
+                                </span>
+                            </div>
+                        </div>
 
                     <button type="button" class="ehxdo-donate-btn" id="ehxdo-donate-btn">
                         <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -194,7 +209,7 @@ function formatAmount($amount, $symbol, $position)
                     <h3 class="ehxdo-card-title">Personal Information</h3>
 
                     <div class="ehxdo-form">
-                        <div class="ehxdo-form-group">
+                        <!-- <div class="ehxdo-form-group">
                             <label class="ehxdo-label">Title *</label>
                             <select name="title" class="ehxdo-input" required>
                                 <option value="">Select title</option>
@@ -203,7 +218,7 @@ function formatAmount($amount, $symbol, $position)
                                 <option value="ms">Ms.</option>
                                 <option value="dr">Dr.</option>
                             </select>
-                        </div>
+                        </div> -->
 
                         <div class="ehxdo-form-row">
                             <div class="ehxdo-form-group">
@@ -228,58 +243,58 @@ function formatAmount($amount, $symbol, $position)
 
 
                         <div class="ehxdo-gift-aid">
-                            <!-- <label class="ehxdo-label">Gift Aid</label> -->
                             <label style="display: flex; align-items: center; gap: 0.5rem; cursor: pointer;">
-                                <input type="checkbox" name="gift_aid" value="1" style="cursor: pointer;">
+                                <input type="checkbox" name="gift_aid" id="gift_aid_checkbox" value="1" style="cursor: pointer;">
                                 <span style="font-size: 0.875rem;">Gift Aid</span>
                             </label>
                         </div>
 
-
-                        <div class="ehxdo-form-group">
-                            <label class="ehxdo-label">Address line 1</label>
-                            <input type="text" name="address_line_1" class="ehxdo-input">
-                        </div>
-                        <div class="ehxdo-form-group">
-                            <label class="ehxdo-label">Address line 2</label>
-                            <input type="text" name="address_line_2" class="ehxdo-input">
-                        </div>
-
-
-                        <div class="ehxdo-form-row">
+                        <!-- Gift Aid Address Fields (Initially Hidden) -->
+                        <div id="gift_aid_fields" style="display: none;">
                             <div class="ehxdo-form-group">
-                                <label class="ehxdo-label">City</label>
-                                <input type="text" name="city" class="ehxdo-input">
+                                <label class="ehxdo-label">Address line 1</label>
+                                <input type="text" name="address_line_1" class="ehxdo-input">
                             </div>
-                            <div class="ehxdo-form-group">
-                                <label class="ehxdo-label">State</label>
-                                <input type="text" name="state" class="ehxdo-input">
+                            <div class="ehxdo-form-group" style="padding-top: 15px;">
+                                <label class="ehxdo-label">Address line 2</label>
+                                <input type="text" name="address_line_2" class="ehxdo-input">
+                            </div>
+
+                            <div class="ehxdo-form-row" style="padding-top: 15px;">
+                                <div class="ehxdo-form-group">
+                                    <label class="ehxdo-label">City</label>
+                                    <input type="text" name="city" class="ehxdo-input">
+                                </div>
+                                <div class="ehxdo-form-group">
+                                    <label class="ehxdo-label">State</label>
+                                    <input type="text" name="state" class="ehxdo-input">
+                                </div>
+                            </div>
+
+                            <div class="ehxdo-form-row" style="padding-top: 15px;">
+                                <div class="ehxdo-form-group">
+                                    <label class="ehxdo-label">Country</label>
+                                    <input type="text" name="country" class="ehxdo-input">
+                                </div>
+                                <div class="ehxdo-form-group">
+                                    <label class="ehxdo-label">Post Code</label>
+                                    <input type="text" name="post_code" class="ehxdo-input">
+                                </div>
                             </div>
                         </div>
 
-                        <div class="ehxdo-form-row">
-                            <div class="ehxdo-form-group">
-                                <label class="ehxdo-label">Country</label>
-                                <input type="text" name="country" class="ehxdo-input">
-                            </div>
-                            <div class="ehxdo-form-group">
-                                <label class="ehxdo-label">Post Code</label>
-                                <input type="text" name="post_code" class="ehxdo-input">
-                            </div>
-                        </div>
-
-                        <div class="ehxdo-summary">
+                        <div class="ehxdo-summary" style="padding-top: 20px;">
                             <div class="ehxdo-summary-row">
-                                <span>Due Directly from You:</span>
-                             <span class="ehxdo-amount" id="ehxdo-summary-amount">
-                                <?php echo formatAmount($default_amount, $currencySymbol, $position); ?>
-                            </span>
+                                <span>Total Payable Amount :</span>
+                                <span class="ehxdo-amount" id="ehxdo-summary-amount">
+                                    <?php echo formatAmount($default_amount, $currencySymbol, $position); ?>
+                                </span>
                             </div>
                             <div class="ehxdo-summary-row ehxdo-highlight">
                                 <span>Your Contribution with Gift Aid:</span>
-                             <span class="ehxdo-amount" id="ehxdo-summary-total">
-                                <?php echo formatAmount($default_amount, $currencySymbol, $position); ?>
-                            </span>
+                                <span class="ehxdo-amount" id="ehxdo-summary-total">
+                                    <?php echo formatAmount($default_amount, $currencySymbol, $position); ?>
+                                </span>
                             </div>
                         </div>
 
@@ -295,141 +310,14 @@ function formatAmount($amount, $symbol, $position)
 </div>
 
 <script>
-    const customSelect = document.querySelector('.custom-select');
-    const selectDisplay = customSelect.querySelector('.select-display');
-    const selectOptions = customSelect.querySelector('.select-options');
-    const options = customSelect.querySelectorAll('.select-option');
-    const hiddenInput = document.getElementById('donation_type');
-    const displayValue = document.getElementById('display-value');
+    const giftAidCheckbox = document.getElementById('gift_aid_checkbox');
+    const giftAidFields = document.getElementById('gift_aid_fields');
 
-    // Toggle dropdown
-    selectDisplay.addEventListener('click', function(e) {
-        e.stopPropagation();
-        selectOptions.classList.toggle('show');
-        this.classList.toggle('active');
-    });
-
-    // Select option
-    options.forEach(option => {
-        option.addEventListener('click', function() {
-            const value = this.getAttribute('data-value');
-            const text = this.textContent;
-
-            // Update display
-            selectDisplay.textContent = text;
-            hiddenInput.value = value;
-            displayValue.textContent = value;
-
-            // Update selected state
-            options.forEach(opt => opt.classList.remove('selected'));
-            this.classList.add('selected');
-
-            // Close dropdown
-            selectOptions.classList.remove('show');
-            selectDisplay.classList.remove('active');
-        });
-    });
-
-    // Close dropdown when clicking outside
-    document.addEventListener('click', function(e) {
-        if (!customSelect.contains(e.target)) {
-            selectOptions.classList.remove('show');
-            selectDisplay.classList.remove('active');
-        }
-    });
-
-    // Close on Escape key
-    document.addEventListener('keydown', function(e) {
-        if (e.key === 'Escape') {
-            selectOptions.classList.remove('show');
-            selectDisplay.classList.remove('active');
+    giftAidCheckbox.addEventListener('change', function() {
+        if (this.checked) {
+            giftAidFields.style.display = 'block';
+        } else {
+            giftAidFields.style.display = 'none';
         }
     });
 </script>
-
-<!-- <script>
-       // Section Navigation
-        const sections = document.querySelectorAll('.ehxdo-donation-card');
-        let currentSection = 0;
-
-        function showSection(index) {
-            sections.forEach((section, i) => {
-                if (i === index) {
-                    section.classList.remove('ehxdo-hidden');
-                } else {
-                    section.classList.add('ehxdo-hidden');
-                }
-            });
-
-            // Update button states
-            const prevBtns = document.querySelectorAll('.ehxdo-prev');
-            const nextBtns = document.querySelectorAll('.ehxdo-next');
-            
-            prevBtns.forEach(btn => {
-                btn.disabled = index === 0;
-            });
-
-            nextBtns.forEach(btn => {
-                btn.style.display = index === sections.length - 1 ? 'none' : 'inline-block';
-            });
-        }
-
-        document.querySelectorAll('.ehxdo-next').forEach(btn => {
-            btn.addEventListener('click', () => {
-                if (currentSection < sections.length - 1) {
-                    currentSection++;
-                    showSection(currentSection);
-                }
-            });
-        });
-
-        document.querySelectorAll('.ehxdo-prev').forEach(btn => {
-            btn.addEventListener('click', () => {
-                if (currentSection > 0) {
-                    currentSection--;
-                    showSection(currentSection);
-                }
-            });
-        });
-
-        // Amount selection
-        const amountInput = document.getElementById('ehxdo-selected-amount');
-        const donateBtn = document.getElementById('ehxdo-donate-btn');
-        const customAmountInput = document.getElementById('ehxdo-custom-amount');
-        const summaryAmount = document.getElementById('ehxdo-summary-amount');
-        const summaryTotal = document.getElementById('ehxdo-summary-total');
-
-        function updateAmount(amount) {
-            amountInput.value = amount;
-            donateBtn.textContent = `💳 Donate $${amount}`;
-            summaryAmount.textContent = `£${amount}.00`;
-            summaryTotal.textContent = `£${amount}.00`;
-        }
-
-        document.querySelectorAll('.ehxdo-amount-btn').forEach(btn => {
-            btn.addEventListener('click', function() {
-                document.querySelectorAll('.ehxdo-amount-btn').forEach(b => b.classList.remove('ehxdo-selected'));
-                this.classList.add('ehxdo-selected');
-                customAmountInput.value = '';
-                
-                const amount = this.getAttribute('data-amount');
-                updateAmount(amount);
-            });
-        });
-
-        customAmountInput.addEventListener('input', function() {
-            const customAmount = parseFloat(this.value) || 0;
-            if (customAmount > 0) {
-                document.querySelectorAll('.ehxdo-amount-btn').forEach(b => b.classList.remove('ehxdo-selected'));
-                updateAmount(customAmount);
-            }
-        });
-
-        // Donate button click (goes to next section)
-        donateBtn.addEventListener('click', () => {
-            if (currentSection < sections.length - 1) {
-                currentSection++;
-                showSection(currentSection);
-            }
-        });
-</script> -->

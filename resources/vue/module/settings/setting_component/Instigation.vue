@@ -127,6 +127,8 @@ export default {
     font-weight: 500;
     color: #374151;
     padding-top: 10px;
+    display: flex;
+    text-align: center;
 }
 
 .ehxdo-input-wrapper {

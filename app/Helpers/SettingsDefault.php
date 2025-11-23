@@ -19,6 +19,9 @@ class SettingsDefault
                 'city' => '',
                 'state' => '',
                 'postal_code' => '',
+                'progressbar' => true,
+                'service_fee' => false,
+                'service_fee_percentage' => 0,
             ],
             'integration' => [
                 'stripe' => [
