@@ -41,9 +41,12 @@ $progressBarColor = $colorSettings['primary_btn'] ?? '#079455';
                     </p>
 
                     <div class="ehxdo-progress-section">
-                        <div class="ehxdo-progress-bar">
-                            <div class="ehxdo-progress-fill" style="width: <?php echo rand(20, 90); ?>%;"></div>
-                        </div>
+                        <?php if ($generalSettings['progressbar'] ?? true): ?>
+                            <div class="ehxdo-progress-bar">
+                                <div class="ehxdo-progress-fill" style="width: <?php echo rand(20, 90); ?>%;"></div>
+                            </div>
+                        <?php endif; ?>
+
                         <div class="ehxdo-campaign-stats">
                             <div class="ehxdo-stat-item">
                                 <span class="ehxdo-stat-label">Goals</span>

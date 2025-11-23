@@ -70,7 +70,7 @@ function formatAmount($amount, $symbol, $position)
                             <div class="ehxdo-stat-label">Donors</div>
                         </div>
                     </div>
-
+                <?php if ($generalSettings['progressbar'] ?? true): ?>
                     <div class="ehxdo-progress-container">
                         <div class="ehxdo-progress-label">
                             <span>Campaign Progress</span>
@@ -80,7 +80,7 @@ function formatAmount($amount, $symbol, $position)
                             <div class="ehxdo-progress-fill" style="width: <?php echo $progress; ?>%"></div>
                         </div>
                     </div>
-
+                <?php endif; ?>
                     <div class="ehxdo-about-section">
                         <h2 class="ehxdo-about-title">About This Campaign</h2>
                         <p class="ehxdo-about-text"><?php echo htmlspecialchars($campaign['short_description']); ?></p>
