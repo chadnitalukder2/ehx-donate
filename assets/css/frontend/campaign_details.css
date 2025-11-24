@@ -382,7 +382,7 @@
   font-family: var(--ehxdo-font-family);
   width: 100%;
   padding: 0.875rem;
-  border: 2px solid var(--ehxdo-border-color);
+  border: 1.5px solid var(--ehxdo-border-color);
   border-radius: 8px;
   font-size: 14px;
   box-sizing: border-box;

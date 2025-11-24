@@ -169,7 +169,8 @@ function formatAmount($amount, $symbol, $position)
                             class="ehxdo-custom-amount"
                             id="ehxdo-custom-amount">
                     </div>
-                    <p id="ehxdo_service_fee_percentage" style="display: none;"> <?php echo $generalSettings['service_fee_percentage'] ?? ''; ?></p>
+                    <input type="hidden" id="ehxdo_service_fee_percentage" value="<?php echo $generalSettings['service_fee_percentage'] ?? ''; ?>">
+                    <input type="hidden" id="ehxdo_service_fee_enabled" value="<?php echo $generalSettings['service_fee'] ?? ''; ?>">
 
                     <div class="ehxdo-summary" style="padding-top: 20px; margin-bottom: 20px;">
                         <div class="ehxdo-summary-row">
@@ -181,7 +182,7 @@ function formatAmount($amount, $symbol, $position)
                         <?php if ($generalSettings['service_fee'] ?? false): ?>
                             <div class="ehxdo-summary-row ehxdo-highlight">
                                 <span>Final Payable with Fee :</span>
-                                <span class="ehxdo-amount" id="ehxdo-summary-total">
+                                <span class="ehxdo-amount" id="ehxdo-summary-total-with-fee">
                                     <?php echo formatAmount($default_amount, $currencySymbol, $position); ?>
                                 </span>
                             </div>
@@ -281,17 +282,17 @@ function formatAmount($amount, $symbol, $position)
 
                         <div class="ehxdo-summary" style="padding-top: 20px;">
                             <div class="ehxdo-summary-row">
-                                <span>Total Payable Amount :</span>
-                                <span class="ehxdo-amount" id="ehxdo-summary-amount">
+                                <span>Final Payable Total Amount :</span>
+                                <span class="ehxdo-amount" id="ehxdo-final-summary-amount">
                                     <?php echo formatAmount($default_amount, $currencySymbol, $position); ?>
                                 </span>
                             </div>
-                            <div class="ehxdo-summary-row ehxdo-highlight">
+                            <!-- <div class="ehxdo-summary-row ehxdo-highlight">
                                 <span>Your Contribution with Gift Aid:</span>
                                 <span class="ehxdo-amount" id="ehxdo-summary-total">
                                     <?php echo formatAmount($default_amount, $currencySymbol, $position); ?>
                                 </span>
-                            </div>
+                            </div> -->
                         </div>
 
                         <div class="ehxdo-section-nav">
