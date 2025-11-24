@@ -150,9 +150,9 @@ jQuery(document).ready(function ($) {
     $('#ehxdo-donation-form').on('submit', function (e) {
         e.preventDefault();
         const formData = $(this).serialize();
-        console.log('window', window);
+        console.log('window', window.EHXDonate.restUrl);
         $.ajax({
-            url: `${window.EHXDonate.restUrl}/api/donateSubmission`,
+            url: `${window.EHXDonate.restUrl}api/donationSubmission`,
             type: 'POST',
             data: formData + '&action=ehxdo_process_donation',
             success: function (response) {

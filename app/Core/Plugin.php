@@ -244,7 +244,7 @@ class Plugin
         wp_localize_script('ehx-donate-admin', 'EHXDonate', [
             'ajaxUrl' => admin_url('admin-ajax.php'),
             'restUrl' => rest_url('ehx-donate/v1/'),
-              'restNonce' => wp_create_nonce('wp_rest'),
+            'restNonce' => wp_create_nonce('wp_rest'),
 
             // 'nonce' => wp_create_nonce('exh_donate_nonce'),
             'strings' => [

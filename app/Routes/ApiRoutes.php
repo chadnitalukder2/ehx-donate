@@ -29,7 +29,7 @@ class ApiRoutes
             $router->post('/updateCampaignStatus/{id}', 'CampaignController@updateCampaignStatus', ['auth']);
 
             //donation routes
-            $router->post('/donateSubmission', 'DonationController@store');
+            $router->post('/donationSubmission', 'DonationController@store');
             
             $router->get('/settings/{key}', 'SettingsController@getSettings');
             $router->post('/settings/{key}', 'SettingsController@updateSettings');

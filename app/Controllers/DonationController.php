@@ -15,7 +15,7 @@ class DonationController extends Controller
      */
     public function store(): void
     {
-        dd( 'Donation store method called' );
+        var_dump( 'Donation store method called' );
         $this->requireAuth();
         
         $data = $this->validate([
