@@ -152,7 +152,7 @@ jQuery(document).ready(function ($) {
         const formData = $(this).serialize();
         console.log('window', window.EHXDonate.restUrl);
         $.ajax({
-            url: `${window.EHXDonate.restUrl}api/donationSubmission`,
+            url: `${window.EHXDonate.restUrl}donationSubmission`,
             type: 'POST',
             data: formData + '&action=ehxdo_process_donation',
             success: function (response) {
