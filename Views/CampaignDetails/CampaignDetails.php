@@ -12,6 +12,8 @@ $currency = $generalSettings['currency'] ?? 'GBP';
 $currencySymbol = $currencySymbols[$currency] ?? '£';
 $position = $generalSettings['currency_position'] ?? 'Before';
 
+$serviceFeePercent = $generalSettings['service_fee_percentage'] ?? 0;
+
 function formatAmount($amount, $symbol, $position)
 {
     $formatted = number_format($amount, 2);
@@ -141,21 +143,6 @@ function formatAmount($amount, $symbol, $position)
                                 <option value="yearly">Yearly</option>
                             </select>
                         </div>
-
-                        <!-- <div class="ehxdo-donation-type">
-                            <label for="donation_type" class="ehxdo-label">Donation Type</label>
-                            <div class="custom-select">
-                                <div class="select-display">One-time</div>
-                                <div class="select-options">
-                                    <div class="select-option selected" data-value="one-time">One-time</div>
-                                    <div class="select-option" data-value="weekly">Weekly</div>
-                                    <div class="select-option" data-value="monthly">Monthly</div>
-                                    <div class="select-option" data-value="quarterly">Quarterly</div>
-                                    <div class="select-option" data-value="yearly">Yearly</div>
-                                </div>
-                            </div>
-                            <input type="hidden" name="donation_type" id="donation_type" value="one-time">
-                        </div> -->
                     <?php endif; ?>
 
                     <div class="ehxdo-amount-section">
@@ -182,6 +169,7 @@ function formatAmount($amount, $symbol, $position)
                             class="ehxdo-custom-amount"
                             id="ehxdo-custom-amount">
                     </div>
+                    <p id="ehxdo_service_fee_percentage" style="display: none;"> <?php echo $generalSettings['service_fee_percentage'] ?? ''; ?></p>
 
                     <div class="ehxdo-summary" style="padding-top: 20px; margin-bottom: 20px;">
                         <div class="ehxdo-summary-row">
@@ -190,14 +178,16 @@ function formatAmount($amount, $symbol, $position)
                                 <?php echo formatAmount($default_amount, $currencySymbol, $position); ?>
                             </span>
                         </div>
-                        <div class="ehxdo-summary-row ehxdo-highlight">
-                            <span>Final Payable with Fee :</span>
-                            <span class="ehxdo-amount" id="ehxdo-summary-total">
-                                <?php echo formatAmount($default_amount, $currencySymbol, $position); ?>
-                            </span>
-                        </div>
+                        <?php if ($generalSettings['service_fee'] ?? false): ?>
+                            <div class="ehxdo-summary-row ehxdo-highlight">
+                                <span>Final Payable with Fee :</span>
+                                <span class="ehxdo-amount" id="ehxdo-summary-total">
+                                    <?php echo formatAmount($default_amount, $currencySymbol, $position); ?>
+                                </span>
+                            </div>
+                        <?php endif; ?>
                     </div>
-
+                    <p class="ehxdo-error-msg" style="color: red; font-size: 14px; margin-top: 10px; display:none">Please select or enter a donation amount.</p>
                     <button type="button" class="ehxdo-donate-btn" id="ehxdo-donate-btn">
                         <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
                             <path d="M13.3335 3.33331H2.66683C1.93045 3.33331 1.3335 3.93027 1.3335 4.66665V11.3333C1.3335 12.0697 1.93045 12.6666 2.66683 12.6666H13.3335C14.0699 12.6666 14.6668 12.0697 14.6668 11.3333V4.66665C14.6668 3.93027 14.0699 3.33331 13.3335 3.33331Z" stroke="white" stroke-width="1.33333" stroke-linecap="round" stroke-linejoin="round" />
@@ -316,6 +306,7 @@ function formatAmount($amount, $symbol, $position)
 </div>
 
 <script>
+    //Gift Aid Toggle-===========================================
     const giftAidCheckbox = document.getElementById('gift_aid_checkbox');
     const giftAidFields = document.getElementById('gift_aid_fields');
 
@@ -326,4 +317,7 @@ function formatAmount($amount, $symbol, $position)
             giftAidFields.style.display = 'none';
         }
     });
+
+    //=====================donate must amount validation=========================
+    const donateButton = document.getElementById('donate-amount-display');
 </script>

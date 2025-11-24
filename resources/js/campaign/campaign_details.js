@@ -1,9 +1,9 @@
-jQuery(document).ready(function($) {
+jQuery(document).ready(function ($) {
 
     // Get currency settings from hidden inputs or data attributes
     const currencySymbol = $('input[name="currency_symbol"]').val() || '£';
     const currencyPosition = $('input[name="currency_position"]').val() || 'Before';
-    
+
     // Helper function to format currency
     function formatCurrency(amount) {
         const formatted = parseFloat(amount).toFixed(2);
@@ -13,13 +13,13 @@ jQuery(document).ready(function($) {
             return formatted + currencySymbol;
         }
     }
- 
+
     // Section Navigation
     const $sections = $('.ehxdo-donation-card');
     let currentSection = 0;
 
     function showSection(index) {
-        $sections.each(function(i) {
+        $sections.each(function (i) {
             $(this).toggleClass('ehxdo-hidden', i !== index);
         });
 
@@ -28,14 +28,14 @@ jQuery(document).ready(function($) {
         $('.ehxdo-next').css('display', index === $sections.length - 1 ? 'none' : 'inline-block');
     }
 
-    $('.ehxdo-next').on('click', function() {
+    $('.ehxdo-next').on('click', function () {
         if (currentSection < $sections.length - 1) {
             currentSection++;
             showSection(currentSection);
         }
     });
 
-    $('.ehxdo-prev').on('click', function() {
+    $('.ehxdo-prev').on('click', function () {
         if (currentSection > 0) {
             currentSection--;
             showSection(currentSection);
@@ -51,9 +51,9 @@ jQuery(document).ready(function($) {
 
     function updateAmount(amount) {
         const formattedAmount = formatCurrency(amount);
-        
+
         $amountInput.val(amount);
-        
+
         // Update donate button with icon
         $donateBtn.html(`
             <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -62,12 +62,12 @@ jQuery(document).ready(function($) {
             </svg>
             Donate ${formattedAmount}
         `);
-        
+
         $summaryAmount.text(formattedAmount);
         $summaryTotal.text(formattedAmount);
     }
 
-    $('.ehxdo-amount-btn').on('click', function() {
+    $('.ehxdo-amount-btn').on('click', function () {
         $('.ehxdo-amount-btn').removeClass('ehxdo-selected');
         $(this).addClass('ehxdo-selected');
         $customAmountInput.val('');
@@ -76,7 +76,7 @@ jQuery(document).ready(function($) {
         updateAmount(amount);
     });
 
-    $customAmountInput.on('input', function() {
+    $customAmountInput.on('input', function () {
         const customAmount = parseFloat($(this).val()) || 0;
         if (customAmount > 0) {
             $('.ehxdo-amount-btn').removeClass('ehxdo-selected');
@@ -84,8 +84,21 @@ jQuery(document).ready(function($) {
         }
     });
 
-    // Donate button click (next section)
-    $donateBtn.on('click', function() {
+    // Donate button click with validation
+    $donateBtn.on('click', function () {
+        const selectedAmount = parseFloat($amountInput.val()) || 0;
+        if (selectedAmount <= 0) {
+            $customAmountInput.css('border', '2px solid red');
+            $('.ehxdo-error-msg').show(); // display:block
+          
+            setTimeout(function () {
+                  $customAmountInput.css('border', '');
+                $('.ehxdo-error-msg').hide(); // display:none
+            }, 3000);
+
+            return false;
+        }
+
         if (currentSection < $sections.length - 1) {
             currentSection++;
             showSection(currentSection);
