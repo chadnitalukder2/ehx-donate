@@ -3,7 +3,7 @@ jQuery(document).ready(function ($) {
     // Get currency settings from hidden inputs or data attributes
     const currencySymbol = $('input[name="currency_symbol"]').val() || '£';
     const currencyPosition = $('input[name="currency_position"]').val() || 'Before';
-    
+
     // Get service fee settings
     const serviceFeeEnabled = $('#ehxdo_service_fee_enabled').val() === '1' || $('#ehxdo_service_fee_enabled').val() === 'true';
     const serviceFeePercentage = parseFloat($('#ehxdo_service_fee_percentage').val()) || 0;
@@ -71,7 +71,7 @@ jQuery(document).ready(function ($) {
     function updateAmount(amount) {
         const donationAmount = parseFloat(amount);
         const totalWithFee = calculateTotalWithFee(donationAmount);
-        
+
         const formattedDonationAmount = formatCurrency(donationAmount);
         const formattedTotalWithFee = formatCurrency(totalWithFee);
 
@@ -79,7 +79,7 @@ jQuery(document).ready(function ($) {
 
         // Update donate button with icon - show total with fee if enabled
         const displayAmount = (serviceFeeEnabled && serviceFeePercentage > 0) ? formattedTotalWithFee : formattedDonationAmount;
-        
+
         $donateBtn.html(`
             <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
                 <path d="M13.3335 3.33331H2.66683C1.93045 3.33331 1.3335 3.93027 1.3335 4.66665V11.3333C1.3335 12.0697 1.93045 12.6666 2.66683 12.6666H13.3335C14.0699 12.6666 14.6668 12.0697 14.6668 11.3333V4.66665C14.6668 3.93027 14.0699 3.33331 13.3335 3.33331Z" stroke="white" stroke-width="1.33333" stroke-linecap="round" stroke-linejoin="round" />
@@ -90,7 +90,7 @@ jQuery(document).ready(function ($) {
 
         // Update summary amounts
         $summaryAmount.text(formattedDonationAmount);
-        
+
         // Only show fee calculation if service fee is enabled
         if (serviceFeeEnabled && serviceFeePercentage > 0) {
             $summaryTotalWithFee.text(formattedTotalWithFee);
@@ -127,7 +127,7 @@ jQuery(document).ready(function ($) {
         if (selectedAmount <= 0) {
             $customAmountInput.css('border', '1.5px solid red');
             $('.ehxdo-error-msg').show(); // display:block
-          
+
             setTimeout(function () {
                 $customAmountInput.css('border', '');
                 $('.ehxdo-error-msg').hide(); // display:none
@@ -144,4 +144,27 @@ jQuery(document).ready(function ($) {
 
     // Initialize first section
     showSection(currentSection);
+
+
+    //form submission handling    
+    $('#ehxdo-donation-form').on('submit', function (e) {
+        e.preventDefault();
+        const formData = $(this).serialize();
+        console.log('window', window);
+        $.ajax({
+            url: `${window.EHXDonate.restUrl}/api/donateSubmission`,
+            type: 'POST',
+            data: formData + '&action=ehxdo_process_donation',
+            success: function (response) {
+                if (response.success) {
+                    window.location.href = response.data.redirect_url;
+                } else {
+                    alert('Error: ' + response.data.message);
+                }
+            },
+            error: function () {
+                alert('An unexpected error occurred. Please try again later.');
+            }
+        });
+    });
 });

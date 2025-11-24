@@ -33,7 +33,7 @@ class CreateDonationLogTable
         'transaction_id' => 'varchar(255) NOT NULL UNIQUE',
         'campaign_id' => 'bigint(20) UNSIGNED DEFAULT NULL',
         'user_id' => 'bigint(20) UNSIGNED DEFAULT NULL',
-        'doner_id' => 'bigint(20) UNSIGNED DEFAULT NULL',
+        'donor_id' => 'bigint(20) UNSIGNED DEFAULT NULL',
         'team_id' => 'bigint(20) UNSIGNED DEFAULT NULL',
         'donor_name' => 'varchar(255) DEFAULT NULL',
         'donor_email' => 'varchar(255) DEFAULT NULL',
