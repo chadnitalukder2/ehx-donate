@@ -142,7 +142,6 @@ class CampaignController extends Controller
             return;
         }
 
-        // Check if user owns the campaign or has admin capabilities
         if ($campaign->user_id !== $this->getCurrentUserId() && !$this->can('manage_options')) {
             $this->error('Unauthorized', 403);
             return;

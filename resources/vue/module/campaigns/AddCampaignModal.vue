@@ -94,14 +94,15 @@ export default {
                 header_image: "",
                 settings: {
                     "allow_custom_amount": true,
-                    "min_donation": 5,
-                    "max_donation": 1000,
+                    "min_donation": 1,
+                    "max_donation": 999999,
                     "predefined_pricing": true,
                     "description": '',
                     "pricing_items": [
                         { "name": "Basic", "amount": 5 },
                         { "name": "Premium", "amount": 10 },
-                        { "name": "Premium", "amount": 15 }
+                        { "name": "Premium", "amount": 20 },
+                        
                     ],
                     "allow_recurring_amount": false,
                     "images": [],

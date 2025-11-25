@@ -410,7 +410,6 @@ abstract class Model
         $model = new static($attributes);
 
         if (!$model->save()) {
-            // Throw exception or handle error
             throw new Exception('Failed to create model: ' . $model->getFirstError());
         }
 

@@ -90,7 +90,7 @@
                             <div class="ehxdo-section-inner">
                                 <div class="ehxdo-checkbox-group">
                                     <el-checkbox v-model="form.settings.allow_custom_amount" class="ehxdo-checkbox">
-                                        Allow Custom Amount
+                                        Allow Custom Amount 
                                     </el-checkbox>
                                 </div>
                                 <p class="ehxdo-description">
@@ -113,7 +113,7 @@
                             <div class="ehxdo-section-inner">
                                 <div class="ehxdo-checkbox-group">
                                     <el-checkbox v-model="form.settings.predefined_pricing" class="ehxdo-checkbox">
-                                        Predefined Pricing
+                                      Allow Predefined Pricing
                                     </el-checkbox>
                                 </div>
                                 <p class="ehxdo-description">

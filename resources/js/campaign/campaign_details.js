@@ -133,7 +133,7 @@ jQuery(document).ready(function ($) {
         const selectedAmount = parseFloat($amountInput.val()) || 0;
         if (selectedAmount <= 0) {
             $customAmountInput.css('border', '1.5px solid red');
-            $('.ehxdo-error-msg').show(); // display:block
+            $('.ehxdo-error-msg').show();
 
             setTimeout(function () {
                 $customAmountInput.css('border', '');
@@ -151,20 +151,13 @@ jQuery(document).ready(function ($) {
 
     showSection(currentSection);
 
-    //TemporaryError message
-      function showTemporaryError(message, duration = 3000, color = 'rgb(221 47 47)') {
-        const $msg = $('.ehxd-response-message');
-        if (message && message.trim() !== '') {
-          $msg.text(message).css('color', color).fadeIn();
-          setTimeout(() => {
-            $msg.fadeOut(400, function () {
-              $(this).text('').hide();
-            });
-          }, duration);
-        } else {
-          $msg.hide();
-        }
-      }
+    // Function to generate unique donation hash
+    function generateDonationHash() {
+        const timestamp = Date.now();
+        const random = Math.random().toString(36).substring(2, 15);
+        const hash = `DON-${timestamp}-${random}`.toUpperCase();
+        return hash;
+    }
 
     //form submission handling    
     $('#ehxdo-donation-form').on('submit', function (e) {
@@ -199,13 +192,13 @@ jQuery(document).ready(function ($) {
         if (!email.value.trim() || !emailRegex.test(email.value.trim())) {
             $(email).css('border', '1.5px solid red');
             errors.push('Please enter a valid email address.');
-        } 
+        }
 
         // If there are errors, show error message and return
         if (errors.length > 0) {
             const errorMsg = `<p class="ehxdo-form-error-msg" style="color: red; font-size: 14px;">
-            Please complete all required fields<br>
-        </p>`;
+                Please complete all required fields<br>
+            </p>`;
 
             $('.ehxdo-section-nav').before(errorMsg);
 
@@ -224,56 +217,79 @@ jQuery(document).ready(function ($) {
         const originalText = $submitBtn.text();
 
         $submitBtn.prop('disabled', true)
-            .html('<span style="display: inline-block; margin-right: 8px;"></span> Submitting...')
+            .html('<span style="display: inline-block; margin-right: 8px;">⏳</span> Submitting...')
             .css('opacity', '0.7');
 
-        const data = [
-            'first_name',
-            'last_name',
-            'email',
-            'phone',
-            'donation_hash' ,
-            'campaign_id',
-            'donor_message',
-            'anonymous_donation',
-            'gift_aid',
-            'net_amount'
-        ]
-        console.log('Submitting donation with data:', $this.data)
-        const formData = $(this).serialize();
+        // Get the base donation amount (without fee)
+        const donationAmount = parseFloat($('#ehxdo-selected-amount').val()) || 0;
+        
+        // Calculate service fee
+        const serviceFee = calculateServiceFee(donationAmount);
+        
+        // Get total amount (donation + fee)
+        const totalAmount = parseFloat($('#ehxdo-net_amount').val()) || donationAmount;
 
+        const data = {
+            first_name: $('input[name="first_name"]').val() || '',
+            last_name: $('input[name="last_name"]').val() || '',
+            email: $('input[name="email"]').val() || '',
+            phone: $('input[name="phone"]').val() || '',
+            donation_hash: generateDonationHash(), 
+            campaign_id: $('input[name="campaign_id"]').val() || '',
+            donation_note: $('textarea[name="donation_note"]').val() || '',
+            anonymous_donation: $('input[name="anonymous_donation"]').is(':checked') ? 1 : 0,
+            gift_aid: $('input[name="gift_aid"]').is(':checked') ? 1 : 0,
+            
+            // Amount fields
+            amount: donationAmount.toFixed(2),
+            service_fee: serviceFee.toFixed(2),
+            net_amount: totalAmount.toFixed(2),
+            
+            // Other fields
+            currency: $('input[name="currency"]').val() || '', 
+            donation_type: $('#donation_type').val() || 'one-time',
+            
+            // Address fields (if gift aid is checked)
+            address_line_1: $('input[name="address_line_1"]').val() || '',
+            address_line_2: $('input[name="address_line_2"]').val() || '',
+            city: $('input[name="city"]').val() || '',
+            state: $('input[name="state"]').val() || '',
+            country: $('input[name="country"]').val() || '',
+            post_code: $('input[name="post_code"]').val() || ''
+        };
+        
+        console.log('Submitting donation with data:', data);
+        
         $.ajax({
             url: `${window.EHXDonate.restUrl}donationSubmission`,
             type: 'POST',
             headers: {
                 'X-WP-Nonce': window.EHXDonate.restNonce
             },
-            data: formData,
+            data: data,
             success: function (response) {
                 if (response.success) {
                     $submitBtn.html('<span style="display: inline-block; margin-right: 8px;">✓</span> Success! Redirecting...');
                     window.location.href = response.data.redirect_url;
                 } else {
-                    // Show error message
                     const errorMsg = `<p class="ehxdo-form-error-msg" style="color: red; font-size: 14px; margin: 15px 0; padding: 10px; background-color: #ffebee; border-radius: 4px;">
-                    <strong>Error:</strong> ${response.data.message}
-                </p>`;
+                        <strong>Error:</strong> ${response.data.message}
+                    </p>`;
                     $('.ehxdo-section-nav').before(errorMsg);
 
-                    // Reset button
                     $submitBtn.prop('disabled', false)
                         .text(originalText)
                         .css('opacity', '1');
                 }
             },
-            error: function () {
-                // Show error message
+            error: function (xhr, status, error) {
+                console.error('AJAX Error:', status, error);
+                
                 const errorMsg = `<p class="ehxdo-form-error-msg" style="color: red; font-size: 14px; margin: 15px 0; padding: 10px; background-color: #ffebee; border-radius: 4px;">
-                <strong>Error:</strong> An unexpected error occurred. Please try again later.
-            </p>`;
+                    <strong>Error:</strong> An unexpected error occurred. Please try again later.
+                </p>`;
                 $('.ehxdo-section-nav').before(errorMsg);
 
-                // Reset button
                 $submitBtn.prop('disabled', false)
                     .text(originalText)
                     .css('opacity', '1');
@@ -281,5 +297,4 @@ jQuery(document).ready(function ($) {
         });
     });
 
-    
 });

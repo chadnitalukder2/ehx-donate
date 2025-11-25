@@ -10,20 +10,21 @@ class Donor extends Model
     /**
      * The table name
      */
-    protected $table = 'ehxdo_donors';
+    protected $table = 'ehxdo_donor';
 
     /**
      * The attributes that are mass assignable
      */
     protected $fillable = [
-        'title',
-        'description',
-        'destination',
-        'start_date',
-        'end_date',
-        'price',
-        'status',
-        'user_id'
+        'user_id',
+        'campaign_id',
+        'first_name',
+        'last_name',
+        'email',
+        'phone',
+        'meta',
+        'created_at',
+        'updated_at'
     ];
 
     /**

@@ -19,7 +19,10 @@ function formatAmount($amount, $symbol, $position)
     $formatted = number_format($amount, 2);
     return $position === 'Before' ? $symbol  . $formatted : $formatted . $symbol;
 }
-//dd($campaign['id']);
+
+$minDonation = $campaign['settings']['min_donation'] ?? 1;
+$maxDonation = $campaign['settings']['max_donation'] ?? 999999;
+// dd($campaign);
 ?>
 
 <style>
@@ -62,7 +65,8 @@ function formatAmount($amount, $symbol, $position)
                     <div class="ehxdo-stats-container">
                         <div class="ehxdo-stat-item ehxdo-stat-raised">
                             <div class="ehxdo-stat-value">
-                                <?php echo formatAmount($campaign['raised'], $currencySymbol, $position); ?>
+                                <?php // echo formatAmount($campaign['raised'], $currencySymbol, $position); 
+                                ?>
                             </div>
 
                             <div class="ehxdo-stat-label">Raised</div>
@@ -115,7 +119,8 @@ function formatAmount($amount, $symbol, $position)
                                     <path d="M6.00016 7.33333C7.47292 7.33333 8.66683 6.13943 8.66683 4.66667C8.66683 3.19391 7.47292 2 6.00016 2C4.5274 2 3.3335 3.19391 3.3335 4.66667C3.3335 6.13943 4.5274 7.33333 6.00016 7.33333Z" stroke="#4A5565" stroke-width="1.33333" stroke-linecap="round" stroke-linejoin="round" />
                                 </svg>
 
-                            </span> <?php echo $campaign['donors']; ?> Supporters
+                            </span> <?php //echo $campaign['donors']; 
+                                    ?> Supporters
                         </span>
                     </div>
                 </div>
@@ -152,7 +157,7 @@ function formatAmount($amount, $symbol, $position)
                         <input type="hidden" name="currency_symbol" value="<?php echo $currencySymbol; ?>">
                         <input type="hidden" name="currency_position" value="<?php echo $position; ?>">
 
-                        <?php if ($campaign['settings']['allow_custom_amount'] === true): ?>
+                        <?php if ($campaign['settings']['predefined_pricing'] === true): ?>
                             <div class="ehxdo-amount-grid">
                                 <?php foreach ($campaign['settings']['pricing_items'] as $item): ?>
                                     <button type="button"
@@ -164,10 +169,19 @@ function formatAmount($amount, $symbol, $position)
                             </div>
                         <?php endif; ?>
 
-                        <input type="text"
-                            placeholder="Custom amount"
-                            class="ehxdo-custom-amount"
-                            id="ehxdo-custom-amount">
+                        <?php if ($campaign['settings']['allow_custom_amount'] === true): ?>
+                            <input type="hidden" id="ehxdo-min-donation" value="<?php echo $minDonation; ?>">
+                            <input type="hidden" id="ehxdo-max-donation" value="<?php echo $maxDonation; ?>">
+
+                            <input type="number"
+                                placeholder="Custom amount"
+                                class="ehxdo-custom-amount"
+                                id="ehxdo-custom-amount">
+                            <p class="ehxdo-amount-hint" style="font-size: 12px; color: #666; margin-top: 5px;">
+                                Minimum: <?php echo formatAmount($minDonation, $currencySymbol, $position); ?> |
+                                Maximum: <?php echo formatAmount($maxDonation, $currencySymbol, $position); ?>
+                            </p>
+                        <?php endif; ?>
                     </div>
                     <input type="hidden" id="ehxdo_service_fee_percentage" value="<?php echo $generalSettings['service_fee_percentage'] ?? ''; ?>">
                     <input type="hidden" id="ehxdo_service_fee_enabled" value="<?php echo $generalSettings['service_fee'] ?? ''; ?>">
@@ -367,4 +381,106 @@ function formatAmount($amount, $symbol, $position)
             });
         }
     });
+
+    document.addEventListener('DOMContentLoaded', function() {
+    const customAmountInput = document.getElementById('ehxdo-custom-amount');
+    const minDonation = parseFloat(document.getElementById('ehxdo-min-donation').value);
+    const maxDonation = parseFloat(document.getElementById('ehxdo-max-donation').value);
+    const errorMsg = document.querySelector('.ehxdo-error-msg');
+    const donateBtn = document.getElementById('ehxdo-donate-btn');
+
+    // Validate and restrict custom amount input
+    if (customAmountInput) {
+        customAmountInput.addEventListener('input', function() {
+            let value = parseFloat(this.value);
+            
+            // Clear previous error
+            errorMsg.style.display = 'none';
+            customAmountInput.style.borderColor = '';
+            
+            if (this.value && !isNaN(value)) {
+                // Enforce minimum
+                if (value < minDonation) {
+                    this.value = minDonation;
+                    value = minDonation;
+                    errorMsg.textContent = `Minimum donation amount is ${formatAmount(minDonation)}`;
+                    errorMsg.style.display = 'block';
+                    customAmountInput.style.borderColor = '#e71111';
+                    
+                    // Auto-hide error after 2 seconds
+                    setTimeout(() => {
+                        errorMsg.style.display = 'none';
+                        customAmountInput.style.borderColor = '';
+                    }, 2000);
+                } 
+                // Enforce maximum
+                else if (value > maxDonation) {
+                    this.value = maxDonation;
+                    value = maxDonation;
+                    errorMsg.textContent = `Maximum donation amount is ${formatAmount(maxDonation)}`;
+                    errorMsg.style.display = 'block';
+                    customAmountInput.style.borderColor = '#e71111';
+                    
+                    // Auto-hide error after 2 seconds
+                    setTimeout(() => {
+                        errorMsg.style.display = 'none';
+                        customAmountInput.style.borderColor = '';
+                    }, 2000);
+                }
+            }
+        });
+        
+        // Also validate on blur (when user leaves the field)
+        customAmountInput.addEventListener('blur', function() {
+            let value = parseFloat(this.value);
+            
+            if (this.value && !isNaN(value)) {
+                if (value < minDonation) {
+                    this.value = minDonation;
+                } else if (value > maxDonation) {
+                    this.value = maxDonation;
+                }
+            }
+        });
+    }
+
+    // Validate on donate button click
+    if (donateBtn) {
+        donateBtn.addEventListener('click', function(e) {
+            const selectedAmount = parseFloat(document.getElementById('ehxdo-selected-amount').value);
+            
+            if (!selectedAmount || isNaN(selectedAmount)) {
+                e.preventDefault();
+                errorMsg.textContent = 'Please select or enter a donation amount.';
+                errorMsg.style.display = 'block';
+                return false;
+            }
+            
+            if (selectedAmount < minDonation) {
+                e.preventDefault();
+                errorMsg.textContent = `Minimum donation amount is ${formatAmount(minDonation)}`;
+                errorMsg.style.display = 'block';
+                return false;
+            }
+            
+            if (selectedAmount > maxDonation) {
+                e.preventDefault();
+                errorMsg.textContent = `Maximum donation amount is ${formatAmount(maxDonation)}`;
+                errorMsg.style.display = 'block';
+                return false;
+            }
+            
+            // Clear error and proceed
+            errorMsg.style.display = 'none';
+        });
+    }
+
+    // Helper function to format amount (matches PHP formatAmount)
+    function formatAmount(amount) {
+        const symbol = document.querySelector('input[name="currency_symbol"]').value;
+        const position = document.querySelector('input[name="currency_position"]').value;
+        const formatted = parseFloat(amount).toFixed(2);
+        return position === 'Before' ? symbol + formatted : formatted + symbol;
+    }
+});
 </script>
