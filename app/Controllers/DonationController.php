@@ -15,13 +15,13 @@ class DonationController extends Controller
      */
     public function store(): void
     {
-        var_dump( 'Donation store method called' );
+        dd( 'Donation store method called' );
         $this->requireAuth();
         
         $data = $this->validate([
-            'title' => 'required|max:255',
-            'description' => 'max:1000',
-            'destination' => 'required|max:255',
+            'first_name' => 'required|max:255',
+            'last_name' => 'max:1000',
+            'email' => 'required|max:255',
             'start_date' => 'required',
             'end_date' => 'required',
             'price' => 'required|numeric',

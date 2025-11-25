@@ -19,7 +19,7 @@ function formatAmount($amount, $symbol, $position)
     $formatted = number_format($amount, 2);
     return $position === 'Before' ? $symbol  . $formatted : $formatted . $symbol;
 }
-
+//dd($campaign['id']);
 ?>
 
 <style>
@@ -217,25 +217,27 @@ function formatAmount($amount, $symbol, $position)
                             </select>
                         </div> -->
 
+                        <input type="hidden" name="campaign_id" value="<?php echo esc_attr($campaign['id']); ?>">
+                        <input type="hidden" name="net_amount" id="ehxdo-net_amount" value="<?php echo $default_amount; ?>">
                         <div class="ehxdo-form-row">
                             <div class="ehxdo-form-group">
                                 <label class="ehxdo-label">First Name *</label>
-                                <input type="text" name="first_name" class="ehxdo-input" required>
+                                <input type="text" name="first_name" class="ehxdo-input">
                             </div>
                             <div class="ehxdo-form-group">
                                 <label class="ehxdo-label">Last Name *</label>
-                                <input type="text" name="last_name" class="ehxdo-input" required>
+                                <input type="text" name="last_name" class="ehxdo-input">
                             </div>
                         </div>
 
 
                         <div class="ehxdo-form-group">
                             <label class="ehxdo-label">Email Address *</label>
-                            <input type="email" name="email" class="ehxdo-input" required>
+                            <input type="email" name="email" class="ehxdo-input">
                         </div>
                         <div class="ehxdo-form-group">
-                            <label class="ehxdo-label">Phone Number *</label>
-                            <input type="tel" name="phone" class="ehxdo-input" required>
+                            <label class="ehxdo-label">Phone Number </label>
+                            <input type="tel" name="phone" class="ehxdo-input">
                         </div>
 
                         <div class="ehxdo-form-group">
@@ -295,6 +297,17 @@ function formatAmount($amount, $symbol, $position)
                             </div>
                         </div>
 
+
+                        <div class="ehxdo-anonymous-option" style="padding-top: 15px;">
+                            <label style="display: flex; align-items: center; gap: 0.5rem; cursor: pointer;">
+                                <input type="checkbox" name="anonymous_donation" id="anonymous_checkbox" value="1" style="cursor: pointer;">
+                                <span style="font-size: 0.875rem;">Make this donation anonymous</span>
+                            </label>
+                            <p style="font-size: 0.75rem; color: #666; margin-top: 0.25rem; margin-left: 1.5rem;">
+                                Your donation will be recorded, but your name won't be displayed publicly.
+                            </p>
+                        </div>
+
                         <div class="ehxdo-summary" style="padding-top: 20px;">
                             <div class="ehxdo-summary-row">
                                 <span>Final Payable Total Amount :</span>
@@ -309,18 +322,12 @@ function formatAmount($amount, $symbol, $position)
                                 </span>
                             </div> -->
                         </div>
-                        <div class="ehxdo-anonymous-option" style="padding-top: 15px;">
-                            <label style="display: flex; align-items: center; gap: 0.5rem; cursor: pointer;">
-                                <input type="checkbox" name="anonymous_donation" id="anonymous_checkbox" value="1" style="cursor: pointer;">
-                                <span style="font-size: 0.875rem;">Make this donation anonymous</span>
-                            </label>
-                            <p style="font-size: 0.75rem; color: #666; margin-top: 0.25rem; margin-left: 1.5rem;">
-                                Your donation will be recorded, but your name won't be displayed publicly.
-                            </p>
-                        </div>
-                        <div class="ehxdo-section-nav">
-                            <button type="button" class="ehxdo-nav-btn ehxdo-prev">Previous</button>
-                            <button type="submit" class="ehxdo-nav-btn ehxdo-submit">Submit</button>
+                        <div class="ehxdo_button_wrapper">
+
+                            <div class="ehxdo-section-nav">
+                                <button type="button" class="ehxdo-nav-btn ehxdo-prev">Previous</button>
+                                <button type="submit" class="ehxdo-nav-btn ehxdo-submit">Submit</button>
+                            </div>
                         </div>
                     </div>
                 </div>

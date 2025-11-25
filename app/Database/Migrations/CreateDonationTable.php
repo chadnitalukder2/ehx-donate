@@ -34,7 +34,6 @@ class CreateDonationLogTable
         'campaign_id' => 'bigint(20) UNSIGNED DEFAULT NULL',
         'user_id' => 'bigint(20) UNSIGNED DEFAULT NULL',
         'donor_id' => 'bigint(20) UNSIGNED DEFAULT NULL',
-        'team_id' => 'bigint(20) UNSIGNED DEFAULT NULL',
         'donor_name' => 'varchar(255) DEFAULT NULL',
         'donor_email' => 'varchar(255) DEFAULT NULL',
         'donor_message' => 'text DEFAULT NULL',

@@ -449,6 +449,7 @@
   border-radius: 8px;
   font-size: 14px;
   box-sizing: border-box;
+  color: var(--ehxdo-text-gray);
   transition: border-color 0.2s;
 }
 
@@ -536,6 +537,7 @@
   padding: 0px 12px;
   border: 1.5px solid var(--ehxdo-border-color);
   border-radius: 10px;
+  color: var(--ehxdo-text-gray);
   font-size: 0.875rem;
   transition: border-color 0.2s;
 }
@@ -587,10 +589,11 @@ select.ehxdo-input {
 .ehxdo-section-nav {
   display: flex;
   gap: 0.75rem;
-  margin-top: 1.5rem;
+  margin-top: 6px;
   padding-top: 1.5rem;
   border-top: 1px solid var(--ehxdo-border-color);
-  .ehxdo-prev{
+
+  .ehxdo-prev {
     font-family: var(--ehxdo-font-family);
   }
 }
@@ -628,9 +631,10 @@ select.ehxdo-input {
 .ehxdo-nav-btn.ehxdo-submit:hover {
   background: color-mix(in srgb, var(--ehxdo-primary-btn) 90%, white);
 }
-.ehxdo_test_mode_container{
-  p{
-     color: var(--ehxdo-primary-btn-text);
+
+.ehxdo_test_mode_container {
+  p {
+    color: var(--ehxdo-primary-btn-text);
     font-size: 14px;
     display: inline-block;
     box-sizing: border-box;
@@ -639,11 +643,13 @@ select.ehxdo-input {
     font-weight: 500;
     background: var(--ehxdo-primary-btn);
 
-    
+
   }
 }
-.ehxdo-textarea{
+
+.ehxdo-textarea {
   font-family: var(--ehxdo-font-family);
+  color: var(--ehxdo-text-gray);
   box-sizing: border-box;
   padding: 12px;
 }
