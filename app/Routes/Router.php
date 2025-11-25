@@ -183,9 +183,9 @@ class Router
                     },
                     'permission_callback' => function($request) use ($route) {
                         // ✅ Global REST Nonce Validation
-                        if(!current_user_can('manage_options')) {
-                            return new \WP_Error('rest_forbidden', __('You do not have permission to access this resource.', 'ehx-donate'), ['status' => 403]);
-                        }
+                        // if(!current_user_can('manage_options')) {
+                        //     return new \WP_Error('rest_forbidden', __('You do not have permission to access this resource.', 'ehx-donate'), ['status' => 403]);
+                        // }
                         $nonce = $request->get_header('X-WP-Nonce');
                         if (empty($nonce) || !wp_verify_nonce($nonce, 'wp_rest')) {
                             return new \WP_Error('rest_nonce_invalid', __('Invalid or missing nonce.', 'ehx-donate'), ['status' => 403]);

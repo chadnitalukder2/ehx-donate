@@ -154,6 +154,9 @@ jQuery(document).ready(function ($) {
         $.ajax({
             url: `${window.EHXDonate.restUrl}donationSubmission`,
             type: 'POST',
+            headers: {
+                'X-WP-Nonce': window.EHXDonate.restNonce
+            },
             data: formData + '&action=ehxdo_process_donation',
             success: function (response) {
                 if (response.success) {
