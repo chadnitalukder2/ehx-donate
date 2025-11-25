@@ -642,6 +642,11 @@ select.ehxdo-input {
     
   }
 }
+.ehxdo-textarea{
+  font-family: var(--ehxdo-font-family);
+  box-sizing: border-box;
+  padding: 12px;
+}
 
 /* Responsive Design */
 @media (max-width: 768px) {

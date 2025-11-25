@@ -1,11 +1,11 @@
 <template>
     <div class="ehxdo-stripe-settings-container">
         <!-- Stripe Integration Section -->
-         <div class=" ehxdo-section-spacing" v-for="(settings, value) in settings">
+        <div class=" ehxdo-section-spacing">
             <div class="ehxdo-section" style="margin-bottom: 20px;">
-                <h2 class="ehxdo-section-title">{{ settings.title }}</h2>
+                <h2 class="ehxdo-section-title">Stripe</h2>
                 <p class="ehxdo-section-description">
-                    {{ settings.description }}
+                    Configuration for Stripe payment gateway integration.
                 </p>
             </div>
 
@@ -33,23 +33,49 @@
                         </div>
                     </div> -->
 
-                     <!-- Client Key -->
+
+                    <!-- Client Key -->
                     <div class="ehxdo-form-row">
-                        <label class="ehxdo-form-label">Client key</label>
+                        <label class="ehxdo-form-label"> Client key</label>
                         <div class="ehxdo-input-wrapper">
                             <el-input v-model="settings.clientKey" placeholder="Stripe client key"
-                                class="ehxdo-input-field"  autocomplete="off" :disabled="settings.enabled"/>
+                                class="ehxdo-input-field" autocomplete="off" :disabled="settings.enabled" />
                         </div>
                     </div>
 
                     <!-- Client Secret -->
                     <div class="ehxdo-form-row">
-                        <label class="ehxdo-form-label">Client secret</label>
+                        <label class="ehxdo-form-label"> Client secret</label>
                         <div class="ehxdo-input-wrapper">
                             <el-input v-model="settings.clientSecret" type="password" placeholder="Stripe client secret"
-                                show-password class="ehxdo-input-field"  autocomplete="new-password"  :disabled="settings.enabled" />
+                                show-password class="ehxdo-input-field" autocomplete="new-password"
+                                :disabled="settings.enabled" />
                         </div>
                     </div>
+
+
+
+                    <!-- <div class="ehxdo_live_mode">
+                   
+                    <div class="ehxdo-form-row" style="margin-bottom: 24px;">
+                        <label class="ehxdo-form-label">Test Client key</label>
+                        <div class="ehxdo-input-wrapper">
+                            <el-input v-model="settings.clientKey" placeholder="Stripe client key"
+                                class="ehxdo-input-field" autocomplete="off" :disabled="settings.enabled" />
+                        </div>
+                    </div>
+
+                    <div class="ehxdo-form-row">
+                        <label class="ehxdo-form-label">Test Client secret</label>
+                        <div class="ehxdo-input-wrapper">
+                            <el-input v-model="settings.clientSecret" type="password" placeholder="Stripe client secret"
+                                show-password class="ehxdo-input-field" autocomplete="new-password"
+                                :disabled="settings.enabled" />
+                        </div>
+                    </div>
+                    </div> -->
+
+
                 </div>
             </div>
         </div>
@@ -75,6 +101,12 @@ export default {
 </script>
 
 <style scoped>
+.ehxdo_live_mode {
+    border: 1px solid #ddd;
+    padding: 20px;
+    border-radius: 16px;
+}
+
 .ehxdo-stripe-settings-container {
     max-width: 100%;
     padding: 2rem;

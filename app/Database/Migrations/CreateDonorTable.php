@@ -35,7 +35,6 @@ class CreateDonorTable
             'last_name' => 'varchar(191) DEFAULT NULL',
             'email' => 'varchar(191) DEFAULT NULL',
             'phone' => 'varchar(50) DEFAULT NULL',
-            'address' => 'text DEFAULT NULL',
             'meta' => 'json DEFAULT NULL',
             'created_at' => 'timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP',
             'updated_at' => 'timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP'

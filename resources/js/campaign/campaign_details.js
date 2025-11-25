@@ -142,7 +142,6 @@ jQuery(document).ready(function ($) {
         }
     });
 
-    // Initialize first section
     showSection(currentSection);
 
 

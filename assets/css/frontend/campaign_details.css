@@ -576,6 +576,12 @@ select.ehxdo-input {
   background: var(--ehxdo-primary-btn);
 }
 
+.ehxdo-textarea {
+  font-family: var(--ehxdo-font-family);
+  box-sizing: border-box;
+  padding: 12px;
+}
+
 /* Responsive Design */
 @media (max-width: 768px) {
   .ehxdo-stats-container {

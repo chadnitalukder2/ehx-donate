@@ -238,6 +238,21 @@ function formatAmount($amount, $symbol, $position)
                             <input type="tel" name="phone" class="ehxdo-input" required>
                         </div>
 
+                        <div class="ehxdo-form-group">
+                            <label class="ehxdo-label">
+                                Add a Note (Optional)
+                            </label>
+                            <textarea
+                                name="donation_note"
+                                class="ehxdo-input ehxdo-textarea"
+                                rows="10"
+                                maxlength="500"
+                                placeholder="Say something about your donation..."
+                                style="resize: vertical; min-height: 80px; font-family: inherit;"></textarea>
+                            <div style="text-align: right; font-size: 0.75rem; color: #999; margin-top: 5px;">
+                                <span id="note-char-count">0</span>/500 characters
+                            </div>
+                        </div>
 
                         <div class="ehxdo-gift-aid">
                             <label style="display: flex; align-items: center; gap: 0.5rem; cursor: pointer;">
@@ -294,7 +309,15 @@ function formatAmount($amount, $symbol, $position)
                                 </span>
                             </div> -->
                         </div>
-
+                        <div class="ehxdo-anonymous-option" style="padding-top: 15px;">
+                            <label style="display: flex; align-items: center; gap: 0.5rem; cursor: pointer;">
+                                <input type="checkbox" name="anonymous_donation" id="anonymous_checkbox" value="1" style="cursor: pointer;">
+                                <span style="font-size: 0.875rem;">Make this donation anonymous</span>
+                            </label>
+                            <p style="font-size: 0.75rem; color: #666; margin-top: 0.25rem; margin-left: 1.5rem;">
+                                Your donation will be recorded, but your name won't be displayed publicly.
+                            </p>
+                        </div>
                         <div class="ehxdo-section-nav">
                             <button type="button" class="ehxdo-nav-btn ehxdo-prev">Previous</button>
                             <button type="submit" class="ehxdo-nav-btn ehxdo-submit">Submit</button>
@@ -319,6 +342,22 @@ function formatAmount($amount, $symbol, $position)
         }
     });
 
-    //=====================donate must amount validation=========================
-    const donateButton = document.getElementById('donate-amount-display');
+    //=====================note word count=========================
+    document.addEventListener('DOMContentLoaded', function() {
+        const noteTextarea = document.querySelector('textarea[name="donation_note"]');
+        const charCount = document.getElementById('note-char-count');
+        if (noteTextarea && charCount) {
+            noteTextarea.addEventListener('input', function() {
+                const length = this.value.length;
+                charCount.textContent = length;
+                if (length > 450) {
+                    charCount.style.color = '#dc3545';
+                } else if (length > 400) {
+                    charCount.style.color = '#ffc107';
+                } else {
+                    charCount.style.color = '#999';
+                }
+            });
+        }
+    });
 </script>
