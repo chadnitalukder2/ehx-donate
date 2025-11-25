@@ -151,6 +151,20 @@ jQuery(document).ready(function ($) {
 
     showSection(currentSection);
 
+    //TemporaryError message
+      function showTemporaryError(message, duration = 3000, color = 'rgb(221 47 47)') {
+        const $msg = $('.ehxd-response-message');
+        if (message && message.trim() !== '') {
+          $msg.text(message).css('color', color).fadeIn();
+          setTimeout(() => {
+            $msg.fadeOut(400, function () {
+              $(this).text('').hide();
+            });
+          }, duration);
+        } else {
+          $msg.hide();
+        }
+      }
 
     //form submission handling    
     $('#ehxdo-donation-form').on('submit', function (e) {
@@ -213,6 +227,19 @@ jQuery(document).ready(function ($) {
             .html('<span style="display: inline-block; margin-right: 8px;"></span> Submitting...')
             .css('opacity', '0.7');
 
+        const data = [
+            'first_name',
+            'last_name',
+            'email',
+            'phone',
+            'donation_hash' ,
+            'campaign_id',
+            'donor_message',
+            'anonymous_donation',
+            'gift_aid',
+            'net_amount'
+        ]
+        console.log('Submitting donation with data:', $this.data)
         const formData = $(this).serialize();
 
         $.ajax({
@@ -253,4 +280,6 @@ jQuery(document).ready(function ($) {
             }
         });
     });
+
+    
 });

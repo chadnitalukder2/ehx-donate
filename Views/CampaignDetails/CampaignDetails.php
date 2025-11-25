@@ -221,18 +221,18 @@ function formatAmount($amount, $symbol, $position)
                         <input type="hidden" name="net_amount" id="ehxdo-net_amount" value="<?php echo $default_amount; ?>">
                         <div class="ehxdo-form-row">
                             <div class="ehxdo-form-group">
-                                <label class="ehxdo-label">First Name *</label>
+                                <label class="ehxdo-label">First Name <span style="color: #e71111;">*</span></label>
                                 <input type="text" name="first_name" class="ehxdo-input">
                             </div>
                             <div class="ehxdo-form-group">
-                                <label class="ehxdo-label">Last Name *</label>
+                                <label class="ehxdo-label">Last Name <span style="color: #e71111;">*</span></label>
                                 <input type="text" name="last_name" class="ehxdo-input">
                             </div>
                         </div>
 
 
                         <div class="ehxdo-form-group">
-                            <label class="ehxdo-label">Email Address *</label>
+                            <label class="ehxdo-label">Email Address <span style="color: #e71111;">*</span></label>
                             <input type="email" name="email" class="ehxdo-input">
                         </div>
                         <div class="ehxdo-form-group">
