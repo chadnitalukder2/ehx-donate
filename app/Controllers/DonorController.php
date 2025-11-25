@@ -25,9 +25,8 @@ class DonorController extends Controller
         ];
 
         $donor = Donor::create($donor_data);
-       
         $this->success([
-            'donor_id' => $donor['id']
+            'donor_id' => $donor->id
         ], 'Donor created successfully', 201);
     }
 }

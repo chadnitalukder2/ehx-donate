@@ -2,6 +2,7 @@
 
 namespace EHXDonate\Controllers;
 
+use EHXDonate\Models\Donor;
 use EHXDonate\Models\Trip;
 use EHXDonate\Services\DonationService;
 
@@ -69,11 +70,20 @@ class DonationController extends Controller
             }
         }
 
-        $donor_id = (new DonorController())->createOrUpdateDonor($data);
+        $donorModel = new Donor();
+        $existing_donor = $donorModel->where('email', $data['email'])->first();
+        dd($existing_donor->id, 'existing_donor');
+        if ($existing_donor) {
+            // Donor exists, use existing donor_id
+            $donor_id = $existing_donor->id;
+        } else {
+            // Create new donor
+            $donor_id = (new DonorController())->createOrUpdateDonor($data);
 
-        if (!$donor_id) {
-            $this->error('Failed to create donor record', 400);
-            return;
+            if (!$donor_id) {
+                $this->error('Failed to create donor record', 400);
+                return;
+            }
         }
 
 

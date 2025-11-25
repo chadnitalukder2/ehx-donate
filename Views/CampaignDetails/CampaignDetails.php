@@ -383,104 +383,104 @@ $maxDonation = $campaign['settings']['max_donation'] ?? 999999;
     });
 
     document.addEventListener('DOMContentLoaded', function() {
-    const customAmountInput = document.getElementById('ehxdo-custom-amount');
-    const minDonation = parseFloat(document.getElementById('ehxdo-min-donation').value);
-    const maxDonation = parseFloat(document.getElementById('ehxdo-max-donation').value);
-    const errorMsg = document.querySelector('.ehxdo-error-msg');
-    const donateBtn = document.getElementById('ehxdo-donate-btn');
+        const customAmountInput = document.getElementById('ehxdo-custom-amount');
+        const minDonation = parseFloat(document.getElementById('ehxdo-min-donation').value);
+        const maxDonation = parseFloat(document.getElementById('ehxdo-max-donation').value);
+        const errorMsg = document.querySelector('.ehxdo-error-msg');
+        const donateBtn = document.getElementById('ehxdo-donate-btn');
 
-    // Validate and restrict custom amount input
-    if (customAmountInput) {
-        customAmountInput.addEventListener('input', function() {
-            let value = parseFloat(this.value);
-            
-            // Clear previous error
-            errorMsg.style.display = 'none';
-            customAmountInput.style.borderColor = '';
-            
-            if (this.value && !isNaN(value)) {
-                // Enforce minimum
-                if (value < minDonation) {
-                    this.value = minDonation;
-                    value = minDonation;
+        // Validate and restrict custom amount input
+        if (customAmountInput) {
+            customAmountInput.addEventListener('input', function() {
+                let value = parseFloat(this.value);
+
+                // Clear previous error
+                errorMsg.style.display = 'none';
+                customAmountInput.style.borderColor = '';
+
+                if (this.value && !isNaN(value)) {
+                    // Enforce minimum
+                    if (value < minDonation) {
+                        this.value = minDonation;
+                        value = minDonation;
+                        errorMsg.textContent = `Minimum donation amount is ${formatAmount(minDonation)}`;
+                        errorMsg.style.display = 'block';
+                        customAmountInput.style.borderColor = '#e71111';
+
+                        // Auto-hide error after 2 seconds
+                        setTimeout(() => {
+                            errorMsg.style.display = 'none';
+                            customAmountInput.style.borderColor = '';
+                        }, 2000);
+                    }
+                    // Enforce maximum
+                    else if (value > maxDonation) {
+                        this.value = maxDonation;
+                        value = maxDonation;
+                        errorMsg.textContent = `Maximum donation amount is ${formatAmount(maxDonation)}`;
+                        errorMsg.style.display = 'block';
+                        customAmountInput.style.borderColor = '#e71111';
+
+                        // Auto-hide error after 2 seconds
+                        setTimeout(() => {
+                            errorMsg.style.display = 'none';
+                            customAmountInput.style.borderColor = '';
+                        }, 2000);
+                    }
+                }
+            });
+
+            // Also validate on blur (when user leaves the field)
+            customAmountInput.addEventListener('blur', function() {
+                let value = parseFloat(this.value);
+
+                if (this.value && !isNaN(value)) {
+                    if (value < minDonation) {
+                        this.value = minDonation;
+                    } else if (value > maxDonation) {
+                        this.value = maxDonation;
+                    }
+                }
+            });
+        }
+
+        // Validate on donate button click
+        if (donateBtn) {
+            donateBtn.addEventListener('click', function(e) {
+                const selectedAmount = parseFloat(document.getElementById('ehxdo-selected-amount').value);
+
+                if (!selectedAmount || isNaN(selectedAmount)) {
+                    e.preventDefault();
+                    errorMsg.textContent = 'Please select or enter a donation amount.';
+                    errorMsg.style.display = 'block';
+                    return false;
+                }
+
+                if (selectedAmount < minDonation) {
+                    e.preventDefault();
                     errorMsg.textContent = `Minimum donation amount is ${formatAmount(minDonation)}`;
                     errorMsg.style.display = 'block';
-                    customAmountInput.style.borderColor = '#e71111';
-                    
-                    // Auto-hide error after 2 seconds
-                    setTimeout(() => {
-                        errorMsg.style.display = 'none';
-                        customAmountInput.style.borderColor = '';
-                    }, 2000);
-                } 
-                // Enforce maximum
-                else if (value > maxDonation) {
-                    this.value = maxDonation;
-                    value = maxDonation;
+                    return false;
+                }
+
+                if (selectedAmount > maxDonation) {
+                    e.preventDefault();
                     errorMsg.textContent = `Maximum donation amount is ${formatAmount(maxDonation)}`;
                     errorMsg.style.display = 'block';
-                    customAmountInput.style.borderColor = '#e71111';
-                    
-                    // Auto-hide error after 2 seconds
-                    setTimeout(() => {
-                        errorMsg.style.display = 'none';
-                        customAmountInput.style.borderColor = '';
-                    }, 2000);
+                    return false;
                 }
-            }
-        });
-        
-        // Also validate on blur (when user leaves the field)
-        customAmountInput.addEventListener('blur', function() {
-            let value = parseFloat(this.value);
-            
-            if (this.value && !isNaN(value)) {
-                if (value < minDonation) {
-                    this.value = minDonation;
-                } else if (value > maxDonation) {
-                    this.value = maxDonation;
-                }
-            }
-        });
-    }
 
-    // Validate on donate button click
-    if (donateBtn) {
-        donateBtn.addEventListener('click', function(e) {
-            const selectedAmount = parseFloat(document.getElementById('ehxdo-selected-amount').value);
-            
-            if (!selectedAmount || isNaN(selectedAmount)) {
-                e.preventDefault();
-                errorMsg.textContent = 'Please select or enter a donation amount.';
-                errorMsg.style.display = 'block';
-                return false;
-            }
-            
-            if (selectedAmount < minDonation) {
-                e.preventDefault();
-                errorMsg.textContent = `Minimum donation amount is ${formatAmount(minDonation)}`;
-                errorMsg.style.display = 'block';
-                return false;
-            }
-            
-            if (selectedAmount > maxDonation) {
-                e.preventDefault();
-                errorMsg.textContent = `Maximum donation amount is ${formatAmount(maxDonation)}`;
-                errorMsg.style.display = 'block';
-                return false;
-            }
-            
-            // Clear error and proceed
-            errorMsg.style.display = 'none';
-        });
-    }
+                // Clear error and proceed
+                errorMsg.style.display = 'none';
+            });
+        }
 
-    // Helper function to format amount (matches PHP formatAmount)
-    function formatAmount(amount) {
-        const symbol = document.querySelector('input[name="currency_symbol"]').value;
-        const position = document.querySelector('input[name="currency_position"]').value;
-        const formatted = parseFloat(amount).toFixed(2);
-        return position === 'Before' ? symbol + formatted : formatted + symbol;
-    }
-});
+        // Helper function to format amount (matches PHP formatAmount)
+        function formatAmount(amount) {
+            const symbol = document.querySelector('input[name="currency_symbol"]').value;
+            const position = document.querySelector('input[name="currency_position"]').value;
+            const formatted = parseFloat(amount).toFixed(2);
+            return position === 'Before' ? symbol + formatted : formatted + symbol;
+        }
+    });
 </script>

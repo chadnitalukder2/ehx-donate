@@ -430,11 +430,11 @@ abstract class Model
         return $this;
     }
 
-  public function orderBy($column, $direction = 'ASC'): self
-{
-    $this->query['orderBy'] = [$column, strtoupper($direction)];
-    return $this;
-}
+    public function orderBy($column, $direction = 'ASC'): self
+    {
+        $this->query['orderBy'] = [$column, strtoupper($direction)];
+        return $this;
+    }
 
     public function get(): array
     {
@@ -472,7 +472,53 @@ abstract class Model
         return $models;
     }
 
-      public static function getCampaignByPostId(int $post_id): ?self
+    /**
+     * Get the first record matching the query
+     */
+    public function first(): ?self
+    {
+        $table = $this->wpdb->prefix . $this->table;
+        $sql = "SELECT * FROM {$table}";
+        $params = [];
+
+        // Apply WHERE conditions
+        if (!empty($this->query['where'])) {
+            $whereClauses = [];
+            foreach ($this->query['where'] as [$column, $operator, $value]) {
+                $whereClauses[] = "{$column} {$operator} %s";
+                $params[] = $value;
+            }
+            $sql .= " WHERE " . implode(' AND ', $whereClauses);
+        }
+
+        // Apply ORDER BY if defined
+        if (!empty($this->query['orderBy'])) {
+            [$column, $direction] = $this->query['orderBy'];
+            $sql .= " ORDER BY {$column} {$direction}";
+        }
+
+        // Limit to 1 record
+        $sql .= " LIMIT 1";
+
+        // Prepare and execute query
+        if (!empty($params)) {
+            $prepared = $this->wpdb->prepare($sql, $params);
+            $result = $this->wpdb->get_row($prepared);
+        } else {
+            $result = $this->wpdb->get_row($sql);
+        }
+
+        if ($result) {
+            $model = new static();
+            $model->fill((array) $result);
+            $model->exists = true;
+            return $model;
+        }
+
+        return null;
+    }
+
+    public static function getCampaignByPostId(int $post_id): ?self
     {
         $instance = new static();
         $table = $instance->wpdb->prefix . $instance->table;
