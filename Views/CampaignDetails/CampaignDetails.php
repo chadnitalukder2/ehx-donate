@@ -23,7 +23,7 @@ function formatAmount($amount, $symbol, $position)
 $minDonation = $campaign['settings']['min_donation'] ?? 1;
 $maxDonation = $campaign['settings']['max_donation'] ?? 999999;
 // $default_amount = 0;
-$default_amount = $campaign['settings']['pricing_items'][0]['amount'] ?? $minDonation;
+$default_amount = 0.00;
 // dd($campaign);
 ?>
 
@@ -392,7 +392,6 @@ $default_amount = $campaign['settings']['pricing_items'][0]['amount'] ?? $minDon
 
     // Custom Amount Validation and Restriction
     document.addEventListener('DOMContentLoaded', function() {
-        // Get all necessary elements
         const customAmountInput = document.getElementById('ehxdo-custom-amount');
         const minDonationInput = document.getElementById('ehxdo-min-donation');
         const maxDonationInput = document.getElementById('ehxdo-max-donation');
