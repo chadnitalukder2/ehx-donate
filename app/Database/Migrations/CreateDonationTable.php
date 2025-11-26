@@ -7,7 +7,7 @@ use EHXDonate\Database\Database;
 /**
  * Migration to create donation table
  */
-class CreateDonationLogTable
+class CreateDonationTable
 {
     /**
      * Database instance
@@ -69,7 +69,7 @@ class CreateDonationLogTable
             'KEY idx_campaign_id (campaign_id)',
             'KEY idx_user_id (user_id)',
             'KEY idx_payment_status (payment_status)',
-            'KEY idx_transaction_type (transaction_type)'
+            'KEY idx_donation_type (donation_type)'
         ]
     ];
 

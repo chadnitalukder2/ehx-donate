@@ -32,7 +32,7 @@ class CreateSubscriptionTable
             'user_id' => 'bigint(20) UNSIGNED DEFAULT NULL',
             'donor_id' => 'bigint(20) UNSIGNED DEFAULT NULL',
             'campaign_id' => 'bigint(20) UNSIGNED DEFAULT NULL',
-            'interval' => 'varchar(50) DEFAULT NULL',
+            // 'interval' => '`interval` varchar(50) DEFAULT NULL',
             'amount' => 'decimal(10,2) NOT NULL DEFAULT 0.00',
             'status' => "varchar(50) NOT NULL DEFAULT 'active'",
             'start_date' => 'date DEFAULT NULL',
@@ -48,7 +48,6 @@ class CreateSubscriptionTable
             'primary_key' => 'id',
             'indexes' => [
                 'KEY idx_user_id (user_id)',
-                'KEY idx_interval (interval)',
                 'KEY idx_donor_id (donor_id)',
                 'KEY idx_campaign_id (campaign_id)',
                 'KEY idx_status (status)',

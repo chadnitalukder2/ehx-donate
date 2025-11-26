@@ -20,6 +20,8 @@ class CPTHandler
             ],
             'public' => true,
             'has_archive' => true,
+            'show_in_rest' => true,
+            'show_in_menu' => false,
             'rewrite' => ['slug' => 'campaigns'],
             'supports' => ['title', 'editor', 'thumbnail']
         ]);
