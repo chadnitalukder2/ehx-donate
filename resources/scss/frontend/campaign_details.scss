@@ -22,25 +22,16 @@
 
 }
 
-@media (max-width: 1024px) {
-  .ehxdo_campaign_list_wrapper {
-    grid-template-columns: 1fr;
-  }
-}
 
 .ehxdo-campaign_details_container {
-  display: grid;
-  grid-template-columns: 6fr 3fr;
-  // grid-template-columns: repeat(2, 1fr);
+  display: flex;
+  justify-content: space-between;
   gap: 30px;
 
 }
 
-
-
-
 .ehxdo-left-section {
-
+flex-basis: 62%;
   .ehxdo_campaign_details_wrapper {
     background: var(--ehxdo-white);
     border-radius: 16px;
@@ -226,6 +217,7 @@
 
 /* Right Section */
 .ehxdo-right-section {
+  flex-basis: 35%;
   position: sticky;
   top: 2rem;
   height: fit-content;
@@ -655,16 +647,29 @@ select.ehxdo-input {
 }
 
 /* Responsive Design */
-@media (max-width: 768px) {
+
+@media (max-width: 1024px) {
+  .ehxdo-campaign_details_container {
+    flex-direction: column;
+  }
+  .ehxdo_campaign_list_wrapper{
+    padding: 0px;
+  }
+}
+
+@media (max-width: 800px) {
+  .ehxdo-campaign-header-image{
+    height: 200px !important;
+  }
+}
+
+@media (max-width: 600px) {
   .ehxdo-stats-container {
     grid-template-columns: 1fr;
     gap: 1rem;
   }
 
-  .ehxdo-amount-grid {
-    grid-template-columns: repeat(2, 1fr);
-  }
-
+  
   .ehxdo-form-row {
     grid-template-columns: 1fr;
   }
@@ -678,9 +683,6 @@ select.ehxdo-input {
     padding: 1.5rem;
   }
 
-  .ehxdo-left-section {
-    padding: 1.5rem;
-  }
 }
 
 @media (max-width: 480px) {
@@ -688,8 +690,8 @@ select.ehxdo-input {
     padding: 1rem;
   }
 
-  .ehxdo-campaign-image {
-    height: 200px;
+  .ehxdo-campaign-header-image {
+    height: 150px !important;
   }
 
   .ehxdo-stat-value {

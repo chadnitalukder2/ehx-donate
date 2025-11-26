@@ -43,13 +43,14 @@ class DonationController extends Controller
             'country' => 'nullable|string',
             'post_code' => 'nullable|string',
         ]);
+
         $data['user_id'] = $this->getCurrentUserId();
+
         if ($data['user_id'] === null) {
-            // Check if user with this email already exists
             $existing_user = get_user_by('email', $data['email']);
             if ($existing_user) {
                 $data['user_id'] = $existing_user->ID;
-            } else { // Create new user
+            } else {
                 $username = DonationService::generateUsername($data['email']);
                 $password = wp_generate_password(12, true, true);
                 $user_data = array(
@@ -73,23 +74,31 @@ class DonationController extends Controller
 
         $donorModel = new Donor();
         $existing_donor = $donorModel->where('email', $data['email'])->first();
-        
+dd($data);
         if ($existing_donor) {
             $donor_id = $existing_donor->id;
             $update_data = [
                 'first_name' => $data['first_name'],
                 'last_name' => $data['last_name'],
-                'phone' => $data['phone'],
+                'phone' => $data['phone'] ?? '',
                 'updated_at' => current_time('mysql'),
             ];
-            $donorModel->where('id', $donor_id)->save($update_data);
+
+            $updateResult = (new DonorController())->updateDonor($donor_id, $update_data);
+
+            if (!$updateResult) {
+                $this->error('Failed to update donor record', 400);
+                return;
+            }
         } else {
             $donor_id = (new DonorController())->createDonor($data);
+
             if (!$donor_id) {
                 $this->error('Failed to create donor record', 400);
                 return;
             }
         }
+
 
         $data['donor_id'] = $donor_id;
 
@@ -103,7 +112,7 @@ class DonationController extends Controller
             'donor_message' => $data['donation_note'] ?? '',
             'anonymous_donation' => $data['anonymous_donation'] ?? 0,
             'gift_aid' => $data['gift_aid'] ?? 0,
-            'charge' =>  ($data['service_fee'] ?? 0),
+            'charge' => ($data['service_fee'] ?? 0),
             'net_amount' => $data['net_amount'],
             'amount' => $data['amount'],
             'service_fee' => $data['service_fee'] ?? 0,
@@ -112,12 +121,13 @@ class DonationController extends Controller
             'created_at' => current_time('mysql'),
             'updated_at' => current_time('mysql'),
         ];
+
         $donation = Donation::create($donationData);
 
 
 
-        $this->success([
-            'donation' => $donation->toArray()
-        ], 'Donation created successfully', 201);
+        // $this->success([
+        //     'donation' => $donation->toArray()
+        // ], 'Donation created successfully', 201);
     }
 }

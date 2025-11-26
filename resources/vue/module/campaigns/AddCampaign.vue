@@ -90,7 +90,7 @@
                             <div class="ehxdo-section-inner">
                                 <div class="ehxdo-checkbox-group">
                                     <el-checkbox v-model="form.settings.allow_custom_amount" class="ehxdo-checkbox">
-                                        Allow Custom Amount 
+                                        Allow Custom Amount
                                     </el-checkbox>
                                 </div>
                                 <p class="ehxdo-description">
@@ -532,7 +532,6 @@ export default {
 
 .ehxdo-main-content {
     flex: 1;
-    max-width: 800px;
 }
 
 .ehxdo-header {

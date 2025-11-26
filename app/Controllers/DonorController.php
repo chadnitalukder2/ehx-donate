@@ -29,4 +29,23 @@ class DonorController extends Controller
             'donor_id' => $donor->id
         ], 'Donor created successfully', 201);
     }
+
+    public function updateDonor( $id, $data)
+    {
+        $this->requireAuth();
+        $donor = Donor::find($id);
+
+        if (!$donor) {
+            $this->error('Donor not found', 404);
+            return;
+        }
+
+        $donor->fill($data);
+
+        $donor->save();
+
+        $this->success([
+            'donor' => $donor->toArray()
+        ], 'Donor updated successfully');
+    }
 }

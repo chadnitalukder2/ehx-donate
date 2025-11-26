@@ -22,6 +22,8 @@ function formatAmount($amount, $symbol, $position)
 
 $minDonation = $campaign['settings']['min_donation'] ?? 1;
 $maxDonation = $campaign['settings']['max_donation'] ?? 999999;
+// $default_amount = 0;
+$default_amount = $campaign['settings']['pricing_items'][0]['amount'] ?? $minDonation;
 // dd($campaign);
 ?>
 
@@ -167,7 +169,7 @@ $maxDonation = $campaign['settings']['max_donation'] ?? 999999;
                             <div class="ehxdo-amount-grid">
                                 <?php foreach ($campaign['settings']['pricing_items'] as $item): ?>
                                     <button type="button"
-                                        class="ehxdo-amount-btn <?php echo $item['amount'] === $default_amount ? 'ehxdo-selected' : ''; ?>"
+                                        class="ehxdo-amount-btn <?php echo $item['amount'] === $default_amount ? 'ehxdo-selected' : '0.00'; ?>"
                                         data-amount="<?php echo $item['amount']; ?>">
                                         <?php echo formatAmount($item['amount'], $currencySymbol, $position); ?>
                                     </button>
@@ -358,93 +360,236 @@ $maxDonation = $campaign['settings']['max_donation'] ?? 999999;
 
 <script>
     //Gift Aid Toggle-===========================================
-    const giftAidCheckbox = document.getElementById('gift_aid_checkbox');
-    const giftAidFields = document.getElementById('gift_aid_fields');
+    // const giftAidCheckbox = document.getElementById('gift_aid_checkbox');
+    // const giftAidFields = document.getElementById('gift_aid_fields');
 
-    giftAidCheckbox.addEventListener('change', function() {
-        if (this.checked) {
-            giftAidFields.style.display = 'block';
-        } else {
-            giftAidFields.style.display = 'none';
-        }
-    });
+    // giftAidCheckbox.addEventListener('change', function() {
+    //     if (this.checked) {
+    //         giftAidFields.style.display = 'block';
+    //     } else {
+    //         giftAidFields.style.display = 'none';
+    //     }
+    // });
 
     //=====================note word count=========================
-    document.addEventListener('DOMContentLoaded', function() {
-        const noteTextarea = document.querySelector('textarea[name="donation_note"]');
-        const charCount = document.getElementById('note-char-count');
-        if (noteTextarea && charCount) {
-            noteTextarea.addEventListener('input', function() {
-                const length = this.value.length;
-                charCount.textContent = length;
-                if (length > 450) {
-                    charCount.style.color = '#dc3545';
-                } else if (length > 400) {
-                    charCount.style.color = '#ffc107';
-                } else {
-                    charCount.style.color = '#999';
-                }
-            });
-        }
-    });
+    // document.addEventListener('DOMContentLoaded', function() {
+    //     const noteTextarea = document.querySelector('textarea[name="donation_note"]');
+    //     const charCount = document.getElementById('note-char-count');
+    //     if (noteTextarea && charCount) {
+    //         noteTextarea.addEventListener('input', function() {
+    //             const length = this.value.length;
+    //             charCount.textContent = length;
+    //             if (length > 450) {
+    //                 charCount.style.color = '#dc3545';
+    //             } else if (length > 400) {
+    //                 charCount.style.color = '#ffc107';
+    //             } else {
+    //                 charCount.style.color = '#999';
+    //             }
+    //         });
+    //     }
+    // });
 
+    // Custom Amount Validation and Restriction
     document.addEventListener('DOMContentLoaded', function() {
+        // Get all necessary elements
         const customAmountInput = document.getElementById('ehxdo-custom-amount');
-        const minDonation = parseFloat(document.getElementById('ehxdo-min-donation').value);
-        const maxDonation = parseFloat(document.getElementById('ehxdo-max-donation').value);
+        const minDonationInput = document.getElementById('ehxdo-min-donation');
+        const maxDonationInput = document.getElementById('ehxdo-max-donation');
         const errorMsg = document.querySelector('.ehxdo-error-msg');
         const donateBtn = document.getElementById('ehxdo-donate-btn');
+        const selectedAmountInput = document.getElementById('ehxdo-selected-amount');
+        const currencySymbol = document.querySelector('input[name="currency_symbol"]')?.value || '$';
+        const currencyPosition = document.querySelector('input[name="currency_position"]')?.value || 'Before';
+        const amountBtns = document.querySelectorAll('.ehxdo-amount-btn');
 
-        // Validate and restrict custom amount input
+        // Parse min and max values
+        const minDonation = minDonationInput ? parseFloat(minDonationInput.value) : 1;
+        const maxDonation = maxDonationInput ? parseFloat(maxDonationInput.value) : 999999;
+
+        // Clear default selection on page load
+        selectedAmountInput.value = '';
+        amountBtns.forEach(btn => btn.classList.remove('ehxdo-selected'));
+
+        // Update displays to show placeholder or minimum
+        const donateAmountDisplay = document.getElementById('donate-amount-display');
+        if (donateAmountDisplay) {
+            donateAmountDisplay.textContent = formatAmount(0);
+        }
+
+        // Helper function to format amount
+        function formatAmount(amount) {
+            const formatted = parseFloat(amount).toFixed(2);
+            return currencyPosition === 'Before' ? currencySymbol + formatted : formatted + currencySymbol;
+        }
+
+        // Helper function to show error
+        function showError(message) {
+            if (errorMsg) {
+                errorMsg.textContent = message;
+                errorMsg.style.display = 'block';
+                if (customAmountInput) {
+                    customAmountInput.style.borderColor = '#e71111';
+                }
+            }
+        }
+
+        // Helper function to hide error
+        function hideError() {
+            if (errorMsg) {
+                errorMsg.style.display = 'none';
+            }
+            if (customAmountInput) {
+                customAmountInput.style.borderColor = '';
+            }
+        }
+
+        // Validate amount against min/max
+        function validateAmount(value) {
+            const amount = parseFloat(value);
+
+            if (isNaN(amount) || amount <= 0 || value === '') {
+                return {
+                    valid: false,
+                    message: 'Please select or enter a donation amount.'
+                };
+            }
+
+            if (amount < minDonation) {
+                return {
+                    valid: false,
+                    message: `Minimum donation amount is ${formatAmount(minDonation)}`
+                };
+            }
+
+            if (amount > maxDonation) {
+                return {
+                    valid: false,
+                    message: `Maximum donation amount is ${formatAmount(maxDonation)}`
+                };
+            }
+
+            return {
+                valid: true
+            };
+        }
+
+        // Update selected amount and display
+        function updateSelectedAmount(amount) {
+            if (selectedAmountInput) {
+                selectedAmountInput.value = amount;
+            }
+
+            // Update donate button display
+            const donateAmountDisplay = document.getElementById('donate-amount-display');
+            if (donateAmountDisplay) {
+                donateAmountDisplay.textContent = formatAmount(amount);
+            }
+
+            // Update summary amounts
+            const summaryAmount = document.getElementById('ehxdo-summary-amount');
+            const finalSummaryAmount = document.getElementById('ehxdo-final-summary-amount');
+
+            if (summaryAmount) {
+                summaryAmount.textContent = formatAmount(amount);
+            }
+            if (finalSummaryAmount) {
+                finalSummaryAmount.textContent = formatAmount(amount);
+            }
+
+            // Update with service fee if enabled
+            const serviceFeeEnabled = document.getElementById('ehxdo_service_fee_enabled')?.value;
+            const serviceFeePercent = parseFloat(document.getElementById('ehxdo_service_fee_percentage')?.value || 0);
+
+            if (serviceFeeEnabled && serviceFeePercent > 0) {
+                const totalWithFee = amount + (amount * serviceFeePercent / 100);
+                const summaryTotalWithFee = document.getElementById('ehxdo-summary-total-with-fee');
+                if (summaryTotalWithFee) {
+                    summaryTotalWithFee.textContent = formatAmount(totalWithFee);
+                }
+            }
+        }
+
+        // Handle predefined amount buttons
+        amountBtns.forEach(btn => {
+            btn.addEventListener('click', function() {
+                // Remove selected class from all buttons
+                amountBtns.forEach(b => b.classList.remove('ehxdo-selected'));
+
+                // Add selected class to clicked button
+                this.classList.add('ehxdo-selected');
+
+                // Clear custom amount input
+                if (customAmountInput) {
+                    customAmountInput.value = '';
+                }
+
+                // Get and update amount
+                const amount = parseFloat(this.getAttribute('data-amount'));
+                updateSelectedAmount(amount);
+                hideError();
+            });
+        });
+
+        // Handle custom amount input
         if (customAmountInput) {
             customAmountInput.addEventListener('input', function() {
-                let value = parseFloat(this.value);
+                const value = this.value.trim();
 
-                // Clear previous error
-                errorMsg.style.display = 'none';
-                customAmountInput.style.borderColor = '';
+                // Clear predefined button selection
+                amountBtns.forEach(btn => btn.classList.remove('ehxdo-selected'));
 
-                if (this.value && !isNaN(value)) {
-                    // Enforce minimum
-                    if (value < minDonation) {
-                        this.value = minDonation;
-                        value = minDonation;
-                        errorMsg.textContent = `Minimum donation amount is ${formatAmount(minDonation)}`;
-                        errorMsg.style.display = 'block';
-                        customAmountInput.style.borderColor = '#e71111';
+                // Hide error initially
+                hideError();
 
-                        // Auto-hide error after 2 seconds
-                        setTimeout(() => {
-                            errorMsg.style.display = 'none';
-                            customAmountInput.style.borderColor = '';
-                        }, 2000);
-                    }
-                    // Enforce maximum
-                    else if (value > maxDonation) {
-                        this.value = maxDonation;
-                        value = maxDonation;
-                        errorMsg.textContent = `Maximum donation amount is ${formatAmount(maxDonation)}`;
-                        errorMsg.style.display = 'block';
-                        customAmountInput.style.borderColor = '#e71111';
-
-                        // Auto-hide error after 2 seconds
-                        setTimeout(() => {
-                            errorMsg.style.display = 'none';
-                            customAmountInput.style.borderColor = '';
-                        }, 2000);
-                    }
+                if (value === '') {
+                    selectedAmountInput.value = '';
+                    return;
                 }
+
+                let amount = parseFloat(value);
+
+                if (isNaN(amount)) {
+                    showError('Please enter a valid number.');
+                    return;
+                }
+
+                // Enforce minimum
+                if (amount < minDonation) {
+                    this.value = minDonation;
+                    amount = minDonation;
+                    showError(`Minimum donation amount is ${formatAmount(minDonation)}`);
+                    setTimeout(hideError, 2500);
+                }
+                // Enforce maximum
+                else if (amount > maxDonation) {
+                    this.value = maxDonation;
+                    amount = maxDonation;
+                    showError(`Maximum donation amount is ${formatAmount(maxDonation)}`);
+                    setTimeout(hideError, 2500);
+                }
+
+                // Update selected amount
+                updateSelectedAmount(amount);
             });
 
-            // Also validate on blur (when user leaves the field)
+            // Validate on blur
             customAmountInput.addEventListener('blur', function() {
-                let value = parseFloat(this.value);
+                const value = this.value.trim();
 
-                if (this.value && !isNaN(value)) {
-                    if (value < minDonation) {
+                if (value === '') {
+                    return;
+                }
+
+                let amount = parseFloat(value);
+
+                if (!isNaN(amount)) {
+                    if (amount < minDonation) {
                         this.value = minDonation;
-                    } else if (value > maxDonation) {
+                        updateSelectedAmount(minDonation);
+                    } else if (amount > maxDonation) {
                         this.value = maxDonation;
+                        updateSelectedAmount(maxDonation);
                     }
                 }
             });
@@ -453,40 +598,93 @@ $maxDonation = $campaign['settings']['max_donation'] ?? 999999;
         // Validate on donate button click
         if (donateBtn) {
             donateBtn.addEventListener('click', function(e) {
-                const selectedAmount = parseFloat(document.getElementById('ehxdo-selected-amount').value);
+                const selectedAmount = selectedAmountInput?.value || '';
 
-                if (!selectedAmount || isNaN(selectedAmount)) {
+                const validation = validateAmount(selectedAmount);
+
+                if (!validation.valid) {
                     e.preventDefault();
-                    errorMsg.textContent = 'Please select or enter a donation amount.';
-                    errorMsg.style.display = 'block';
+                    e.stopPropagation();
+                    showError(validation.message);
+
+                    // Scroll to error
+                    if (errorMsg) {
+                        errorMsg.scrollIntoView({
+                            behavior: 'smooth',
+                            block: 'center'
+                        });
+                    }
+
                     return false;
                 }
 
-                if (selectedAmount < minDonation) {
-                    e.preventDefault();
-                    errorMsg.textContent = `Minimum donation amount is ${formatAmount(minDonation)}`;
-                    errorMsg.style.display = 'block';
-                    return false;
-                }
+                // Clear error and proceed to next section
+                hideError();
 
-                if (selectedAmount > maxDonation) {
-                    e.preventDefault();
-                    errorMsg.textContent = `Maximum donation amount is ${formatAmount(maxDonation)}`;
-                    errorMsg.style.display = 'block';
-                    return false;
-                }
+                // Show section 2, hide section 1
+                const section1 = document.getElementById('ehxdo-section-1');
+                const section2 = document.getElementById('ehxdo-section-2');
 
-                // Clear error and proceed
-                errorMsg.style.display = 'none';
+                if (section1 && section2) {
+                    section1.classList.add('ehxdo-hidden');
+                    section2.classList.remove('ehxdo-hidden');
+
+                    // Scroll to top of section 2
+                    section2.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }
             });
         }
 
-        // Helper function to format amount (matches PHP formatAmount)
-        function formatAmount(amount) {
-            const symbol = document.querySelector('input[name="currency_symbol"]').value;
-            const position = document.querySelector('input[name="currency_position"]').value;
-            const formatted = parseFloat(amount).toFixed(2);
-            return position === 'Before' ? symbol + formatted : formatted + symbol;
+        // Handle previous button
+        const prevBtn = document.querySelector('.ehxdo-prev');
+        if (prevBtn) {
+            prevBtn.addEventListener('click', function() {
+                const section1 = document.getElementById('ehxdo-section-1');
+                const section2 = document.getElementById('ehxdo-section-2');
+
+                if (section1 && section2) {
+                    section2.classList.add('ehxdo-hidden');
+                    section1.classList.remove('ehxdo-hidden');
+
+                    // Scroll to top of section 1
+                    section1.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }
+            });
+        }
+
+        // Gift Aid Toggle
+        const giftAidCheckbox = document.getElementById('gift_aid_checkbox');
+        const giftAidFields = document.getElementById('gift_aid_fields');
+
+        if (giftAidCheckbox && giftAidFields) {
+            giftAidCheckbox.addEventListener('change', function() {
+                giftAidFields.style.display = this.checked ? 'block' : 'none';
+            });
+        }
+
+        // Note character count
+        const noteTextarea = document.querySelector('textarea[name="donation_note"]');
+        const charCount = document.getElementById('note-char-count');
+
+        if (noteTextarea && charCount) {
+            noteTextarea.addEventListener('input', function() {
+                const length = this.value.length;
+                charCount.textContent = length;
+
+                if (length > 450) {
+                    charCount.style.color = '#dc3545';
+                } else if (length > 400) {
+                    charCount.style.color = '#ffc107';
+                } else {
+                    charCount.style.color = '#999';
+                }
+            });
         }
     });
 </script>
