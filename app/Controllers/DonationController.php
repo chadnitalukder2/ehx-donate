@@ -90,7 +90,6 @@ class DonationController extends Controller
                 $this->error('Failed to update donor record', 400);
                 return;
             }
-          
         } else {
             $donor_id = (new DonorController())->createDonor($data);
 
@@ -135,9 +134,279 @@ class DonationController extends Controller
 
         $donation = Donation::create($donationData);
 
+        $emailSettings = get_option('ehx_donate_settings_email', []);
 
+        $this->sendDonationEmails($donation, $data, $emailSettings);
 
-        $this->success([
-        ], 'Donation created successfully', 201);
+        $this->success([], 'Donation created successfully', 201);
+    }
+
+    private function sendDonationEmails($donation, $data, $emailSettings)
+    {
+        $adminEmail = $emailSettings['adminEmail'] ?? get_option('admin_email');
+        $fromName = $emailSettings['mailFromName'] ?? get_bloginfo('name');
+        $fromAddress = $emailSettings['mailFromAddress'] ?? get_option('admin_email');
+        $enableHtml = $emailSettings['enableHtml'] ?? true;
+
+        // Email headers setup
+        $headers = [];
+        $headers[] = 'From: ' . $fromName . ' <' . $fromAddress . '>';
+
+        if ($enableHtml) {
+            $headers[] = 'Content-Type: text/html; charset=UTF-8';
+        }
+
+        // 1. Admin email
+        $this->sendAdminEmail($adminEmail, $donation, $data, $headers);
+
+        // 2. Donor email
+        $this->sendDonorEmail($data['email'], $donation, $data, $headers);
+    }
+
+    private function sendAdminEmail($adminEmail, $donation, $data, $headers)
+    {
+        $subject = 'New Donation Received - ' . $donation->transaction_id;
+
+        $message = $this->getAdminEmailTemplate($donation, $data);
+
+        wp_mail($adminEmail, $subject, $message, $headers);
+    }
+
+    /**
+     * Send email to donor
+     */
+    private function sendDonorEmail($donorEmail, $donation, $data, $headers)
+    {
+        $subject = 'Thank you for your donation!';
+
+        $message = $this->getDonorEmailTemplate($donation, $data);
+
+        wp_mail($donorEmail, $subject, $message, $headers);
+    }
+
+    private function getAdminEmailTemplate($donation, $data)
+    {
+        ob_start();
+?>
+        <!DOCTYPE html>
+        <html>
+
+        <head>
+            <style>
+                body {
+                    font-family: Arial, sans-serif;
+                    line-height: 1.6;
+                    color: #333;
+                }
+
+                .container {
+                    max-width: 600px;
+                    margin: 0 auto;
+                    padding: 20px;
+                }
+
+                .header {
+                    background: #4CAF50;
+                    color: white;
+                    padding: 20px;
+                    text-align: center;
+                }
+
+                .content {
+                    padding: 20px;
+                    background: #f9f9f9;
+                }
+
+                .info-row {
+                    margin: 10px 0;
+                    padding: 10px;
+                    background: white;
+                }
+
+                .label {
+                    font-weight: bold;
+                    color: #555;
+                }
+
+                .amount {
+                    font-size: 24px;
+                    color: #4CAF50;
+                    font-weight: bold;
+                }
+            </style>
+        </head>
+
+        <body>
+            <div class="container">
+                <div class="header">
+                    <h2>New Donation Received</h2>
+                </div>
+                <div class="content">
+                    <div class="info-row">
+                        <span class="label">Transaction ID:</span> <?php echo esc_html($donation->transaction_id); ?>
+                    </div>
+                    <div class="info-row">
+                        <span class="label">Donor Name:</span> <?php echo esc_html($donation->donor_name); ?>
+                    </div>
+                    <div class="info-row">
+                        <span class="label">Email:</span> <?php echo esc_html($donation->donor_email); ?>
+                    </div>
+                    <div class="info-row">
+                        <span class="label">Phone:</span> <?php echo esc_html($data['phone'] ?? 'N/A'); ?>
+                    </div>
+                    <div class="info-row">
+                        <span class="label">Amount:</span>
+                        <span class="amount"><?php echo esc_html($donation->currency . ' ' . number_format($donation->amount, 2)); ?></span>
+                    </div>
+                    <div class="info-row">
+                        <span class="label">Net Amount:</span> <?php echo esc_html($donation->currency . ' ' . number_format($donation->net_amount, 2)); ?>
+                    </div>
+                    <div class="info-row">
+                        <span class="label">Processing Fee:</span> <?php echo esc_html($donation->currency . ' ' . number_format($donation->processing_fee, 2)); ?>
+                    </div>
+                    <div class="info-row">
+                        <span class="label">Donation Type:</span> <?php echo esc_html(ucfirst($donation->donation_type)); ?>
+                    </div>
+                    <div class="info-row">
+                        <span class="label">Payment Mode:</span> <?php echo esc_html(ucfirst($donation->payment_mode)); ?>
+                    </div>
+                    <?php if (!empty($donation->donor_message)): ?>
+                        <div class="info-row">
+                            <span class="label">Message:</span><br>
+                            <?php echo nl2br(esc_html($donation->donor_message)); ?>
+                        </div>
+                    <?php endif; ?>
+                    <div class="info-row">
+                        <span class="label">Anonymous:</span> <?php echo $donation->anonymous_donation ? 'Yes' : 'No'; ?>
+                    </div>
+                    <div class="info-row">
+                        <span class="label">Date:</span> <?php echo esc_html($donation->created_at); ?>
+                    </div>
+                </div>
+            </div>
+        </body>
+
+        </html>
+    <?php
+        return ob_get_clean();
+    }
+
+    /**
+     * Donor email template
+     */
+    private function getDonorEmailTemplate($donation, $data)
+    {
+        ob_start();
+    ?>
+        <!DOCTYPE html>
+        <html>
+
+        <head>
+            <style>
+                body {
+                    font-family: Arial, sans-serif;
+                    line-height: 1.6;
+                    color: #333;
+                }
+
+                .container {
+                    max-width: 600px;
+                    margin: 0 auto;
+                    padding: 20px;
+                }
+
+                .header {
+                    background: #4CAF50;
+                    color: white;
+                    padding: 20px;
+                    text-align: center;
+                }
+
+                .content {
+                    padding: 20px;
+                    background: #f9f9f9;
+                }
+
+                .thank-you {
+                    font-size: 24px;
+                    color: #4CAF50;
+                    text-align: center;
+                    margin: 20px 0;
+                }
+
+                .info-box {
+                    background: white;
+                    padding: 20px;
+                    margin: 20px 0;
+                    border-left: 4px solid #4CAF50;
+                }
+
+                .amount {
+                    font-size: 28px;
+                    color: #4CAF50;
+                    font-weight: bold;
+                    text-align: center;
+                    margin: 20px 0;
+                }
+
+                .footer {
+                    text-align: center;
+                    padding: 20px;
+                    color: #666;
+                    font-size: 14px;
+                }
+            </style>
+        </head>
+
+        <body>
+            <div class="container">
+                <div class="header">
+                    <h1>Thank You for Your Donation!</h1>
+                </div>
+                <div class="content">
+                    <p class="thank-you">Dear <?php echo esc_html($data['first_name']); ?>,</p>
+
+                    <p>Thank you for your generous donation! Your support makes a real difference.</p>
+
+                    <div class="amount">
+                        <?php echo esc_html($donation->currency . ' ' . number_format($donation->amount, 2)); ?>
+                    </div>
+
+                    <div class="info-box">
+                        <h3>Donation Details</h3>
+                        <p><strong>Transaction ID:</strong> <?php echo esc_html($donation->transaction_id); ?></p>
+                        <p><strong>Date:</strong> <?php echo esc_html($donation->created_at); ?></p>
+                        <p><strong>Donation Type:</strong> <?php echo esc_html(ucfirst($donation->donation_type)); ?></p>
+                        <p><strong>Net Amount:</strong> <?php echo esc_html($donation->currency . ' ' . number_format($donation->net_amount, 2)); ?></p>
+                        <?php if ($donation->processing_fee > 0): ?>
+                            <p><strong>Processing Fee:</strong> <?php echo esc_html($donation->currency . ' ' . number_format($donation->processing_fee, 2)); ?></p>
+                        <?php endif; ?>
+                    </div>
+
+                    <?php if (!empty($donation->donor_message)): ?>
+                        <div class="info-box">
+                            <h3>Your Message</h3>
+                            <p><?php echo nl2br(esc_html($donation->donor_message)); ?></p>
+                        </div>
+                    <?php endif; ?>
+
+                    <p>This email serves as a receipt for your donation. Please keep it for your records.</p>
+
+                    <p>If you have any questions, please don't hesitate to contact us.</p>
+
+                    <p>With gratitude,<br>
+                        <strong><?php echo get_bloginfo('name'); ?></strong>
+                    </p>
+                </div>
+
+                <div class="footer">
+                    <p>This is an automated message. Please do not reply to this email.</p>
+                </div>
+            </div>
+        </body>
+
+        </html>
+<?php
+        return ob_get_clean();
     }
 }
