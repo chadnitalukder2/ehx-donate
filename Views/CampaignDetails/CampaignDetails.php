@@ -50,11 +50,14 @@ $maxDonation = $campaign['settings']['max_donation'] ?? 999999;
         <div class="ehxdo-left-section">
 
             <div class="ehxdo_campaign_details_wrapper">
-                <div class="ehxdo-campaign-header-image">
-                    <img src="<?php echo htmlspecialchars($campaign['header_image']); ?>"
-                        alt="<?php echo htmlspecialchars($campaign['title']); ?>"
-                        class="ehxdo-campaign-image">
-                </div>
+
+                <?php if (!empty($campaign['header_image'])): ?>
+                    <div class="ehxdo-campaign-header-image">
+                        <img src="<?php echo htmlspecialchars($campaign['header_image']); ?>"
+                            alt="<?php echo htmlspecialchars($campaign['title']); ?>"
+                            class="ehxdo-campaign-image">
+                    </div>
+                <?php endif; ?>
                 <div class="ehxdo_details_campaign_list">
 
 
@@ -100,16 +103,19 @@ $maxDonation = $campaign['settings']['max_donation'] ?? 999999;
                     </div>
 
                     <div class="ehxdo-campaign-meta">
-                        <span class="ehxdo-meta-item">
-                            <span class="ehxdo-meta-icon">
-                                <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                    <path d="M5.3335 1.33337V4.00004" stroke="#4A5565" stroke-width="1.33333" stroke-linecap="round" stroke-linejoin="round" />
-                                    <path d="M10.6665 1.33337V4.00004" stroke="#4A5565" stroke-width="1.33333" stroke-linecap="round" stroke-linejoin="round" />
-                                    <path d="M12.6667 2.66663H3.33333C2.59695 2.66663 2 3.26358 2 3.99996V13.3333C2 14.0697 2.59695 14.6666 3.33333 14.6666H12.6667C13.403 14.6666 14 14.0697 14 13.3333V3.99996C14 3.26358 13.403 2.66663 12.6667 2.66663Z" stroke="#4A5565" stroke-width="1.33333" stroke-linecap="round" stroke-linejoin="round" />
-                                    <path d="M2 6.66663H14" stroke="#4A5565" stroke-width="1.33333" stroke-linecap="round" stroke-linejoin="round" />
-                                </svg>
-                            </span> Ends <?php echo htmlspecialchars($campaign['end_date']); ?>
-                        </span>
+                        <?php if (!empty($campaign['end_date'])): ?>
+                            <span class="ehxdo-meta-item">
+                                <span class="ehxdo-meta-icon">
+                                    <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                        <path d="M5.3335 1.33337V4.00004" stroke="#4A5565" stroke-width="1.33333" stroke-linecap="round" stroke-linejoin="round" />
+                                        <path d="M10.6665 1.33337V4.00004" stroke="#4A5565" stroke-width="1.33333" stroke-linecap="round" stroke-linejoin="round" />
+                                        <path d="M12.6667 2.66663H3.33333C2.59695 2.66663 2 3.26358 2 3.99996V13.3333C2 14.0697 2.59695 14.6666 3.33333 14.6666H12.6667C13.403 14.6666 14 14.0697 14 13.3333V3.99996C14 3.26358 13.403 2.66663 12.6667 2.66663Z" stroke="#4A5565" stroke-width="1.33333" stroke-linecap="round" stroke-linejoin="round" />
+                                        <path d="M2 6.66663H14" stroke="#4A5565" stroke-width="1.33333" stroke-linecap="round" stroke-linejoin="round" />
+                                    </svg>
+                                </span>
+                                Ends <?php echo esc_html($campaign['end_date']); ?>
+                            </span>
+                        <?php endif; ?>
                         <span class="ehxdo-meta-item">
                             <span class="ehxdo-meta-icon">
                                 <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -270,15 +276,15 @@ $maxDonation = $campaign['settings']['max_donation'] ?? 999999;
                             </div>
                         </div>
 
-                        <div class="ehxdo-gift-aid">
+                        <!-- <div class="ehxdo-gift-aid">
                             <label style="display: flex; align-items: center; gap: 0.5rem; cursor: pointer;">
                                 <input type="checkbox" name="gift_aid" id="gift_aid_checkbox" value="1" style="cursor: pointer;">
                                 <span style="font-size: 0.875rem;">Gift Aid</span>
                             </label>
-                        </div>
+                        </div> -->
 
                         <!-- Gift Aid Address Fields (Initially Hidden) -->
-                        <div id="gift_aid_fields" style="display: none;">
+                        <!-- <div id="gift_aid_fields" style="display: none;">
                             <div class="ehxdo-form-group">
                                 <label class="ehxdo-label">Address line 1</label>
                                 <input type="text" name="address_line_1" class="ehxdo-input">
@@ -309,7 +315,7 @@ $maxDonation = $campaign['settings']['max_donation'] ?? 999999;
                                     <input type="text" name="post_code" class="ehxdo-input">
                                 </div>
                             </div>
-                        </div>
+                        </div> -->
 
 
                         <div class="ehxdo-anonymous-option" style="padding-top: 15px;">

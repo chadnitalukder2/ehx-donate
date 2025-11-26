@@ -28,9 +28,14 @@ $progressBarColor = $colorSettings['primary_btn'] ?? '#079455';
 
         <?php foreach ($data as $campaign): ?>
             <div class="ehxdo-campaign-card">
-                <div class="ehxdo-campaign-image">
-                    <img src="<?php echo esc_url($campaign->header_image ?: 'https://placehold.co/500x260'); ?>" alt="<?php echo esc_attr($campaign->title); ?>">
-                </div>
+
+                <?php if (!empty($campaign->header_image)) : ?>
+                    <div class="ehxdo-campaign-image">
+                        <img src="<?php echo esc_url($campaign->header_image); ?>"
+                            alt="<?php echo esc_attr($campaign->title); ?>">
+                    </div>
+                <?php endif; ?>
+
                 <div class="ehxdo-campaign-content">
                     <h2 class="ehxdo-campaign-title"><?php echo esc_html($campaign->title); ?></h2>
                     <p class="ehxdo-campaign-description">
@@ -52,8 +57,8 @@ $progressBarColor = $colorSettings['primary_btn'] ?? '#079455';
                                 <span class="ehxdo-stat-label">Goals</span>
                                 <span class="ehxdo-stat-value">
                                     <?php
-                                    $currency = $generalSettings['currency'] ?? 'USD';
-                                    $currencySymbol = $currencySymbols[$currency] ?? '$';
+                                    $currency = $generalSettings['currency'] ?? 'GBP';
+                                    $currencySymbol = $currencySymbols[$currency] ?? '£';
                                     $position = $generalSettings['currency_position'] ?? 'Before';
                                     $amount = number_format($campaign->goal_amount, 2);
 
@@ -66,22 +71,24 @@ $progressBarColor = $colorSettings['primary_btn'] ?? '#079455';
                                     <!-- $<?php echo number_format($campaign->goal_amount, 2); ?> -->
                                 </span>
                             </div>
-                            <div class="ehxdo-stat-item">
-                                <?php
-                                $start_date = strtotime($campaign->start_date);
-                                $end_date = strtotime($campaign->end_date); // Assuming you have an end_date field
-                                $current_date = time();
-                                $days_left = floor(($end_date - $current_date) / (60 * 60 * 24));
+                            <?php if (!empty($campaign->end_date)) : ?>
+                                <div class="ehxdo-stat-item">
+                                    <?php
+                                    $start_date = strtotime($campaign->start_date);
+                                    $end_date = strtotime($campaign->end_date); // Assuming you have an end_date field
+                                    $current_date = time();
+                                    $days_left = floor(($end_date - $current_date) / (60 * 60 * 24));
 
-                                if ($days_left > 0) {
-                                    echo '<span class="ehxdo-time-left">' . $days_left . ' days left</span>';
-                                } elseif ($days_left == 0) {
-                                    echo '<span class="ehxdo-time-left">Last day!</span>';
-                                } else {
-                                    echo '<span class="ehxdo-time-left">Ended</span>';
-                                }
-                                ?>
-                            </div>
+                                    if ($days_left > 0) {
+                                        echo '<span class="ehxdo-time-left">' . $days_left . ' days left</span>';
+                                    } elseif ($days_left == 0) {
+                                        echo '<span class="ehxdo-time-left">Last day!</span>';
+                                    } else {
+                                        echo '<span class="ehxdo-time-left">Ended</span>';
+                                    }
+                                    ?>
+                                </div>
+                            <?php endif; ?>
                         </div>
                     </div>
 

@@ -10,7 +10,7 @@ use EHXDonate\Models\Trip;
  */
 class DonorController extends Controller
 {
-    public function createOrUpdateDonor($data)
+    public function createDonor($data)
     {
      
         $donor_data = [

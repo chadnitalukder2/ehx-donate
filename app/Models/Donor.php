@@ -16,6 +16,7 @@ class Donor extends Model
      * The attributes that are mass assignable
      */
     protected $fillable = [
+        'id',
         'user_id',
         'campaign_id',
         'first_name',

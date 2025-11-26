@@ -51,13 +51,13 @@ class CreateDonationLogTable
         // 'reporting_tip_amount' => 'decimal(12,2) DEFAULT NULL',
         // 'reporting_processing_fee' => 'decimal(12,2) DEFAULT NULL',
         'custom_form_data' => 'json DEFAULT NULL',
-        'currency' => "varchar(10) NOT NULL DEFAULT 'USD'",
+        'currency' => "varchar(10) NOT NULL DEFAULT 'GBP'",
         'payment_status' => "enum('pending','completed','failed','refunded') NOT NULL DEFAULT 'pending'",
         'comment_status' => "enum('publish','pending','spam') NOT NULL DEFAULT 'pending'",
         'message_replies' => 'json DEFAULT NULL',
         'payment_method' => 'varchar(255) DEFAULT NULL',
         'payment_mode' => "enum('test','live') NOT NULL DEFAULT 'test'",
-        'transaction_type' => "enum('one_time','recurring','manual','refund') NOT NULL DEFAULT 'one_time'",
+        'donation_type' => "varchar(50) NOT NULL DEFAULT 'one-time'",
         'created_at' => 'timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP',
         'updated_at' => 'timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP'
     ];

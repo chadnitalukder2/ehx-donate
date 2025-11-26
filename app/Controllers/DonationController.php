@@ -2,6 +2,7 @@
 
 namespace EHXDonate\Controllers;
 
+use EHXDonate\Models\Donation;
 use EHXDonate\Models\Donor;
 use EHXDonate\Models\Trip;
 use EHXDonate\Services\DonationService;
@@ -72,27 +73,51 @@ class DonationController extends Controller
 
         $donorModel = new Donor();
         $existing_donor = $donorModel->where('email', $data['email'])->first();
-        dd($existing_donor->id, 'existing_donor');
+        
         if ($existing_donor) {
-            // Donor exists, use existing donor_id
             $donor_id = $existing_donor->id;
+            $update_data = [
+                'first_name' => $data['first_name'],
+                'last_name' => $data['last_name'],
+                'phone' => $data['phone'],
+                'updated_at' => current_time('mysql'),
+            ];
+            $donorModel->where('id', $donor_id)->save($update_data);
         } else {
-            // Create new donor
-            $donor_id = (new DonorController())->createOrUpdateDonor($data);
-
+            $donor_id = (new DonorController())->createDonor($data);
             if (!$donor_id) {
                 $this->error('Failed to create donor record', 400);
                 return;
             }
         }
 
+        $data['donor_id'] = $donor_id;
 
-
+        $donationData = [
+            'donor_id' => $data['donor_id'],
+            'campaign_id' => $data['campaign_id'],
+            'user_id' => $data['user_id'],
+            'donation_hash' => $data['donation_hash'],
+            'donor_name' => trim($data['first_name'] . ' ' . $data['last_name']),
+            'donor_email' => $data['email'],
+            'donor_message' => $data['donation_note'] ?? '',
+            'anonymous_donation' => $data['anonymous_donation'] ?? 0,
+            'gift_aid' => $data['gift_aid'] ?? 0,
+            'charge' =>  ($data['service_fee'] ?? 0),
+            'net_amount' => $data['net_amount'],
+            'amount' => $data['amount'],
+            'service_fee' => $data['service_fee'] ?? 0,
+            'currency' => $data['currency'] ?? 'GBP',
+            'donation_type' => $data['donation_type'] ?? 'one-time',
+            'created_at' => current_time('mysql'),
+            'updated_at' => current_time('mysql'),
+        ];
+        $donation = Donation::create($donationData);
 
 
 
         $this->success([
-            //'trip' => $trip->toArray()
-        ], 'Trip created successfully', 201);
+            'donation' => $donation->toArray()
+        ], 'Donation created successfully', 201);
     }
 }
