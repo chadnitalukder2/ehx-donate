@@ -22,7 +22,7 @@ function formatAmount($amount, $symbol, $position)
 
 $minDonation = $campaign['settings']['min_donation'] ?? 1;
 $maxDonation = $campaign['settings']['max_donation'] ?? 999999;
-// $default_amount = 0;
+
 $default_amount = 0.00;
 // dd($campaign);
 ?>
@@ -238,6 +238,7 @@ $default_amount = 0.00;
                                 <option value="dr">Dr.</option>
                             </select>
                         </div> -->
+                      <input type="hidden" name="payment_mode" value="<?php echo $isTestMode ? 'test' : 'live'; ?>">
 
                         <input type="hidden" name="campaign_id" value="<?php echo esc_attr($campaign['id']); ?>">
                         <input type="hidden" name="net_amount" id="ehxdo-net_amount" value="<?php echo $default_amount; ?>">

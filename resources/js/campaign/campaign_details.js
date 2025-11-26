@@ -255,7 +255,9 @@ jQuery(document).ready(function ($) {
             city: $('input[name="city"]').val() || '',
             state: $('input[name="state"]').val() || '',
             country: $('input[name="country"]').val() || '',
-            post_code: $('input[name="post_code"]').val() || ''
+            post_code: $('input[name="post_code"]').val() || '',
+
+            payment_mode: $('input[name="payment_mode"]').val() || 'live',
         };
         
         console.log('Submitting donation with data:', data);

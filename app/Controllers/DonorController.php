@@ -12,7 +12,7 @@ class DonorController extends Controller
 {
     public function createDonor($data)
     {
-     
+
         $donor_data = [
             'user_id' => $data['user_id'] ?? null,
             'campaign_id' => $data['campaign_id'] ?? null,
@@ -25,27 +25,18 @@ class DonorController extends Controller
         ];
 
         $donor = Donor::create($donor_data);
-        $this->success([
-            'donor_id' => $donor->id
-        ], 'Donor created successfully', 201);
+        return $donor->id;
     }
 
-    public function updateDonor( $id, $data)
+    public function updateDonor($id, $data)
     {
         $this->requireAuth();
         $donor = Donor::find($id);
-
         if (!$donor) {
-            $this->error('Donor not found', 404);
-            return;
+            return false;
         }
-
         $donor->fill($data);
-
         $donor->save();
-
-        $this->success([
-            'donor' => $donor->toArray()
-        ], 'Donor updated successfully');
+        return true;
     }
 }

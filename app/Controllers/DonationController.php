@@ -74,7 +74,7 @@ class DonationController extends Controller
 
         $donorModel = new Donor();
         $existing_donor = $donorModel->where('email', $data['email'])->first();
-dd($data);
+
         if ($existing_donor) {
             $donor_id = $existing_donor->id;
             $update_data = [
@@ -90,6 +90,7 @@ dd($data);
                 $this->error('Failed to update donor record', 400);
                 return;
             }
+          
         } else {
             $donor_id = (new DonorController())->createDonor($data);
 
@@ -107,15 +108,25 @@ dd($data);
             'campaign_id' => $data['campaign_id'],
             'user_id' => $data['user_id'],
             'donation_hash' => $data['donation_hash'],
+            'transaction_id' => uniqid('don_', true),
             'donor_name' => trim($data['first_name'] . ' ' . $data['last_name']),
             'donor_email' => $data['email'],
             'donor_message' => $data['donation_note'] ?? '',
             'anonymous_donation' => $data['anonymous_donation'] ?? 0,
+            //
+            'total_payment' => $data['amount'],
+            'processing_fee' => ($data['service_fee'] ?? 0),
+            'tip_amount' => 0.00,
+            'payment_status' => 'pending',
+            'comment_status' => 'pending',
+            'message_replies' => null,
+            'payment_method' => null,
+            'payment_mode' => $data['payment_mode'] ?? 'live',
+
             'gift_aid' => $data['gift_aid'] ?? 0,
             'charge' => ($data['service_fee'] ?? 0),
             'net_amount' => $data['net_amount'],
             'amount' => $data['amount'],
-            'service_fee' => $data['service_fee'] ?? 0,
             'currency' => $data['currency'] ?? 'GBP',
             'donation_type' => $data['donation_type'] ?? 'one-time',
             'created_at' => current_time('mysql'),
@@ -126,8 +137,7 @@ dd($data);
 
 
 
-        // $this->success([
-        //     'donation' => $donation->toArray()
-        // ], 'Donation created successfully', 201);
+        $this->success([
+        ], 'Donation created successfully', 201);
     }
 }
