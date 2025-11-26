@@ -125,11 +125,24 @@
   opacity: 0.9;
 }
 
+@media (max-width: 1024px) {
+  .ehxdo-campaigns-grid {
+    grid-template-columns: repeat(2, 1fr) !important;
+  }
+}
+@media (max-width: 640px) {
+  .ehxdo-campaigns-grid {
+    grid-template-columns: repeat(1, 1fr) !important;
+  }
+}
 @media (max-width: 768px) {
   .ehxdo-campaigns-grid {
     grid-template-columns: repeat(1, 1fr);
   }
+  .ehxdo-header {
+    margin-bottom: 30px !important;
+  }
   .ehxdo-header .ehxdo-title {
-    font-size: 28px;
+    font-size: 28px !important;
   }
 }
