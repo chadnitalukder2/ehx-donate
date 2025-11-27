@@ -32,6 +32,9 @@ class ApiRoutes
             //Donor routes
             $router->get('/getAllDonors', 'DonorController@index', ['auth']);
 
+            //Donation routes
+            $router->get('/getAllDonations', 'DonationController@index', ['auth']);
+
             // Settings routes
             $router->get('/settings/{key}', 'SettingsController@getSettings');
             $router->post('/settings/{key}', 'SettingsController@updateSettings');

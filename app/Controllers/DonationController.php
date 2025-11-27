@@ -13,9 +13,19 @@ use EHXDonate\Services\DonationService;
 class DonationController extends Controller
 {
 
-    /**
-     * Store a new donation
-     */
+       public function index(): void
+    {
+
+        $donations = (new Donation())->orderBy('created_at', 'DESC')->get();
+        $generalSettings = get_option('ehx_donate_settings_general', []);
+
+        $this->success([
+            'donations' => array_map(function ($donation) {
+                return $donation->toArray();
+            }, $donations),
+            'generalSettings' => $generalSettings,
+        ]);
+    }
     public function store(): void
     {
         $this->requireAuth();
