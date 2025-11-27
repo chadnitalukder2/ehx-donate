@@ -47,17 +47,18 @@
     border-radius: 10px !important;
 }
 .el-button--primary:hover{
-    background-color: $ehx_primary_btn_hover !important;
-    border: $ehx_primary_btn_hover !important;
+    background-color: #067a3b !important;
+    border: #067a3b !important;
 }
 .is-active{
-    background-color: $ehx_primary_btn !important;
-    border: $ehx_primary_btn !important;
+    background-color: #067a3b  !important;
+    border: #067a3b !important;
+    color: #ffff !important;
 }
 .number:hover, .btn-prev:hover, .btn-next:hover {
-    background-color: $ehx_primary_btn !important;
-    border: $ehx_primary_btn !important;
-    color: $ehxd_background_color_white !important;
+    background-color: #067a3b !important;
+    border: #067a3b !important;
+    color: #ffff !important;
 }
 
 .el-input__wrapper, .el-textarea__inner , .el-select__wrapper , .el-select-dropdown__item, .checkbox__inner

@@ -109,18 +109,19 @@
 }
 
 .el-button--primary:hover {
-  background-color: #373434 !important;
-  border: #373434 !important;
+  background-color: #067a3b !important;
+  border: #067a3b !important;
 }
 
 .is-active {
-  background-color: #1a1b1c !important;
-  border: #1a1b1c !important;
+  background-color: #067a3b !important;
+  border: #067a3b !important;
+  color: white !important;
 }
 
 .number:hover, .btn-prev:hover, .btn-next:hover {
-  background-color: #1a1b1c !important;
-  border: #1a1b1c !important;
+  background-color: #067a3b !important;
+  border: #067a3b !important;
   color: white !important;
 }
 
