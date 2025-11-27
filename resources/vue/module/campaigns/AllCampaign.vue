@@ -228,6 +228,7 @@ export default {
     data() {
         return {
             search: '',
+            status_filter: '',
             campaigns: [],
             generalSettings: {},
             currencies: window.EHXDonate.currencies,
@@ -259,6 +260,13 @@ export default {
             },
             immediate: false
         },
+          status_filter: {
+        handler() {
+            this.currentPage = 1;
+            this.getAllCampaigns();
+        },
+        immediate: false
+    }
     },
 
     methods: {
@@ -312,11 +320,11 @@ export default {
                     },
                     withCredentials: true
                 });
-                console.log('Campaigns response:', response.data.data);
+                console.log('Campaigns response:', response);
                 this.campaigns = response?.data?.data?.campaigns;
                 this.generalSettings = response?.data?.data?.generalSettings || {};
-                // this.total_campaign = response?.data?.total || 0;
-                // this.last_page = response?.data?.last_page || 1;
+                this.total_campaign = response?.data?.data?.total || 0;
+                this.last_page = response?.data?.data?.last_page || 1;
                 this.loading = false;
             } catch (error) {
                 this.loading = false;
@@ -422,7 +430,6 @@ export default {
     },
 
     mounted() {
-        console.log('Mounted AllCampaign.vue', window.EHXDonate);
         this.getAllCampaigns();
     },
 

@@ -416,60 +416,10 @@ abstract class Model
         return $model;
     }
 
-    /**
-     * Get records with a where clause
-     */
-    public function where(string $column, $operator, $value = null): self
-    {
-        if ($value === null) {
-            $value = $operator;
-            $operator = '=';
-        }
-
-        $this->query['where'][] = [$column, $operator, $value];
-        return $this;
-    }
-
     public function orderBy($column, $direction = 'ASC'): self
     {
         $this->query['orderBy'] = [$column, strtoupper($direction)];
         return $this;
-    }
-
-    public function get(): array
-    {
-        $table = $this->wpdb->prefix . $this->table;
-        $sql = "SELECT * FROM {$table}";
-        $params = [];
-
-        // Apply WHERE conditions
-        if (!empty($this->query['where'])) {
-            $whereClauses = [];
-            foreach ($this->query['where'] as [$column, $operator, $value]) {
-                $whereClauses[] = "{$column} {$operator} %s";
-                $params[] = $value;
-            }
-            $sql .= " WHERE " . implode(' AND ', $whereClauses);
-        }
-
-        // Apply ORDER BY if defined
-        if (!empty($this->query['orderBy'])) {
-            [$column, $direction] = $this->query['orderBy'];
-            $sql .= " ORDER BY {$column} {$direction}";
-        }
-
-        $prepared = $this->wpdb->prepare($sql, $params);
-        $results = $this->wpdb->get_results($prepared);
-
-        $models = [];
-        foreach ($results as $result) {
-            $model = new static();
-            $model->fill((array) $result);
-            $model->exists = true;
-            $models[] = $model;
-        }
-
-        return $models;
     }
 
     /**
@@ -516,6 +466,188 @@ abstract class Model
         }
 
         return null;
+    }
+
+    /**
+     * Add OR WHERE clause
+     */
+    public function orWhere(string $column, $operator, $value = null): self
+    {
+        if ($value === null) {
+            $value = $operator;
+            $operator = '=';
+        }
+
+        $this->query['where'][] = [
+            'column' => $column,
+            'operator' => $operator,
+            'value' => $value,
+            'boolean' => 'OR'
+        ];
+        return $this;
+    }
+
+    /**
+     * Update the where method to include boolean
+     */
+    public function where(string $column, $operator, $value = null): self
+    {
+        if ($value === null) {
+            $value = $operator;
+            $operator = '=';
+        }
+
+        $this->query['where'][] = [
+            'column' => $column,
+            'operator' => $operator,
+            'value' => $value,
+            'boolean' => 'AND'
+        ];
+        return $this;
+    }
+
+    /**
+     * Reset query builder
+     */
+    protected function resetQuery(): void
+    {
+        $this->query = [
+            'where' => [],
+            'whereIn' => [],
+            'orderBy' => null,
+            'limit' => null,
+            'offset' => null,
+        ];
+    }
+
+    /**
+     * Update get() method to support limit and offset
+     */
+    public function get(): array
+    {
+        $table = $this->wpdb->prefix . $this->table;
+        $sql = "SELECT * FROM {$table}";
+        $params = [];
+
+        // Apply WHERE conditions
+        if (!empty($this->query['where'])) {
+            $sql .= " WHERE ";
+            $firstWhere = true;
+
+            foreach ($this->query['where'] as $condition) {
+                if (!$firstWhere) {
+                    $boolean = $condition['boolean'] ?? 'AND';
+                    $sql .= " {$boolean} ";
+                } else {
+                    $firstWhere = false;
+                }
+
+                $sql .= "{$condition['column']} {$condition['operator']} %s";
+                $params[] = $condition['value'];
+            }
+        }
+
+        // Apply ORDER BY if defined
+        if (!empty($this->query['orderBy'])) {
+            [$column, $direction] = $this->query['orderBy'];
+            $sql .= " ORDER BY {$column} {$direction}";
+        }
+
+        // Apply LIMIT and OFFSET if defined
+        if (isset($this->query['limit'])) {
+            $sql .= " LIMIT {$this->query['limit']}";
+
+            if (isset($this->query['offset'])) {
+                $sql .= " OFFSET {$this->query['offset']}";
+            }
+        }
+
+        // Prepare and execute
+        if (!empty($params)) {
+            $prepared = $this->wpdb->prepare($sql, $params);
+            $results = $this->wpdb->get_results($prepared);
+        } else {
+            $results = $this->wpdb->get_results($sql);
+        }
+
+        $models = [];
+        foreach ($results as $result) {
+            $model = new static();
+            $model->fill((array) $result);
+            $model->exists = true;
+            $models[] = $model;
+        }
+
+        return $models;
+    }
+
+    /**
+     * Corrected paginate method
+     */
+    public function paginate($perPage = 10, $page = 1, $search = '', $status = null): array
+    {
+        if (!empty($search)) {
+            $this->where('title', 'LIKE', '%' . $this->wpdb->esc_like($search) . '%');
+                
+        }
+
+        if ($status !== null) {
+            $this->where('status', '=', $status);
+        }
+
+        $whereConditions = $this->query['where'] ?? [];
+
+        // Calculate offset
+        $offset = ($page - 1) * $perPage;
+        $this->query['limit'] = $perPage;
+        $this->query['offset'] = $offset;
+
+        // Get the paginated results
+        $results = $this->get();
+
+        // Build count query
+        $table = $this->wpdb->prefix . $this->table;
+        $countSql = "SELECT COUNT(*) FROM {$table}";
+        $params = [];
+
+        // Apply WHERE conditions to count
+        if (!empty($whereConditions)) {
+            $countSql .= " WHERE ";
+            $firstWhere = true;
+
+            foreach ($whereConditions as $condition) {
+                if (!$firstWhere) {
+                    $boolean = $condition['boolean'] ?? 'AND';
+                    $countSql .= " {$boolean} ";
+                } else {
+                    $firstWhere = false;
+                }
+
+                $countSql .= "{$condition['column']} {$condition['operator']} %s";
+                $params[] = $condition['value'];
+            }
+        }
+
+        // Execute count query
+        if (!empty($params)) {
+            $countSql = $this->wpdb->prepare($countSql, $params);
+        }
+
+        $total = (int) $this->wpdb->get_var($countSql);
+
+        // Reset query for next use
+        $this->resetQuery();
+
+        
+        return [
+            'data' => $results,
+            'total' => $total,
+            'per_page' => $perPage,
+            'current_page' => $page,
+            'last_page' => ceil($total / $perPage),
+            'from' => $offset + 1,
+            'to' => min($offset + $perPage, $total),
+        ];
     }
 
     public static function getCampaignByPostId(int $post_id): ?self

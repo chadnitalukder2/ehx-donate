@@ -13,17 +13,41 @@ class CampaignController extends Controller
     /**
      * Get all campaigns
      */
-    public function index(): void
+    public function index( ): void
     {
+          $data = $this->request ;
+        
+        $page = 1;
+        $limit = 10;
+        $search = null;
+        $status = null;
 
-        $campaigns = (new Campaign())->orderBy('created_at', 'DESC')->get();
+        if ($data['page']) {
+            $page = intval( $data['page'] );
+        }
+        if ($data['limit']) {
+            $limit =  intval( $data['limit'] );
+        }
+        if ($data['search']) {
+            $search = sanitize_text_field( $data['search'] );
+        }
+        if ($data['status']) {
+            $status = sanitize_text_field( $data['status'] );
+        }
+
+        $res = (new Campaign)->paginate($limit, $page, $search, $status);
+        $data = array_map(fn($cat) => $cat->toArray(), $res['data']);
+       // $campaigns = (new Campaign())->orderBy('created_at', 'DESC')->get();
         $generalSettings = get_option('ehx_donate_settings_general', []);
 
+      
         $this->success([
-            'campaigns' => array_map(function ($campaign) {
-                return $campaign->toArray();
-            }, $campaigns),
+            'campaigns' => $data,
             'generalSettings' => $generalSettings,
+            'total' => $res['total'],
+            'per_page' => $res['per_page'],
+            'current_page' => $res['current_page'],
+            'last_page' => $res['last_page'],
         ]);
     }
 
@@ -51,9 +75,6 @@ class CampaignController extends Controller
             'generalSettings' => $generalSettings,
         ]);
     }
-
-
-
     /**
      * Create a new campaign
      */
