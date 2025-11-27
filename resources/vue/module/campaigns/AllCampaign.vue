@@ -30,8 +30,8 @@
                                 </div>
                             </span>
                         </div>
-                        <div class="ehxdo-stat-value">1,263</div>
-                        <div class="ehxdo-stat-change"><span class="ehxdo_positive">8.5%</span> from last month</div>
+                        <div class="ehxdo-stat-value">{{ totalActiveCampaigns }}</div>
+                        <div class="ehxdo-stat-change"><span class="ehxdo_positive">{{ percentActive }}%</span> from last month</div>
                     </div>
 
                     <div class="ehxdo-stat-card">
@@ -51,8 +51,8 @@
                                 </div>
                             </span>
                         </div>
-                        <div class="ehxdo-stat-value">32</div>
-                        <div class="ehxdo-stat-change "><span class="ehxdo_negative">- 8.3%</span> from last month</div>
+                        <div class="ehxdo-stat-value">{{ totalPendingCampaigns }}</div>
+                        <div class="ehxdo-stat-change "><span class="ehxdo_negative">- {{ percentPending }}%</span> from last month</div>
                     </div>
 
                     <div class="ehxdo-stat-card">
@@ -74,8 +74,8 @@
                                 </div>
                             </span>
                         </div>
-                        <div class="ehxdo-stat-value">936</div>
-                        <div class="ehxdo-stat-change"> <span class="ehxdo_negative">8.3%</span> from last month</div>
+                        <div class="ehxdo-stat-value">{{ totalCompletedCampaigns }}</div>
+                        <div class="ehxdo-stat-change"> <span class="ehxdo_negative">{{ percentCompleted }}%</span> from last month</div>
                     </div>
 
                 </div>
@@ -192,7 +192,6 @@
 
         <AppModal :title="'Delete campaign'" :width="500" :showFooter="false" ref="delete_campaign_modal">
             <template #body>
-
                 <div class="delete-modal-body">
                     <h1>Are you sure ?</h1>
                     <p>You want to delete this campaign</p>
@@ -231,6 +230,12 @@ export default {
             status_filter: '',
             campaigns: [],
             generalSettings: {},
+            totalActiveCampaigns: 0,
+            totalPendingCampaigns: 0,
+            totalCompletedCampaigns: 0,
+            percentActive: 0,
+            percentPending: 0,
+            percentCompleted: 0,
             currencies: window.EHXDonate.currencies,
             currencySymbols: window.EHXDonate.currencySymbols,
             campaign: {},
@@ -325,6 +330,12 @@ export default {
                 this.generalSettings = response?.data?.data?.generalSettings || {};
                 this.total_campaign = response?.data?.data?.total || 0;
                 this.last_page = response?.data?.data?.last_page || 1;
+                this.totalActiveCampaigns = response?.data?.data?.totalActiveCampaigns || 0;
+                this.totalPendingCampaigns = response?.data?.data?.totalPendingCampaigns || 0;
+                this.totalCompletedCampaigns = response?.data?.data?.totalCompletedCampaigns || 0;
+                this.percentActive = response?.data?.data?.percentActive || 0;
+                this.percentPending = response?.data?.data?.percentPending || 0;
+                this.percentCompleted = response?.data?.data?.percentCompleted || 0;
                 this.loading = false;
             } catch (error) {
                 this.loading = false;

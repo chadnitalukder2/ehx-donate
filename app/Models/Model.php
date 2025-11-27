@@ -542,8 +542,15 @@ abstract class Model
                     $firstWhere = false;
                 }
 
-                $sql .= "{$condition['column']} {$condition['operator']} %s";
-                $params[] = $condition['value'];
+                if (strtoupper($condition['operator']) === 'BETWEEN') {
+                    // Handle BETWEEN clause
+                    $sql .= "{$condition['column']} BETWEEN %s AND %s";
+                    $params[] = $condition['value'][0];
+                    $params[] = $condition['value'][1];
+                } else {
+                    $sql .= "{$condition['column']} {$condition['operator']} %s";
+                    $params[] = $condition['value'];
+                }
             }
         }
 
@@ -588,7 +595,6 @@ abstract class Model
     {
         if (!empty($search)) {
             $this->where('title', 'LIKE', '%' . $this->wpdb->esc_like($search) . '%');
-                
         }
 
         if ($status !== null) {
@@ -638,7 +644,7 @@ abstract class Model
         // Reset query for next use
         $this->resetQuery();
 
-        
+
         return [
             'data' => $results,
             'total' => $total,
@@ -648,6 +654,68 @@ abstract class Model
             'from' => $offset + 1,
             'to' => min($offset + $perPage, $total),
         ];
+    }
+
+    /**
+     * Count records matching the query
+     */
+    public function count(): int
+    {
+        $table = $this->wpdb->prefix . $this->table;
+        $sql = "SELECT COUNT(*) FROM {$table}";
+        $params = [];
+
+        // Apply WHERE conditions
+        if (!empty($this->query['where'])) {
+            $sql .= " WHERE ";
+            $firstWhere = true;
+
+            foreach ($this->query['where'] as $condition) {
+                if (!$firstWhere) {
+                    $boolean = $condition['boolean'] ?? 'AND';
+                    $sql .= " {$boolean} ";
+                } else {
+                    $firstWhere = false;
+                }
+
+                if (strtoupper($condition['operator']) === 'BETWEEN') {
+                    $sql .= "{$condition['column']} BETWEEN %s AND %s";
+                    $params[] = $condition['value'][0];
+                    $params[] = $condition['value'][1];
+                } else {
+                    $sql .= "{$condition['column']} {$condition['operator']} %s";
+                    $params[] = $condition['value'];
+                }
+            }
+        }
+
+        // Prepare and execute
+        if (!empty($params)) {
+            $prepared = $this->wpdb->prepare($sql, $params);
+            $count = $this->wpdb->get_var($prepared);
+        } else {
+            $count = $this->wpdb->get_var($sql);
+        }
+
+        // Reset query for next use
+        $this->resetQuery();
+
+        return (int) $count;
+    }
+    public function whereBetween(string $column, $start, $end = null): self
+    {
+        // If $start is an array, extract start and end
+        if (is_array($start)) {
+            [$start, $end] = $start;
+        }
+
+        $this->query['where'][] = [
+            'column' => $column,
+            'operator' => 'BETWEEN',
+            'value' => [$start, $end],
+            'boolean' => 'AND'
+        ];
+        return $this;
     }
 
     public static function getCampaignByPostId(int $post_id): ?self
