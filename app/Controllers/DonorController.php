@@ -10,6 +10,21 @@ use EHXDonate\Models\Trip;
  */
 class DonorController extends Controller
 {
+
+      public function index(): void
+    {
+
+        $donors = (new Donor())->orderBy('created_at', 'DESC')->get();
+        $generalSettings = get_option('ehx_donate_settings_general', []);
+
+        $this->success([
+            'donors' => array_map(function ($donor) {
+                return $donor->toArray();
+            }, $donors),
+            'generalSettings' => $generalSettings,
+        ]);
+    }
+
     public function createDonor($data)
     {
 
@@ -27,7 +42,6 @@ class DonorController extends Controller
         $donor = Donor::create($donor_data);
         return $donor->id;
     }
-
     public function updateDonor($id, $data)
     {
         $this->requireAuth();

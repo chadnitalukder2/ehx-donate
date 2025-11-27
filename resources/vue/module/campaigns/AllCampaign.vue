@@ -102,7 +102,6 @@
             </template>
 
             <template #columns>
-
                 <el-table-column label="ID" width="80">
                     <template #default="scope">
                         {{ scope.$index + 1 }}
