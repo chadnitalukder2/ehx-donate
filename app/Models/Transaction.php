@@ -10,7 +10,7 @@ class Transaction extends Model
     /**
      * The table name
      */
-    protected $table = 'ehxdo_transactions';
+    protected $table = 'ehxdo_transaction';
 
     /**
      * The attributes that are mass assignable

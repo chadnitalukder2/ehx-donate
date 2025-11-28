@@ -15,18 +15,40 @@ class Router
     /** ---------------------------
      *  Basic HTTP Method Registration
      *  --------------------------- */
-    public function get(string $path, $handler, array $middleware = []): self { return $this->addRoute('GET', $path, $handler, $middleware); }
-    public function post(string $path, $handler, array $middleware = []): self { return $this->addRoute('POST', $path, $handler, $middleware); }
-    public function put(string $path, $handler, array $middleware = []): self { return $this->addRoute('PUT', $path, $handler, $middleware); }
-    public function delete(string $path, $handler, array $middleware = []): self { return $this->addRoute('DELETE', $path, $handler, $middleware); }
-    public function patch(string $path, $handler, array $middleware = []): self { return $this->addRoute('PATCH', $path, $handler, $middleware); }
-    public function any(string $path, $handler, array $middleware = []): self { return $this->addRoute('ANY', $path, $handler, $middleware); }
+    public function get(string $path, $handler, array $middleware = [], array $options = []): self {
+        return $this->addRoute('GET', $path, $handler, $middleware, $options);
+    }
+
+    public function post(string $path, $handler, array $middleware = [], array $options = []): self {
+        return $this->addRoute('POST', $path, $handler, $middleware, $options);
+    }
+
+    public function put(string $path, $handler, array $middleware = [], array $options = []): self {
+        return $this->addRoute('PUT', $path, $handler, $middleware, $options);
+    }
+
+    public function delete(string $path, $handler, array $middleware = [], array $options = []): self {
+        return $this->addRoute('DELETE', $path, $handler, $middleware, $options);
+    }
+
+    public function patch(string $path, $handler, array $middleware = [], array $options = []): self {
+        return $this->addRoute('PATCH', $path, $handler, $middleware, $options);
+    }
+
+    public function any(string $path, $handler, array $middleware = [], array $options = []): self {
+        return $this->addRoute('ANY', $path, $handler, $middleware, $options);
+    }
 
     /** ---------------------------
      *  Add a Route
      *  --------------------------- */
-    protected function addRoute(string $method, string $path, $handler, array $middleware = []): self
-    {
+    protected function addRoute(
+        string $method,
+        string $path,
+        $handler,
+        array $middleware = [],
+        array $options = []
+    ): self {
         $fullPath = $this->currentGroup . $path;
         $fullMiddleware = array_merge($this->currentMiddleware, $middleware);
 
@@ -36,6 +58,7 @@ class Router
             'handler'    => $handler,
             'middleware' => $fullMiddleware,
             'pattern'    => $this->convertToRegex($fullPath),
+            'public'     => $options['public'] ?? false, // NEW
         ];
 
         return $this;
@@ -165,7 +188,9 @@ class Router
     public function registerRestRoutes(string $namespace = 'ehx-donate/v1'): void
     {
         add_action('rest_api_init', function() use ($namespace) {
+
             foreach ($this->routes as $route) {
+
                 $methods = $route['method'] === 'ANY'
                     ? ['GET', 'POST', 'PUT', 'DELETE', 'PATCH']
                     : [$route['method']];
@@ -181,24 +206,33 @@ class Router
                         $params = $request->get_url_params();
                         $this->executeHandler($route['handler'], $params);
                     },
+
                     'permission_callback' => function($request) use ($route) {
-                        // ✅ Global REST Nonce Validation
-                        // if(!current_user_can('manage_options')) {
-                        //     return new \WP_Error('rest_forbidden', __('You do not have permission to access this resource.', 'ehx-donate'), ['status' => 403]);
-                        // }
-                        $nonce = $request->get_header('X-WP-Nonce');
-                        if (empty($nonce) || !wp_verify_nonce($nonce, 'wp_rest')) {
-                            return new \WP_Error('rest_nonce_invalid', __('Invalid or missing nonce.', 'ehx-donate'), ['status' => 403]);
+
+                        // ⭐ Public route → skip auth + nonce
+                        if (!empty($route['public'])) {
+                            return true;
                         }
 
-                        // Then execute custom middlewares if any
+                        // Admin-only route
+                        if (!current_user_can('manage_options')) {
+                            return new \WP_Error('rest_forbidden', __('Forbidden'), ['status' => 403]);
+                        }
+
+                        $nonce = $request->get_header('X-WP-Nonce');
+                        if (empty($nonce) || !wp_verify_nonce($nonce, 'wp_rest')) {
+                            return new \WP_Error('rest_nonce_invalid', __('Invalid or missing nonce'), ['status' => 403]);
+                        }
+
+                        // middleware
                         foreach ($route['middleware'] as $middleware) {
                             if (!$this->executeMiddleware($middleware)) {
                                 return false;
                             }
                         }
+
                         return true;
-                    },
+                    }
                 ]);
             }
         });

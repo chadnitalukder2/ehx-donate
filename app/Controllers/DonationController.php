@@ -6,6 +6,7 @@ use EHXDonate\Models\Donation;
 use EHXDonate\Models\Donor;
 use EHXDonate\Models\Trip;
 use EHXDonate\Services\DonationService;
+use EHXDonate\Services\Payment\Stripe;
 
 /**
  * Donation Controller
@@ -54,6 +55,8 @@ class DonationController extends Controller
             'post_code' => 'nullable|string',
         ]);
 
+        $data['payment_method'] = 'stripe';
+
         $data['user_id'] = $this->getCurrentUserId();
 
         if ($data['user_id'] === null) {
@@ -83,9 +86,9 @@ class DonationController extends Controller
         }
 
         $donorModel = new Donor();
-        $existing_donor = $donorModel->where('email', $data['email'])->first();
-
+        $existing_donor = $donorModel->where('email', $data['email'])->limit(1)->get();
         if ($existing_donor) {
+            $existing_donor = $existing_donor[0];
             $donor_id = $existing_donor->id;
             $update_data = [
                 'first_name' => $data['first_name'],
@@ -111,7 +114,7 @@ class DonationController extends Controller
 
 
         $data['donor_id'] = $donor_id;
-
+        $stipe = new Stripe();
         $donationData = [
             'donor_id' => $data['donor_id'],
             'campaign_id' => $data['campaign_id'],
@@ -130,7 +133,7 @@ class DonationController extends Controller
             'comment_status' => 'pending',
             'message_replies' => null,
             'payment_method' => null,
-            'payment_mode' => $data['payment_mode'] ?? 'live',
+            'payment_mode' => $stipe->getMode(),
 
             'gift_aid' => $data['gift_aid'] ?? 0,
             'charge' => ($data['service_fee'] ?? 0),
@@ -147,6 +150,8 @@ class DonationController extends Controller
         $emailSettings = get_option('ehx_donate_settings_email', []);
 
         $this->sendDonationEmails($donation, $data, $emailSettings);
+
+        do_action('ehxdo_handle_payment_' . $data['payment_method'], $donation, $data);
 
         $this->success([], 'Donation created successfully', 201);
     }

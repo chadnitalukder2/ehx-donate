@@ -2,6 +2,8 @@
 
 namespace EHXDonate\Core;
 
+use EHXDonate\Services\Payment\Stripe;
+
 /**
  * Action class for handling WordPress actions
  */
@@ -16,5 +18,6 @@ class Action
         add_action('init', [new CPTHandler(), 'registerCPT']);
         add_action('init', [new Shortcodes\CampaignShortCode(), 'register']);
         add_action('init', [new Shortcodes\CampaignListShortcode(), 'register']);
+        add_action('init', [new Stripe(), 'register']);
     }
 }

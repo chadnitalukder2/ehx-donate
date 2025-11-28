@@ -6,12 +6,7 @@
             </div>
             <div class="ehxdo_settings_right">
                 <el-button type="info" @click="handleCancel" :disabled="saving">Cancel</el-button>
-                <el-button 
-                    type="primary" 
-                    @click="handleSave" 
-                    :loading="saving"
-                    :disabled="saving"
-                >
+                <el-button type="primary" @click="handleSave" :loading="saving" :disabled="saving">
                     {{ saving ? 'Saving...' : 'Save Change' }}
                 </el-button>
             </div>
@@ -20,8 +15,8 @@
             <div class="ehxdo_settings_sidebar">
                 <SettingSidebar />
             </div>
-            <div class="ehxdo_settings_details">
-                <RouterView :settings="settings" :loading="loading" />
+            <div class="ehxdo_settings_details" v-loading="loading">
+                <RouterView :settings="settings" v-if="!loading && settings" />
             </div>
         </div>
     </div>
@@ -55,13 +50,13 @@ export default {
         }
     },
     mounted() {
-        
+
         this.loadSettings(this.$route.name);
     },
     methods: {
         async loadSettings(key) {
 
-            if(key == 'shortcode' || key == 'index') {
+            if (key == 'shortcode' || key == 'index') {
                 return false;
             }
 
@@ -76,7 +71,7 @@ export default {
                 });
 
                 const result = await response.json();
-                
+
                 if (result.success) {
                     this.settings = { ...result.data?.settings };
                     this.originalSettings = JSON.parse(JSON.stringify(result.data?.settings));
@@ -97,11 +92,11 @@ export default {
                         'Content-Type': 'application/json',
                         'X-WP-Nonce': this.nonce
                     },
-                    body: JSON.stringify({settings : JSON.stringify(this.settings)})
+                    body: JSON.stringify({ settings: JSON.stringify(this.settings) })
                 });
 
                 const result = await response.json();
-                
+
                 if (result.success) {
                     ElMessage.success(result.message || 'Settings saved successfully');
                     this.originalSettings = JSON.parse(JSON.stringify(this.settings));

@@ -272,7 +272,11 @@ jQuery(document).ready(function ($) {
             success: function (response) {
                 if (response.success) {
                     $submitBtn.html('<span style="display: inline-block; margin-right: 8px;">✓</span> Success! Redirecting...');
-                    window.location.href = response.data.redirect_url;
+                    let redirect_url = response?.data?.redirect_url;
+                    console.log('Redirecting to:', response);
+                    if(redirect_url) {
+                        window.location.href = redirect_url;
+                    }
                 } else {
                     const errorMsg = `<p class="ehxdo-form-error-msg" style="color: red; font-size: 14px; margin: 15px 0; padding: 10px; background-color: #ffebee; border-radius: 4px;">
                         <strong>Error:</strong> ${response.data.message}

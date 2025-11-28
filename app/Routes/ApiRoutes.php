@@ -39,5 +39,10 @@ class ApiRoutes
             $router->get('/settings/{key}', 'SettingsController@getSettings');
             $router->post('/settings/{key}', 'SettingsController@updateSettings');
         });
+
+        $router->group(['prefix' => '/payment'], function ($router) {
+            $router->get('/stripe/success', 'PaymentController@stripeSuccess', [], ['public' => true]);
+            $router->get('/stripe/cancel', 'PaymentController@stripeCancel', [], ['public' => true]);
+        });
     }
 }

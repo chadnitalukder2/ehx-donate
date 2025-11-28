@@ -2,7 +2,7 @@
 
 namespace EHXDonate\Controllers;
 
-use EHXDonate\Models\Trip;
+use EHXDonate\Models\Trip;   
 
 /**
  * Subscription Controller

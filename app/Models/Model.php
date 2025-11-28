@@ -421,6 +421,17 @@ abstract class Model
         $this->query['orderBy'] = [$column, strtoupper($direction)];
         return $this;
     }
+    public function limit(int $limit): self
+    {
+        $this->query['limit'] = $limit;
+        return $this;
+    }
+
+    public function offset(int $offset): self
+    {
+        $this->query['offset'] = $offset;
+        return $this;
+    }
 
     /**
      * Get the first record matching the query
@@ -430,7 +441,6 @@ abstract class Model
         $table = $this->wpdb->prefix . $this->table;
         $sql = "SELECT * FROM {$table}";
         $params = [];
-
         // Apply WHERE conditions
         if (!empty($this->query['where'])) {
             $whereClauses = [];

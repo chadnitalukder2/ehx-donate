@@ -46,22 +46,8 @@
                 </el-table-column>
 
 
-                <el-table-column prop="campaign_id" label="Campaign">
-                    <template #default="{ row }">
-                        {{ row.donation ?? 0 }}
-                    </template>
-                </el-table-column>
-                   <el-table-column prop="gift_aid" label="Gift Aid">
-                    <template #default="{ row }">
-                        {{ row.gift_aid ?? 0 }}
-                    </template>
-                </el-table-column>
+                <el-table-column prop="campaign_id" label="Campaign"/>
 
-                   <el-table-column prop="anonymous_donation" label="Anonymous Donation">
-                    <template #default="{ row }">
-                        {{ row.anonymous_donation ?? 0 }}
-                    </template>
-                </el-table-column>
 
                  <el-table-column prop="donation_type" label="Donation Type">
                     <template #default="{ row }">
@@ -69,9 +55,22 @@
                     </template>
                 </el-table-column>
 
-                <el-table-column prop="payment" label="Payment ">
+                <el-table-column prop="payment" label="Payment Status">
                     <template #default="{ row }">
-                        {{ row.payment ? row.payment : '---' }}
+                        <span :class="[
+                            'status-badge',
+                            row.payment_status === 'completed' ? 'ehxdo_status-active' :
+                                row.payment_status === 'pending' ? 'ehxdo_status-pending' :
+                                    row.payment_status === 'failed' ? 'ehxdo_status-failed' : ''
+                        ]">
+                            {{ row.payment_status }}
+                        </span>
+                    </template>
+                </el-table-column>
+
+                <el-table-column prop="created_at" label="Date">
+                    <template #default="{ row }">
+                        {{ formatAddedDate(row.created_at) }}
                     </template>
                 </el-table-column>
 

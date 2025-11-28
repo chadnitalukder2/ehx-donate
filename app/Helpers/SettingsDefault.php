@@ -25,9 +25,12 @@ class SettingsDefault
             ],
             'integration' => [
                 'stripe' => [
-                    'test_mode' => true,
+                    'mode' => 'test', // test, live
                     'clientKey' => '',
                     'clientSecret' => '',
+                    'live_clientKey' => '',
+                    'live_clientSecret' => '',
+                    'enabled' => 'no',
                 ]
             ],
             'email' => [
