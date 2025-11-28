@@ -14,8 +14,8 @@
         Donors
       </router-link>
       
-      <router-link to="/transitions" class="ehxdo_menu_item">
-        Transitions
+      <router-link to="/transaction" class="ehxdo_menu_item">
+        Transaction
       </router-link>
       <!-- <router-link to="/subscriptions" class="ehxdo_menu_item">
         Subscriptions

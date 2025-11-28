@@ -6,7 +6,7 @@ import AddCampaign from './module/campaigns/AddCampaign.vue';
 import AllDonation from './module/donations/AllDonation.vue';
 import AllDonor from './module/donor/AllDonor.vue';
 import Reports from './module/reports/Reports.vue';
-import Transitions from './module/transitions/Transitions.vue';
+import Transaction from './module/transaction/Transaction.vue';
 import Subscriptions from './module/subscriptions/Subscriptions.vue';
 import SettingsIndex from './module/settings/SettingsIndex.vue';
 import General from './module/settings/setting_component/General.vue';
@@ -68,9 +68,9 @@ const router = createRouter({
             }
         },
         {
-            path: '/transitions',
-            component: Transitions,
-            name: 'transitions',
+            path: '/transaction',
+            component: Transaction,
+            name: 'transaction',
             meta: {
                 active_menu: 0
             }
