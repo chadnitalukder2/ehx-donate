@@ -31,7 +31,10 @@
                             </span>
                         </div>
                         <div class="ehxdo-stat-value">{{ totalActiveCampaigns }}</div>
-                        <div class="ehxdo-stat-change"><span class="ehxdo_positive">{{ percentActive }}%</span> from last month</div>
+                        <div class="ehxdo-stat-change"> <span
+                                :class="percentActive >= 0 ? 'ehxdo_positive' : 'ehxdo_negative'">
+                                {{ percentActive }}%
+                            </span> from last month</div>
                     </div>
 
                     <div class="ehxdo-stat-card">
@@ -52,7 +55,8 @@
                             </span>
                         </div>
                         <div class="ehxdo-stat-value">{{ totalPendingCampaigns }}</div>
-                        <div class="ehxdo-stat-change "><span class="ehxdo_negative">- {{ percentPending }}%</span> from last month</div>
+                        <div class="ehxdo-stat-change "><span :class="percentPending >= 0 ? 'ehxdo_positive' : 'ehxdo_negative'"> {{ percentPending }}%</span> from
+                            last month</div>
                     </div>
 
                     <div class="ehxdo-stat-card">
@@ -75,7 +79,8 @@
                             </span>
                         </div>
                         <div class="ehxdo-stat-value">{{ totalCompletedCampaigns }}</div>
-                        <div class="ehxdo-stat-change"> <span class="ehxdo_negative">{{ percentCompleted }}%</span> from last month</div>
+                        <div class="ehxdo-stat-change"> <span :class="percentCompleted >= 0 ? 'ehxdo_positive' : 'ehxdo_negative'">{{ percentCompleted }}%</span> from
+                            last month</div>
                     </div>
 
                 </div>
@@ -265,13 +270,13 @@ export default {
             },
             immediate: false
         },
-          status_filter: {
-        handler() {
-            this.currentPage = 1;
-            this.getAllCampaigns();
-        },
-        immediate: false
-    }
+        status_filter: {
+            handler() {
+                this.currentPage = 1;
+                this.getAllCampaigns();
+            },
+            immediate: false
+        }
     },
 
     methods: {
