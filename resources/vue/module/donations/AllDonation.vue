@@ -16,9 +16,9 @@
                 <div>
                     <el-select v-model="status_filter" size="medium" style="margin-left: 16px; width: 140px;">
                         <el-option label="All Status" :value="undefined"></el-option>
-                        <el-option label="Active" value="active"></el-option>
-                        <el-option label="Pending" value="pending"></el-option>
                         <el-option label="Completed" value="completed"></el-option>
+                        <el-option label="Pending" value="pending"></el-option>
+                        <el-option label="Failed" value="failed"></el-option>
                     </el-select>
                     <el-button @click="getAllDonations()" class="ehxdo_export_btn" size="medium" type="info" style="">
                         <!-- <el-icon class="ehxdo_ex_icon"><Bottom /></el-icon> -->
@@ -148,6 +148,7 @@ export default {
     data() {
         return {
             search: '',
+            status_filter: '',
             donations: [],
             generalSettings: {},
             currencies: window.EHXDonate.currencies,
@@ -173,6 +174,13 @@ export default {
             this.getAllDonations();
         },
         search: {
+            handler() {
+                this.currentPage = 1;
+                this.getAllDonations();
+            },
+            immediate: false
+        },
+         status_filter: {
             handler() {
                 this.currentPage = 1;
                 this.getAllDonations();
@@ -225,11 +233,12 @@ export default {
                     },
                     withCredentials: true
                 });
-                console.log('donations response:', response.data.data);
+                console.log('donations response:', response.data.data.total);
                 this.donations = response?.data?.data?.donations;
                 this.generalSettings = response?.data?.data?.generalSettings || {};
-                // this.total_campaign = response?.data?.total || 0;
-                // this.last_page = response?.data?.last_page || 1;
+                this.total_donations = response?.data?.data?.total || 0;
+                this.last_page = response?.data?.data?.last_page || 1;
+
                 this.loading = false;
             } catch (error) {
                 this.loading = false;

@@ -14,17 +14,39 @@ use EHXDonate\Services\Payment\Stripe;
 class DonationController extends Controller
 {
 
-       public function index(): void
+    public function index(): void
     {
+        $data = $this->request;
 
-        $donations = (new Donation())->orderBy('created_at', 'DESC')->get();
+        $page = 1;
+        $limit = 10;
+        $search = null;
+        $status = null;
+
+        if ($data['page']) {
+            $page = intval($data['page']);
+        }
+        if ($data['limit']) {
+            $limit =  intval($data['limit']);
+        }
+        if ($data['search']) {
+            $search = sanitize_text_field($data['search']);
+        }
+        if ($data['status']) {
+            $status = sanitize_text_field($data['status']);
+        }
+        $res = (new Donation())->paginate($limit, $page, $search, $status);
+        $data = array_map(fn($cat) => $cat->toArray(), $res['data']);
+      //  $donations = (new Donation())->orderBy('created_at', 'DESC')->get();
         $generalSettings = get_option('ehx_donate_settings_general', []);
 
         $this->success([
-            'donations' => array_map(function ($donation) {
-                return $donation->toArray();
-            }, $donations),
+             'donations' => $data,
             'generalSettings' => $generalSettings,
+            'total' => $res['total'],
+            'per_page' => $res['per_page'],
+            'current_page' => $res['current_page'],
+            'last_page' => $res['last_page'],
         ]);
     }
     public function store(): void
