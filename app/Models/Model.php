@@ -89,6 +89,15 @@ abstract class Model
         return strtolower(preg_replace('/(?<!^)[A-Z]/', '_$0', $class)) . 's';
     }
 
+    protected $relations = [];
+
+    public function with($relation): self
+    {
+        if (method_exists($this, $relation)) {
+            $this->relations[$relation] = $this->$relation();
+        }
+        return $this;
+    }
     /**
      * Fill the model with an array of attributes
      */
@@ -137,6 +146,13 @@ abstract class Model
         // Remove hidden attributes
         foreach ($this->hidden as $hidden) {
             unset($attributes[$hidden]);
+        }
+
+        // Add loaded relations
+        foreach ($this->relations as $name => $value) {
+            $attributes[$name] = is_array($value)
+                ? array_map(fn($model) => $model->toArray(), $value)
+                : ($value ? $value->toArray() : null);
         }
 
         return $attributes;
@@ -604,7 +620,11 @@ abstract class Model
     public function paginate($perPage = 10, $page = 1, $search = '', $status = null): array
     {
         if (!empty($search)) {
-            $this->where('title', 'LIKE', '%' . $this->wpdb->esc_like($search) . '%');
+            $this->where('title', 'LIKE', '%' . $this->wpdb->esc_like($search) . '%')
+                ->orWhere('first_name', 'LIKE', '%' . $this->wpdb->esc_like($search) . '%')
+                ->orWhere('last_name', 'LIKE', '%' . $this->wpdb->esc_like($search) . '%')
+                ->orWhere('email', 'LIKE', '%' . $this->wpdb->esc_like($search) . '%')
+                ->orWhere('donor_name', 'LIKE', '%' . $this->wpdb->esc_like($search) . '%');
         }
 
         if ($status !== null) {
@@ -745,6 +765,32 @@ abstract class Model
 
         return null;
     }
+
+    public function hasOne($relatedClass, $foreignKey, $localKey = null)
+    {
+        $instance = new $relatedClass();
+        $localKey = $localKey ?: $this->primaryKey;
+
+        if (!isset($this->attributes[$localKey])) {
+            return null;
+        }
+
+        return $instance->where($foreignKey, $this->attributes[$localKey])[0] ?? null;
+    }
+
+    // ORM Relationship: hasMany
+    public function hasMany($relatedClass, $foreignKey, $localKey = null)
+    {
+        $instance = new $relatedClass();
+        $localKey = $localKey ?: $this->primaryKey;
+
+        if (!isset($this->attributes[$localKey])) {
+            return [];
+        }
+
+        return $instance->where($foreignKey, $this->attributes[$localKey]);
+    }
+
 
     /**
      * Magic method to get attributes

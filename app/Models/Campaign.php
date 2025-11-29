@@ -40,6 +40,11 @@ class Campaign extends Model
      */
     protected $hidden = [];
 
+    public function donations()
+    {
+        return $this->hasMany(Donation::class, 'campaign_id', 'id');
+    }
+
     /**
      * Get trips by status
      */
@@ -52,7 +57,7 @@ class Campaign extends Model
      * Get trips by user
      */
     public static function getByUser(int $userId): array
-    {
+    { 
         return self::where('user_id', $userId);
     }
 

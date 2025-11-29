@@ -36,7 +36,10 @@ class CampaignController extends Controller
         }
 
         $res = (new Campaign)->paginate($limit, $page, $search, $status);
-        $data = array_map(fn($cat) => $cat->toArray(), $res['data']);
+        // $data = array_map(fn($cat) => $cat->toArray(), $res['data'])->with('donations');
+        $data = array_map(function ($campaign) {
+            return $campaign->with('donations')->toArray();
+        }, $res['data']);
         // $campaigns = (new Campaign())->orderBy('created_at', 'DESC')->get();
         $generalSettings = get_option('ehx_donate_settings_general', []);
 
