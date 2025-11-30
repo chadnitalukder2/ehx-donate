@@ -18,7 +18,6 @@ class PaymentController extends Controller
 
         $session_id      = sanitize_text_field($_GET['session_id'] ?? '');
         $donation_id     = intval($_GET['donation_id'] ?? 0);
-
         if (!$session_id || !$donation_id) {
             return wp_send_json_error(['message' => 'Invalid request'], 400);
         }
@@ -30,7 +29,6 @@ class PaymentController extends Controller
 
         $stripe = new Stripe();
         $session = $stripe->getCheckoutSession($session_id);
-
         // create transaction
         $transaction = Transaction::create([
             'campaign_id' => $donation->campaign_id,
@@ -75,12 +73,8 @@ class PaymentController extends Controller
 
     public static function redirectToCampaignPage($donation_id)
     {
-        $donation = Donation::find($donation_id);
-        $campaign = Campaign::find($donation->campaign_id);
-        if (!$campaign) {
-            return wp_send_json_error(['message' => 'Campaign not found'], 404);
-        }
-        wp_redirect(get_permalink($campaign->post_id));
+        // redirect to success page
+        wp_redirect(site_url('/ehxdo-success' . '/' . $donation_id));
         exit();
     }
 }

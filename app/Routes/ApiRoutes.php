@@ -34,6 +34,7 @@ class ApiRoutes
 
             //Donation routes
             $router->get('/getAllDonations', 'DonationController@index', ['auth']);
+            $router->get('/donations/{id}', 'DonationController@show', ['auth']);
 
             // Settings routes
             $router->get('/settings/{key}', 'SettingsController@getSettings');
@@ -44,5 +45,6 @@ class ApiRoutes
             $router->get('/stripe/success', 'PaymentController@stripeSuccess', [], ['public' => true]);
             $router->get('/stripe/cancel', 'PaymentController@stripeCancel', [], ['public' => true]);
         });
+        $router->get('/receipt/download/{donation_id}', 'ReceiptController@downloadReceipt', [], ['public' => true]);
     }
 }

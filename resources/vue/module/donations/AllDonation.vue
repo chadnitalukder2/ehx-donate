@@ -36,7 +36,9 @@
                 </el-table-column>
                 <el-table-column prop="donor_name" label="Donor">
                     <template #default="{ row }">
-                        {{ row.donor_name }}
+                        <router-link :to="{ name: 'view_donation', params: { id: row.id } }" class="ehxdo-title-link">
+                            {{ row.donor_name }}
+                        </router-link>
                     </template>
                 </el-table-column>
                 <el-table-column prop="amount" label="Amount">
@@ -212,8 +214,7 @@ export default {
         },
 
         viewDonation(row) {
-            const url = row.post_url || `/campaign/${row.id}`;
-            window.open(url, '_blank');
+            this.$router.push({ name: 'view_donation', params: { id: row.id } });
         },
 
 

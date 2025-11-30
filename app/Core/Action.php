@@ -18,6 +18,7 @@ class Action
         add_action('init', [new CPTHandler(), 'registerCPT']);
         add_action('init', [new Shortcodes\CampaignShortCode(), 'register']);
         add_action('init', [new Shortcodes\CampaignListShortcode(), 'register']);
+        add_action('init', [new Shortcodes\ReceiptShortcode(), 'register']);
         add_action('init', [new Stripe(), 'register']);
     }
 }

@@ -7,6 +7,8 @@ use EHXDonate\Models\Donor;
 use EHXDonate\Models\Trip;
 use EHXDonate\Services\DonationService;
 use EHXDonate\Services\Payment\Stripe;
+use EHXDonate\Models\Transaction;
+use EHXDonate\Models\Campaign;
 
 /**
  * Donation Controller
@@ -47,6 +49,23 @@ class DonationController extends Controller
             'per_page' => $res['per_page'],
             'current_page' => $res['current_page'],
             'last_page' => $res['last_page'],
+        ]);
+    }
+
+    public function show($id)
+    {
+        $donation = Donation::find($id);
+        if (!$donation) {
+            $this->error('Donation not found', 404);
+            return;
+        }
+        $transactions = (new Transaction())->where('donation_id', $id)->get();
+        $donor = Donor::find($donation->donor_id);
+        $donor->profile = get_avatar_url($donor->email);
+        $this->success([
+            'donation' => $donation->toArray(),
+            'transactions' => $transactions,
+            'donor' => $donor,
         ]);
     }
     public function store(): void
@@ -168,7 +187,7 @@ class DonationController extends Controller
         ];
 
         $donation = Donation::create($donationData);
-
+        
         $emailSettings = get_option('ehx_donate_settings_email', []);
 
         $this->sendDonationEmails($donation, $data, $emailSettings);
@@ -293,7 +312,7 @@ class DonationController extends Controller
                     </div>
                     <div class="info-row">
                         <span class="label">Amount:</span>
-                        <span class="amount"><?php echo esc_html($donation->currency . ' ' . number_format($donation->amount, 2)); ?></span>
+                        <span class="amount"><?php echo esc_html($donation->currency . ' ' . number_format($donation->total_payment, 2)); ?></span>
                     </div>
                     <div class="info-row">
                         <span class="label">Net Amount:</span> <?php echo esc_html($donation->currency . ' ' . number_format($donation->net_amount, 2)); ?>

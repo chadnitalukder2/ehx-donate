@@ -173,4 +173,8 @@ class Donation extends Model
         
         return $start->format('M j, Y') . ' - ' . $end->format('M j, Y');
     }
+    public function transactions()
+    {
+        return $this->hasMany(Transaction::class, 'donation_id', 'id');
+    }
 }

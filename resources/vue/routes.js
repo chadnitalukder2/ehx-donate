@@ -4,6 +4,7 @@ import DashboardIndex from './module/dashboard/DashboardIndex.vue';
 import AllCampaign from './module/campaigns/AllCampaign.vue';
 import AddCampaign from './module/campaigns/AddCampaign.vue';
 import AllDonation from './module/donations/AllDonation.vue';
+import DonationDetails from './module/donations/DonationDetails.vue';
 import AllDonor from './module/donor/AllDonor.vue';
 import Reports from './module/reports/Reports.vue';
 import Transaction from './module/transaction/Transaction.vue';
@@ -47,6 +48,14 @@ const router = createRouter({
             path: '/donations',
             component: AllDonation,
             name: 'donations',
+            meta: {
+                active_menu: 0
+            }
+        },
+        {
+            path: '/donations/:id',
+            component: DonationDetails,
+            name: 'view_donation',
             meta: {
                 active_menu: 0
             }

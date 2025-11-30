@@ -16,14 +16,26 @@ class Transaction extends Model
      * The attributes that are mass assignable
      */
     protected $fillable = [
-        'title',
-        'description',
-        'destination',
-        'start_date',
-        'end_date',
-        'price',
+        'id',
+        'campaign_id',
+        'user_id',
+        'donation_id',
+        'transaction_type',
+        'vendor_charge_id',
+        'payment_method',
+        'payment_method_type',
+        'rate',
+        'card_last_4',
+        'card_brand',
+        'payment_total',
+        'reporting_total',
+        'reporting_currency',
+        'reporting_exchange_rate',
         'status',
-        'user_id'
+        'currency',
+        'payment_mode',
+        'created_at',
+        'updated_at',
     ];
 
     /**

@@ -167,7 +167,7 @@ class CampaignController extends Controller
         $post_id = wp_insert_post($post);
 
         if (is_wp_error($post_id)) {
-            error_log('Campaign post creation failed: ' . $post_id->get_error_message());
+            // error_log('Campaign post creation failed: ' . $post_id->get_error_message());
             $this->error('Failed to create campaign post.', 400);
             return;
         }

@@ -4,11 +4,12 @@ namespace EHXDonate\Models;
 
 use EHXDonate\Core\Database;
 use Exception;
+use JsonSerializable;
 
 /**
  * Base Model class - Lightweight ORM using $wpdb
  */
-abstract class Model
+abstract class Model implements JsonSerializable
 {
     /**
      * The table name
@@ -60,8 +61,25 @@ abstract class Model
      */
     protected $errors = [];
 
+    /**
+     * Relations to be loaded
+     */
+    protected $relations = [];
+
+    /**
+     * Select columns
+     */
+    protected $selects = ['*'];
+
+    /**
+     * Query builder state
+     */
     protected $query = [
+        'where' => [],
+        'whereIn' => [],
         'orderBy' => null,
+        'limit' => null,
+        'offset' => null,
     ];
 
     /**
@@ -89,8 +107,9 @@ abstract class Model
         return strtolower(preg_replace('/(?<!^)[A-Z]/', '_$0', $class)) . 's';
     }
 
-    protected $relations = [];
-
+    /**
+     * Load relations
+     */
     public function with($relation): self
     {
         if (method_exists($this, $relation)) {
@@ -98,6 +117,7 @@ abstract class Model
         }
         return $this;
     }
+
     /**
      * Fill the model with an array of attributes
      */
@@ -150,12 +170,24 @@ abstract class Model
 
         // Add loaded relations
         foreach ($this->relations as $name => $value) {
-            $attributes[$name] = is_array($value)
-                ? array_map(fn($model) => $model->toArray(), $value)
-                : ($value ? $value->toArray() : null);
+            if (is_array($value)) {
+                $attributes[$name] = array_map(function($model) {
+                    return $model instanceof self ? $model->toArray() : $model;
+                }, $value);
+            } else {
+                $attributes[$name] = ($value instanceof self) ? $value->toArray() : $value;
+            }
         }
 
         return $attributes;
+    }
+
+    /**
+     * Implement JsonSerializable
+     */
+    public function jsonSerialize(): array
+    {
+        return $this->toArray();
     }
 
     /**
@@ -384,11 +416,12 @@ abstract class Model
         $table = $instance->wpdb->prefix . $instance->table;
 
         $result = $instance->wpdb->get_row(
-            $instance->wpdb->prepare("SELECT * FROM {$table} WHERE {$instance->primaryKey} = %s", $id)
+            $instance->wpdb->prepare("SELECT * FROM {$table} WHERE {$instance->primaryKey} = %s", $id),
+            ARRAY_A
         );
 
         if ($result) {
-            $instance->fill((array) $result);
+            $instance->fill($result);
             $instance->exists = true;
             return $instance;
         }
@@ -404,19 +437,18 @@ abstract class Model
         $instance = new static();
         $table = $instance->wpdb->prefix . $instance->table;
 
-        $results = $instance->wpdb->get_results("SELECT * FROM {$table}");
+        $results = $instance->wpdb->get_results("SELECT * FROM {$table}", ARRAY_A);
 
         $models = [];
         foreach ($results as $result) {
             $model = new static();
-            $model->fill((array) $result);
+            $model->fill($result);
             $model->exists = true;
             $models[] = $model;
         }
 
         return $models;
     }
-
 
     /**
      * Create a new model instance
@@ -432,17 +464,27 @@ abstract class Model
         return $model;
     }
 
+    /**
+     * Add ORDER BY clause
+     */
     public function orderBy($column, $direction = 'ASC'): self
     {
         $this->query['orderBy'] = [$column, strtoupper($direction)];
         return $this;
     }
+
+    /**
+     * Set LIMIT clause
+     */
     public function limit(int $limit): self
     {
         $this->query['limit'] = $limit;
         return $this;
     }
 
+    /**
+     * Set OFFSET clause
+     */
     public function offset(int $offset): self
     {
         $this->query['offset'] = $offset;
@@ -450,48 +492,23 @@ abstract class Model
     }
 
     /**
-     * Get the first record matching the query
+     * Add WHERE clause
      */
-    public function first(): ?self
+    public function where(string $column, $operator, $value = null): self
     {
-        $table = $this->wpdb->prefix . $this->table;
-        $sql = "SELECT * FROM {$table}";
-        $params = [];
-        // Apply WHERE conditions
-        if (!empty($this->query['where'])) {
-            $whereClauses = [];
-            foreach ($this->query['where'] as [$column, $operator, $value]) {
-                $whereClauses[] = "{$column} {$operator} %s";
-                $params[] = $value;
-            }
-            $sql .= " WHERE " . implode(' AND ', $whereClauses);
+        if ($value === null) {
+            $value = $operator;
+            $operator = '=';
         }
 
-        // Apply ORDER BY if defined
-        if (!empty($this->query['orderBy'])) {
-            [$column, $direction] = $this->query['orderBy'];
-            $sql .= " ORDER BY {$column} {$direction}";
-        }
-
-        // Limit to 1 record
-        $sql .= " LIMIT 1";
-
-        // Prepare and execute query
-        if (!empty($params)) {
-            $prepared = $this->wpdb->prepare($sql, $params);
-            $result = $this->wpdb->get_row($prepared);
-        } else {
-            $result = $this->wpdb->get_row($sql);
-        }
-
-        if ($result) {
-            $model = new static();
-            $model->fill((array) $result);
-            $model->exists = true;
-            return $model;
-        }
-
-        return null;
+        $this->query['where'][] = [
+            'column' => $column,
+            'operator' => $operator,
+            'value' => $value,
+            'boolean' => 'AND'
+        ];
+        
+        return $this;
     }
 
     /**
@@ -514,42 +531,44 @@ abstract class Model
     }
 
     /**
-     * Update the where method to include boolean
+     * Add WHERE BETWEEN clause
      */
-    public function where(string $column, $operator, $value = null): self
+    public function whereBetween(string $column, $start, $end = null): self
     {
-        if ($value === null) {
-            $value = $operator;
-            $operator = '=';
+        // If $start is an array, extract start and end
+        if (is_array($start)) {
+            [$start, $end] = $start;
         }
 
         $this->query['where'][] = [
             'column' => $column,
-            'operator' => $operator,
-            'value' => $value,
+            'operator' => 'BETWEEN',
+            'value' => [$start, $end],
             'boolean' => 'AND'
         ];
         return $this;
     }
 
     /**
-     * Reset query builder
+     * Set SELECT columns
      */
-    protected function resetQuery(): void
+    public function select($columns = ['*'])
     {
-        $this->query = [
-            'where' => [],
-            'whereIn' => [],
-            'orderBy' => null,
-            'limit' => null,
-            'offset' => null,
-        ];
+        if (is_string($columns)) {
+            $columns = explode(',', $columns);
+        }
+
+        $this->selects = array_map(function ($col) {
+            return trim($col);
+        }, $columns);
+
+        return $this;
     }
 
     /**
-     * Update get() method to support limit and offset
+     * Get the first record matching the query
      */
-    public function get(): array
+    public function first(): ?self
     {
         $table = $this->wpdb->prefix . $this->table;
         $sql = "SELECT * FROM {$table}";
@@ -569,7 +588,72 @@ abstract class Model
                 }
 
                 if (strtoupper($condition['operator']) === 'BETWEEN') {
-                    // Handle BETWEEN clause
+                    $sql .= "{$condition['column']} BETWEEN %s AND %s";
+                    $params[] = $condition['value'][0];
+                    $params[] = $condition['value'][1];
+                } else {
+                    $sql .= "{$condition['column']} {$condition['operator']} %s";
+                    $params[] = $condition['value'];
+                }
+            }
+        }
+
+        // Apply ORDER BY if defined
+        if (!empty($this->query['orderBy'])) {
+            [$column, $direction] = $this->query['orderBy'];
+            $sql .= " ORDER BY {$column} {$direction}";
+        }
+
+        // Limit to 1 record
+        $sql .= " LIMIT 1";
+
+        // Prepare and execute query
+        if (!empty($params)) {
+            $prepared = $this->wpdb->prepare($sql, $params);
+            $result = $this->wpdb->get_row($prepared, ARRAY_A);
+        } else {
+            $result = $this->wpdb->get_row($sql, ARRAY_A);
+        }
+
+        // Reset query
+        $this->resetQuery();
+
+        if ($result) {
+            $model = new static();
+            $model->fill($result);
+            $model->exists = true;
+            return $model;
+        }
+
+        return null;
+    }
+
+    /**
+     * Get all records matching the query
+     */
+    public function get(): array
+    {
+        $table = $this->wpdb->prefix . $this->table;
+        
+        // Handle SELECT columns
+        $selectColumns = !empty($this->selects) ? implode(', ', $this->selects) : '*';
+        $sql = "SELECT {$selectColumns} FROM {$table}";
+        $params = [];
+
+        // Apply WHERE conditions
+        if (!empty($this->query['where'])) {
+            $sql .= " WHERE ";
+            $firstWhere = true;
+
+            foreach ($this->query['where'] as $condition) {
+                if (!$firstWhere) {
+                    $boolean = $condition['boolean'] ?? 'AND';
+                    $sql .= " {$boolean} ";
+                } else {
+                    $firstWhere = false;
+                }
+
+                if (strtoupper($condition['operator']) === 'BETWEEN') {
                     $sql .= "{$condition['column']} BETWEEN %s AND %s";
                     $params[] = $condition['value'][0];
                     $params[] = $condition['value'][1];
@@ -598,24 +682,84 @@ abstract class Model
         // Prepare and execute
         if (!empty($params)) {
             $prepared = $this->wpdb->prepare($sql, $params);
-            $results = $this->wpdb->get_results($prepared);
+            $results = $this->wpdb->get_results($prepared, ARRAY_A);
         } else {
-            $results = $this->wpdb->get_results($sql);
+            $results = $this->wpdb->get_results($sql, ARRAY_A);
         }
 
+        // Check for database errors
+        if ($this->wpdb->last_error) {
+            error_log("Database Error in get(): " . $this->wpdb->last_error);
+            $this->resetQuery();
+            return [];
+        }
+
+        // Reset query for next use BEFORE creating models
+        $this->resetQuery();
+
+        // Create model instances
         $models = [];
-        foreach ($results as $result) {
-            $model = new static();
-            $model->fill((array) $result);
-            $model->exists = true;
-            $models[] = $model;
+        if ($results) {
+            foreach ($results as $result) {
+                $model = new static();
+                $model->fill($result);
+                $model->exists = true;
+                $models[] = $model;
+            }
         }
 
         return $models;
     }
 
     /**
-     * Corrected paginate method
+     * Count records matching the query
+     */
+    public function count(): int
+    {
+        $table = $this->wpdb->prefix . $this->table;
+        $sql = "SELECT COUNT(*) FROM {$table}";
+        $params = [];
+
+        // Apply WHERE conditions
+        if (!empty($this->query['where'])) {
+            $sql .= " WHERE ";
+            $firstWhere = true;
+
+            foreach ($this->query['where'] as $condition) {
+                if (!$firstWhere) {
+                    $boolean = $condition['boolean'] ?? 'AND';
+                    $sql .= " {$boolean} ";
+                } else {
+                    $firstWhere = false;
+                }
+
+                if (strtoupper($condition['operator']) === 'BETWEEN') {
+                    $sql .= "{$condition['column']} BETWEEN %s AND %s";
+                    $params[] = $condition['value'][0];
+                    $params[] = $condition['value'][1];
+                } else {
+                    $sql .= "{$condition['column']} {$condition['operator']} %s";
+                    $params[] = $condition['value'];
+                }
+            }
+        }
+
+        // Prepare and execute
+        if (!empty($params)) {
+            $prepared = $this->wpdb->prepare($sql, $params);
+            $count = $this->wpdb->get_var($prepared);
+        } else {
+            $count = $this->wpdb->get_var($sql);
+        }
+
+        // Reset query for next use
+        $this->resetQuery();
+
+        return (int) $count;
+    }
+
+    /**
+     * Paginate results
      */
     public function paginate($perPage = 10, $page = 1, $search = '', $status = null): array
     {
@@ -671,10 +815,6 @@ abstract class Model
 
         $total = (int) $this->wpdb->get_var($countSql);
 
-        // Reset query for next use
-        $this->resetQuery();
-
-
         return [
             'data' => $results,
             'total' => $total,
@@ -687,78 +827,35 @@ abstract class Model
     }
 
     /**
-     * Count records matching the query
+     * Reset query builder
      */
-    public function count(): int
+    protected function resetQuery(): void
     {
-        $table = $this->wpdb->prefix . $this->table;
-        $sql = "SELECT COUNT(*) FROM {$table}";
-        $params = [];
-
-        // Apply WHERE conditions
-        if (!empty($this->query['where'])) {
-            $sql .= " WHERE ";
-            $firstWhere = true;
-
-            foreach ($this->query['where'] as $condition) {
-                if (!$firstWhere) {
-                    $boolean = $condition['boolean'] ?? 'AND';
-                    $sql .= " {$boolean} ";
-                } else {
-                    $firstWhere = false;
-                }
-
-                if (strtoupper($condition['operator']) === 'BETWEEN') {
-                    $sql .= "{$condition['column']} BETWEEN %s AND %s";
-                    $params[] = $condition['value'][0];
-                    $params[] = $condition['value'][1];
-                } else {
-                    $sql .= "{$condition['column']} {$condition['operator']} %s";
-                    $params[] = $condition['value'];
-                }
-            }
-        }
-
-        // Prepare and execute
-        if (!empty($params)) {
-            $prepared = $this->wpdb->prepare($sql, $params);
-            $count = $this->wpdb->get_var($prepared);
-        } else {
-            $count = $this->wpdb->get_var($sql);
-        }
-
-        // Reset query for next use
-        $this->resetQuery();
-
-        return (int) $count;
-    }
-    public function whereBetween(string $column, $start, $end = null): self
-    {
-        // If $start is an array, extract start and end
-        if (is_array($start)) {
-            [$start, $end] = $start;
-        }
-
-        $this->query['where'][] = [
-            'column' => $column,
-            'operator' => 'BETWEEN',
-            'value' => [$start, $end],
-            'boolean' => 'AND'
+        $this->query = [
+            'where' => [],
+            'whereIn' => [],
+            'orderBy' => null,
+            'limit' => null,
+            'offset' => null,
         ];
-        return $this;
+        $this->selects = ['*'];
     }
 
+    /**
+     * Get campaign by post ID
+     */
     public static function getCampaignByPostId(int $post_id): ?self
     {
         $instance = new static();
         $table = $instance->wpdb->prefix . $instance->table;
 
         $result = $instance->wpdb->get_row(
-            $instance->wpdb->prepare("SELECT * FROM {$table} WHERE post_id = %d", $post_id)
+            $instance->wpdb->prepare("SELECT * FROM {$table} WHERE post_id = %d", $post_id),
+            ARRAY_A
         );
 
         if ($result) {
-            $instance->fill((array)$result);
+            $instance->fill($result);
             $instance->exists = true;
             return $instance;
         }
@@ -766,6 +863,9 @@ abstract class Model
         return null;
     }
 
+    /**
+     * Define a has-one relationship
+     */
     public function hasOne($relatedClass, $foreignKey, $localKey = null)
     {
         $instance = new $relatedClass();
@@ -775,10 +875,13 @@ abstract class Model
             return null;
         }
 
-        return $instance->where($foreignKey, $this->attributes[$localKey])[0] ?? null;
+        $results = $instance->where($foreignKey, $this->attributes[$localKey])->get();
+        return $results[0] ?? null;
     }
 
-    // ORM Relationship: hasMany
+    /**
+     * Define a has-many relationship
+     */
     public function hasMany($relatedClass, $foreignKey, $localKey = null)
     {
         $instance = new $relatedClass();
@@ -788,9 +891,8 @@ abstract class Model
             return [];
         }
 
-        return $instance->where($foreignKey, $this->attributes[$localKey]);
+        return $instance->where($foreignKey, $this->attributes[$localKey])->get();
     }
-
 
     /**
      * Magic method to get attributes

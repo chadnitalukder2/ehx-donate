@@ -1,9 +1,20 @@
 <?php
+use EHXDonate\Models\Donation;
+
 $primaryBtnColor = $colorSettings['primary_btn'] ?? '#079455';
 $primaryBtnTextColor = $colorSettings['primary_btn_text'] ?? '#ececec';
 $fontFamily = $colorSettings['fontFamily'] ?? 'Inter Tight, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen, Ubuntu, Cantarell, sans-serif';
 
-$raised = 20;
+$donations = (new Donation())
+->where('campaign_id', $campaign['id'])->get();
+$raised = 0;
+$donationsCount = 0;
+foreach ($donations as $donation) {
+    if ($donation->payment_status === 'completed') {
+        $donationsCount++;
+        $raised += $donation->net_amount;
+    }
+}
 $goal = isset($campaign['goal_amount']) ? (float) $campaign['goal_amount'] : 0;
 $progress = ($goal > 0) ? round(($raised / $goal) * 100) : 0;
 $progress = min($progress, 100);
@@ -70,8 +81,7 @@ $default_amount = 0.00;
                     <div class="ehxdo-stats-container">
                         <div class="ehxdo-stat-item ehxdo-stat-raised">
                             <div class="ehxdo-stat-value">
-                                <?php // echo formatAmount($campaign['raised'], $currencySymbol, $position); 
-                                ?>
+                                <?php echo formatAmount($raised, $currencySymbol, $position); ?>
                             </div>
 
                             <div class="ehxdo-stat-label">Raised</div>
@@ -83,8 +93,8 @@ $default_amount = 0.00;
                             <div class="ehxdo-stat-label">Goal</div>
                         </div>
                         <div class="ehxdo-stat-item ehxdo-stat-donors">
-                            <div class="ehxdo-stat-value"> <?php echo $campaign['donors'] ?? 0; ?></div>
-                            <div class="ehxdo-stat-label">Donors</div>
+                            <div class="ehxdo-stat-value"> <?php echo $donationsCount ?? 0; ?></div>
+                            <div class="ehxdo-stat-label">Donations</div>
                         </div>
                     </div>
                     <?php if ($generalSettings['progressbar'] ?? true): ?>

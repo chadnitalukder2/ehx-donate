@@ -9,6 +9,7 @@ use EHXDonate\Core\Action;
 use EHXDonate\Helpers\Currency;
 use EHXDonate\Helpers\Country;
 use EHXDonate\Helpers\Font;
+use EHXDonate\Routes\WebRoute;
 
 /**
  * Main Plugin class - Bootstrap and service container
@@ -58,6 +59,9 @@ class Plugin
         
         $this->registerServices();
         $this->init();
+        add_action('plugin_loaded',  function () {
+            (new WebRoute())->register();
+        });
     }
 
     /**
