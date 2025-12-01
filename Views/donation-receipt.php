@@ -1,13 +1,17 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Donation Receipt</title>
+
+   
 </head>
+
 <body style="margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Arial, sans-serif; color: #1a1a1a;">
     <div style="max-width: 650px; margin: 0 auto; background-color: #ffffff;">
-        
+
         <!-- Header -->
         <div style="padding: 40px 40px 30px 40px; border-bottom: 1px solid #e5e5e5;">
             <div style="display: table; width: 100%;">
@@ -46,13 +50,13 @@
 
         <!-- Main Content -->
         <div style="padding: 40px;">
-            
+
             <!-- Donor Information -->
             <div style="margin-bottom: 30px;">
                 <h3 style="margin: 0 0 16px 0; font-size: 14px; font-weight: 600; color: #1a1a1a;">Donor Information</h3>
                 <div style="border-bottom: 1px solid #e5e5e5; padding-bottom: 16px;">
                     <p style="margin: 0 0 8px 0; font-size: 16px; font-weight: 600; color: #1a1a1a;">
-                        <?php 
+                        <?php
                         if ($donation['anonymous_donation'] == '1') {
                             echo 'Anonymous Donor';
                         } else {
@@ -61,8 +65,8 @@
                         ?>
                     </p>
                     <?php if ($donation['anonymous_donation'] != '1'): ?>
-                    <p style="margin: 0 0 4px 0; font-size: 13px; color: #666;">
-                    </p>
+                        <p style="margin: 0 0 4px 0; font-size: 13px; color: #666;">
+                        </p>
                     <?php endif; ?>
                     <p style="margin: 0; font-size: 13px; color: #666;">
                         <?php echo htmlspecialchars($donation['donor_email']); ?>
@@ -73,7 +77,7 @@
             <!-- Donation Details -->
             <div style="margin-bottom: 30px;">
                 <h3 style="margin: 0 0 16px 0; font-size: 14px; font-weight: 600; color: #1a1a1a;">Donation Details</h3>
-                
+
                 <!-- Total Amount -->
                 <div style="background-color: #fafafa; padding: 20px; border-radius: 8px; margin-bottom: 20px;">
                     <div style="display: table; width: 100%;">
@@ -98,12 +102,12 @@
                     </tr>
 
                     <?php if (!empty($donation['payment_method'])): ?>
-                    <tr>
-                        <td style="padding: 12px 0; color: #666; border-bottom: 1px solid #e5e5e5;">Payment Method</td>
-                        <td style="padding: 12px 0; text-align: right; color: #1a1a1a; font-weight: 500; border-bottom: 1px solid #e5e5e5;">
-                            <?php echo htmlspecialchars($donation['payment_method']); ?>
-                        </td>
-                    </tr>
+                        <tr>
+                            <td style="padding: 12px 0; color: #666; border-bottom: 1px solid #e5e5e5;">Payment Method</td>
+                            <td style="padding: 12px 0; text-align: right; color: #1a1a1a; font-weight: 500; border-bottom: 1px solid #e5e5e5;">
+                                <?php echo htmlspecialchars($donation['payment_method']); ?>
+                            </td>
+                        </tr>
                     <?php endif; ?>
 
                     <tr>
@@ -117,14 +121,14 @@
 
             <!-- Campaign Info -->
             <?php if (!empty($campaign['title'])): ?>
-            <div style="margin-bottom: 30px;">
-                <h3 style="margin: 0 0 12px 0; font-size: 14px; font-weight: 600; color: #1a1a1a;">Campaign: <?php echo htmlspecialchars($campaign['title']); ?></h3>
-                <?php if (!empty($campaign['short_description'])): ?>
-                <p style="margin: 0; font-size: 13px; color: #666; line-height: 1.6;">
-                    <?php echo htmlspecialchars($campaign['short_description']); ?>
-                </p>
-                <?php endif; ?>
-            </div>
+                <div style="margin-bottom: 30px;">
+                    <h3 style="margin: 0 0 12px 0; font-size: 14px; font-weight: 600; color: #1a1a1a;">Campaign: <?php echo htmlspecialchars($campaign['title']); ?></h3>
+                    <?php if (!empty($campaign['short_description'])): ?>
+                        <p style="margin: 0; font-size: 13px; color: #666; line-height: 1.6;">
+                            <?php echo htmlspecialchars($campaign['short_description']); ?>
+                        </p>
+                    <?php endif; ?>
+                </div>
             <?php endif; ?>
 
             <!-- Tax Info -->
@@ -151,4 +155,5 @@
 
     </div>
 </body>
+
 </html>

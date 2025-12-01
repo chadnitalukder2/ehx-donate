@@ -11,6 +11,16 @@
   --ehxdo-white: #ffffff;
 }
 
+::-moz-selection {
+  background-color: var(--ehxdo-primary-btn);
+  color: #ffffff;
+}
+
+::selection {
+  background-color: var(--ehxdo-primary-btn);
+  color: #ffffff;
+}
+
 .ehxdo_campaign_list_wrapper {
   font-family: var(--ehxdo-font-family);
   max-width: 1200px !important;

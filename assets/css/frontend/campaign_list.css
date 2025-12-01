@@ -1,3 +1,13 @@
+::-moz-selection {
+  background-color: var(--ehxdo-primary-btn);
+  color: #ffffff;
+}
+
+::selection {
+  background-color: var(--ehxdo-primary-btn);
+  color: #ffffff;
+}
+
 .ehxdo-campaign_listing_container {
   max-width: 1200px !important;
   margin: 0 auto;

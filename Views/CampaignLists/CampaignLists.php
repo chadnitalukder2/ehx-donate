@@ -135,8 +135,7 @@ $base_url = strtok($_SERVER['REQUEST_URI'], '?');
                             </div>
                         </div>
                         <div class="ehxdo-donate-btn-wrapper" style="    padding-top: 50px;">
-                            <button class="ehxdo-donate-btn" style="position: absolute; bottom:24px; width: -webkit-fill-available; right: 0; left: 0;
-    margin: 0px 24px;"
+                            <button class="ehxdo-donate-btn" style="position: absolute; bottom:24px; width: -webkit-fill-available; right: 0; left: 0; margin: 0px 24px;"
                                 onclick="window.open('<?php echo esc_url(get_permalink($campaign->post_id)); ?>')">
                                 Donate Now
                             </button>
@@ -154,12 +153,10 @@ $base_url = strtok($_SERVER['REQUEST_URI'], '?');
     <?php if ($total_pages > 1): ?>
         <div class="ehxdo-pagination">
             <?php
-            // Build query parameters
             $query_params = array_filter([
                 'campaign_search' => $search_query
             ]);
 
-            // Previous button
             $prev_disabled = ($current_page <= 1) ? 'disabled' : '';
             if ($current_page > 1) {
                 $prev_params = array_merge($query_params, ['campaign_page' => $current_page - 1]);
@@ -174,7 +171,6 @@ $base_url = strtok($_SERVER['REQUEST_URI'], '?');
             </a>
 
             <?php
-            // Page numbers with smart ellipsis
             $range = 2;
 
             for ($i = 1; $i <= $total_pages; $i++) {

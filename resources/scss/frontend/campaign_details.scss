@@ -10,7 +10,10 @@
   --ehxdo-bg-light: #f9fafb;
   --ehxdo-white: #ffffff;
 }
-
+::selection {
+  background-color: var(--ehxdo-primary-btn); 
+  color: #ffffff;
+}
 .ehxdo_campaign_list_wrapper {
   font-family: var(--ehxdo-font-family);
   max-width: 1200px !important;
@@ -69,12 +72,6 @@ flex-basis: 62%;
 
 
 }
-
-
-
-
-
-
 
 /* Stats */
 .ehxdo-stats-container {

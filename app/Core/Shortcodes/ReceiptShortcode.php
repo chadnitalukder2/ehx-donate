@@ -33,6 +33,7 @@ class ReceiptShortcode
         $donation = Donation::find($id);
         $campaign = Campaign::find($donation->campaign_id);
         $general_settings = get_option('ehx_donate_settings_general', []);
+        $colorSettings = get_option('ehx_donate_settings_color', []);
         // var_dump($donation->toArray());
         // var_dump($campaign->toArray());
         // exit;
@@ -40,6 +41,7 @@ class ReceiptShortcode
             'donation' => $donation->toArray(),
             'campaign' => $campaign->toArray(),
             'general_settings' => $general_settings,
+            'colorSettings' => $colorSettings,
         ]);
     }
 
@@ -52,10 +54,12 @@ class ReceiptShortcode
         $donation = Donation::find($id);
         $campaign = Campaign::find($donation->campaign_id);
         $general_settings = get_option('ehx_donate_settings_general', []);
+        $colorSettings = get_option('ehx_donate_settings_color', []);
         return View::make('failed-reciept', [
             'donation' => $donation->toArray(),
             'campaign' => $campaign->toArray(),
             'general_settings' => $general_settings,
+            'colorSettings' => $colorSettings,
         ]);
     }
 }

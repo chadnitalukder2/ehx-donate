@@ -1,5 +1,8 @@
 <?php
 
+$primaryBtnColor = $colorSettings['primary_btn'] ?? '#079455';
+$primaryBtnTextColor = $colorSettings['primary_btn_text'] ?? '#ececec';
+$fontFamily = $colorSettings['fontFamily'] ?? 'Inter Tight, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen, Ubuntu, Cantarell, sans-serif';
 // Format donation type
 $donation_type_display = ucwords(str_replace('-', ' ', $donation['donation_type']));
 
@@ -9,31 +12,47 @@ $donation_date = date('F d, Y', strtotime($donation['created_at']));
 
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Donation Failed</title>
     <style>
+        :root {
+            --ehxdo-primary-btn: <?php echo $primaryBtnColor; ?>;
+            --ehxdo-primary-btn-text: <?php echo $primaryBtnTextColor; ?>;
+            --ehxdo-font-family: <?php echo $fontFamily; ?>;
+        }
 
         .ehxdo_failed_pdf_header {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-bottom: 20px;
+            margin-bottom: 30px;
+            padding-bottom: 20px;
+            border-bottom: 2px solid #e5e7eb;
+            font-family: var(--ehxdo-font-family);
         }
+
         .ehxdo_failed_pdf_logo {
             font-size: 24px;
             font-weight: bold;
             color: #3d444c;
+            font-family: var(--ehxdo-font-family);
+        }
+
+        .ehxdo_failed_pdf_subtitle {
+            color: #3d444c;
+            font-size: 16px;
         }
 
         .ehxdo_failed_container {
             background: white;
-            border-radius: 12px;
+            border-radius: 16px;
             box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
             max-width: 620px;
             width: 100%;
-            padding: 20px;
+            padding: 25px;
             margin: 20px auto;
         }
 
@@ -91,6 +110,7 @@ $donation_date = date('F d, Y', strtotime($donation['created_at']));
         }
 
         .ehxdo_failed_alert {
+            font-family: var(--ehxdo-font-family);
             background: #fef2f2;
             border-left: 4px solid #ef4444;
             border-radius: 6px;
@@ -109,6 +129,7 @@ $donation_date = date('F d, Y', strtotime($donation['created_at']));
             font-size: 13px;
             color: #7f1d1d;
             line-height: 1.5;
+            margin: 0px;
         }
 
         .ehxdo_failed_details {
@@ -116,6 +137,7 @@ $donation_date = date('F d, Y', strtotime($donation['created_at']));
             border-radius: 8px;
             padding: 20px;
             margin-bottom: 25px;
+            font-family: var(--ehxdo-font-family);
         }
 
         .ehxdo_failed_row {
@@ -137,7 +159,7 @@ $donation_date = date('F d, Y', strtotime($donation['created_at']));
         .ehxdo_failed_value {
             font-size: 14px;
             color: #333;
-            font-weight: 600;
+            font-weight: 500;
             text-align: right;
         }
 
@@ -145,6 +167,7 @@ $donation_date = date('F d, Y', strtotime($donation['created_at']));
             font-size: 15px;
             font-weight: 600;
             color: #333;
+            font-family: var(--ehxdo-font-family);
             margin-bottom: 15px;
         }
 
@@ -161,7 +184,9 @@ $donation_date = date('F d, Y', strtotime($donation['created_at']));
             padding: 12px;
             background: #fef9f5;
             border-radius: 6px;
+            align-items: center;
             border-left: 3px solid #f59e0b;
+            font-family: var(--ehxdo-font-family);
         }
 
         .ehxdo_failed_reason_icon {
@@ -181,6 +206,8 @@ $donation_date = date('F d, Y', strtotime($donation['created_at']));
             font-size: 13px;
             color: #78350f;
             line-height: 1.5;
+            margin: 5px 0px;
+
         }
 
         .ehxdo_failed_buttons {
@@ -201,11 +228,12 @@ $donation_date = date('F d, Y', strtotime($donation['created_at']));
             text-decoration: none;
             display: inline-block;
             border: none;
+            font-family: var(--ehxdo-font-family);
         }
 
         .ehxdo_failed_btn_primary {
             background: #ef4444;
-            color: white;
+            color: white; 
         }
 
         .ehxdo_failed_btn_primary:hover {
@@ -290,6 +318,7 @@ $donation_date = date('F d, Y', strtotime($donation['created_at']));
         }
     </style>
 </head>
+
 <body>
     <div class="ehxdo_failed_container">
         <div class="ehxdo_failed_pdf_header">
@@ -305,7 +334,7 @@ $donation_date = date('F d, Y', strtotime($donation['created_at']));
         <div class="ehxdo_failed_alert">
             <div class="ehxdo_failed_alert_title">Transaction Declined</div>
             <p class="ehxdo_failed_alert_text">
-                <?php 
+                <?php
                 if (!empty($donation['failure_reason'])) {
                     echo htmlspecialchars($donation['failure_reason']);
                 } else {
@@ -344,7 +373,7 @@ $donation_date = date('F d, Y', strtotime($donation['created_at']));
             <li class="ehxdo_failed_reason_item">
                 <div class="ehxdo_failed_reason_icon">
                     <svg viewBox="0 0 24 24">
-                        <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-2h2v2zm0-4h-2V7h2v6z"/>
+                        <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-2h2v2zm0-4h-2V7h2v6z" />
                     </svg>
                 </div>
                 <p class="ehxdo_failed_reason_text"><strong>Insufficient Funds:</strong> Your account doesn't have enough balance to complete this transaction.</p>
@@ -352,7 +381,7 @@ $donation_date = date('F d, Y', strtotime($donation['created_at']));
             <li class="ehxdo_failed_reason_item">
                 <div class="ehxdo_failed_reason_icon">
                     <svg viewBox="0 0 24 24">
-                        <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-2h2v2zm0-4h-2V7h2v6z"/>
+                        <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-2h2v2zm0-4h-2V7h2v6z" />
                     </svg>
                 </div>
                 <p class="ehxdo_failed_reason_text"><strong>Incorrect Card Details:</strong> The card number, expiration date, or CVV might be entered incorrectly.</p>
@@ -360,7 +389,7 @@ $donation_date = date('F d, Y', strtotime($donation['created_at']));
             <li class="ehxdo_failed_reason_item">
                 <div class="ehxdo_failed_reason_icon">
                     <svg viewBox="0 0 24 24">
-                        <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-2h2v2zm0-4h-2V7h2v6z"/>
+                        <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-2h2v2zm0-4h-2V7h2v6z" />
                     </svg>
                 </div>
                 <p class="ehxdo_failed_reason_text"><strong>Card Expired or Blocked:</strong> Your card may have expired or been blocked by your bank for security reasons.</p>
@@ -368,7 +397,7 @@ $donation_date = date('F d, Y', strtotime($donation['created_at']));
             <li class="ehxdo_failed_reason_item">
                 <div class="ehxdo_failed_reason_icon">
                     <svg viewBox="0 0 24 24">
-                        <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-2h2v2zm0-4h-2V7h2v6z"/>
+                        <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-2h2v2zm0-4h-2V7h2v6z" />
                     </svg>
                 </div>
                 <p class="ehxdo_failed_reason_text"><strong>Bank Declined:</strong> Your bank has declined the transaction. Contact your bank for more details.</p>
@@ -381,4 +410,5 @@ $donation_date = date('F d, Y', strtotime($donation['created_at']));
         </div>
     </div>
 </body>
+
 </html>

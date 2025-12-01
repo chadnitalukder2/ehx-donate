@@ -1,12 +1,13 @@
 
 .ehxdo_reciept_container {
-    border-radius: 12px;
+    border-radius: 16px;
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
     max-width: 620px;
     width: 100%;
-    padding: 20px;
+    padding: 24px;
     margin: 20px auto;
-    background: #f9fafb;
+    background: #fff;
+    font-family: var(--ehxdo-font-family);
 }
 
 .ehxdo_reciept_icon {
@@ -32,8 +33,8 @@
 .ehxdo_reciept_checkmark::after {
     content: '';
     position: absolute;
-    left: 6px;
-    top: 2px;
+    left: 9px;
+    top: 3px;
     width: 8px;
     height: 14px;
     border: solid #10b981;
@@ -83,7 +84,7 @@
 .ehxdo_reciept_value {
     font-size: 14px;
     color: #333;
-    font-weight: 600;
+    font-weight: 500;
     text-align: right;
 }
 
@@ -107,6 +108,7 @@
 }
 
 .ehxdo_reciept_section_title {
+    font-family: var(--ehxdo-font-family);
     font-size: 15px;
     font-weight: 600;
     color: #333;
@@ -117,6 +119,7 @@
     display: flex;
     gap: 12px;
     margin-bottom: 15px;
+    align-items:center ;
 }
 
 .ehxdo_reciept_step_icon {
@@ -164,17 +167,19 @@
     transition: all 0.2s;
     text-align: center;
     text-decoration: none;
+    font-family: var(--ehxdo-font-family);
     display: inline-block;
 }
 
 .ehxdo_reciept_btn_primary {
-    background: #2563eb;
-    color: white;
+    background: var(--ehxdo-primary-btn);
+    color: var(--ehxdo-primary-btn-text);
     border: none;
 }
 
 .ehxdo_reciept_btn_primary:hover {
-    background: #1d4ed8;
+    background: var(--ehxdo-primary-btn);
+    opacity: 0.9;
 }
 
 .ehxdo_reciept_btn_secondary {
