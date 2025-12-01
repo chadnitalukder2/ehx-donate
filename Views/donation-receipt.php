@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Donation Receipt</title>
 </head>
-<body style="margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Arial, sans-serif; color: #1a1a1a;>
+<body style="margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Arial, sans-serif; color: #1a1a1a;">
     <div style="max-width: 650px; margin: 0 auto; background-color: #ffffff;">
         
         <!-- Header -->
@@ -62,10 +62,6 @@
                     </p>
                     <?php if ($donation['anonymous_donation'] != '1'): ?>
                     <p style="margin: 0 0 4px 0; font-size: 13px; color: #666;">
-                        <?php 
-                        // Assuming address would be in donor data if available
-                        // For now showing email as we have it
-                        ?>
                     </p>
                     <?php endif; ?>
                     <p style="margin: 0; font-size: 13px; color: #666;">
@@ -78,7 +74,7 @@
             <div style="margin-bottom: 30px;">
                 <h3 style="margin: 0 0 16px 0; font-size: 14px; font-weight: 600; color: #1a1a1a;">Donation Details</h3>
                 
-                <!-- Total Amount - Prominent -->
+                <!-- Total Amount -->
                 <div style="background-color: #fafafa; padding: 20px; border-radius: 8px; margin-bottom: 20px;">
                     <div style="display: table; width: 100%;">
                         <div style="display: table-cell; vertical-align: middle;">
@@ -92,7 +88,7 @@
                     </div>
                 </div>
 
-                <!-- Details Table -->
+                <!-- Table -->
                 <table style="width: 100%; border-collapse: collapse; font-size: 14px;">
                     <tr>
                         <td style="padding: 12px 0; color: #666; border-bottom: 1px solid #e5e5e5;">Donation Date</td>
@@ -100,6 +96,7 @@
                             <?php echo date('F d, Y', strtotime($donation['created_at'])); ?>
                         </td>
                     </tr>
+
                     <?php if (!empty($donation['payment_method'])): ?>
                     <tr>
                         <td style="padding: 12px 0; color: #666; border-bottom: 1px solid #e5e5e5;">Payment Method</td>
@@ -108,6 +105,7 @@
                         </td>
                     </tr>
                     <?php endif; ?>
+
                     <tr>
                         <td style="padding: 12px 0; color: #666; border-bottom: 1px solid #e5e5e5;">Transaction ID</td>
                         <td style="padding: 12px 0; text-align: right; color: #1a1a1a; font-weight: 500; border-bottom: 1px solid #e5e5e5;">
@@ -117,7 +115,7 @@
                 </table>
             </div>
 
-            <!-- Campaign Information -->
+            <!-- Campaign Info -->
             <?php if (!empty($campaign['title'])): ?>
             <div style="margin-bottom: 30px;">
                 <h3 style="margin: 0 0 12px 0; font-size: 14px; font-weight: 600; color: #1a1a1a;">Campaign: <?php echo htmlspecialchars($campaign['title']); ?></h3>
@@ -129,7 +127,7 @@
             </div>
             <?php endif; ?>
 
-            <!-- Tax Deduction Information -->
+            <!-- Tax Info -->
             <div style="background-color: #f0f7ff; border: 1px solid #d0e4ff; border-radius: 8px; padding: 20px; margin-bottom: 30px;">
                 <h3 style="margin: 0 0 12px 0; font-size: 13px; font-weight: 700; color: #1a1a1a; text-transform: uppercase; letter-spacing: 0.5px;">
                     TAX DEDUCTION INFORMATION
@@ -138,7 +136,7 @@
                     This donation is tax-deductible to the full extent allowed by law. No goods or services were provided in exchange for this donation.
                 </p>
                 <p style="margin: 0; font-size: 13px; color: #333; line-height: 1.6;">
-                    Please retain this receipt for your tax records and consult with your tax advisor for specific deduction guidelines.
+                    Please retain this receipt for your tax records.
                 </p>
             </div>
 
@@ -147,7 +145,7 @@
         <!-- Footer -->
         <div style="padding: 30px 40px; background-color: #fafafa; border-top: 1px solid #e5e5e5;">
             <p style="margin: 0 0 8px 0; font-size: 12px; color: #666; text-align: center; line-height: 1.6;">
-                This receipt serves as official proof of donation. Please keep it for your records.
+                This receipt serves as official proof of donation.
             </p>
         </div>
 

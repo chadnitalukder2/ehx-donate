@@ -9,10 +9,11 @@ $donations = (new Donation())
 ->where('campaign_id', $campaign['id'])->get();
 $raised = 0;
 $donationsCount = 0;
+// dd($donations);
 foreach ($donations as $donation) {
     if ($donation->payment_status === 'completed') {
         $donationsCount++;
-        $raised += $donation->net_amount;
+        $raised += $donation->total_payment;
     }
 }
 $goal = isset($campaign['goal_amount']) ? (float) $campaign['goal_amount'] : 0;
@@ -137,8 +138,7 @@ $default_amount = 0.00;
                                     <path d="M6.00016 7.33333C7.47292 7.33333 8.66683 6.13943 8.66683 4.66667C8.66683 3.19391 7.47292 2 6.00016 2C4.5274 2 3.3335 3.19391 3.3335 4.66667C3.3335 6.13943 4.5274 7.33333 6.00016 7.33333Z" stroke="#4A5565" stroke-width="1.33333" stroke-linecap="round" stroke-linejoin="round" />
                                 </svg>
 
-                            </span> <?php //echo $campaign['donors']; 
-                                    ?> Supporters
+                            </span> <?php echo $donationsCount ?? 0; ?> Supporters
                         </span>
                     </div>
                 </div>

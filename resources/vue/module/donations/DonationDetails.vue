@@ -62,7 +62,7 @@ export default {
 
 <style lang="scss" scoped>
 .ehxd_wrapper {
-    max-width: 840px;
+    max-width: 1050px;
     margin: 0 auto;
 }
 </style>
