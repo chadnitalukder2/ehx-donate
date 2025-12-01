@@ -128,13 +128,13 @@
 
                 <el-table-column prop="donation" label="Donation">
                     <template #default="{ row }">
-                        {{ row.donation ?? 0 }}
+                        {{ row.total_donations ?? 0 }}
                     </template>
                 </el-table-column>
 
                 <el-table-column prop="raised" label="Raised">
                     <template #default="{ row }">
-                        {{ formatCurrency(row.raised) }}
+                        {{ formatCurrency(row.total_raised) }}
                     </template>
                 </el-table-column>
                 <!-- Status column -->

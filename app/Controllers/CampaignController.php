@@ -4,6 +4,7 @@ namespace EHXDonate\Controllers;
 
 use EHXDonate\Models\Campaign;
 use EHXDonate\Core\CPTHandler;
+use EHXDonate\Models\Donation;
 
 /**
  * Campaign Controller
@@ -35,11 +36,39 @@ class CampaignController extends Controller
             $status = sanitize_text_field($data['status']);
         }
 
-        $res = (new Campaign)->paginate($limit, $page, $search, $status);
+        $res = (new Campaign)->orderBy('created_at', 'desc')->paginate($limit, $page, $search, $status);
         // $data = array_map(fn($cat) => $cat->toArray(), $res['data'])->with('donations');
+        // $data = array_map(function ($campaign) {
+        //     return $campaign->with('donations')->toArray();
+        // }, $res['data']);
+
         $data = array_map(function ($campaign) {
-            return $campaign->with('donations')->toArray();
+
+            $campaignArray = $campaign->with('donations')->toArray();
+
+            // ---- Calculate totals ----
+            $totalDonations = 0;
+            $totalRaised = 0;
+
+            if (!empty($campaignArray['donations'])) {
+                foreach ($campaignArray['donations'] as $donation) {
+
+                    // Count completed donations
+
+                    $totalDonations++;
+                    if ($donation['payment_status'] === 'completed') {
+                        $totalRaised += floatval($donation['total_payment']);
+                    }
+                }
+            }
+
+            // Add totals to response
+            $campaignArray['total_donations'] = $totalDonations;
+            $campaignArray['total_raised'] = $totalRaised;
+
+            return $campaignArray;
         }, $res['data']);
+
         // $campaigns = (new Campaign())->orderBy('created_at', 'DESC')->get();
         $generalSettings = get_option('ehx_donate_settings_general', []);
 
@@ -72,11 +101,6 @@ class CampaignController extends Controller
         $percentPending = $lastMonthPending > 0 ? round((($totalPendingCampaigns - $lastMonthPending) / $lastMonthPending) * 100, 2) : null;
         $percentCompleted = $lastMonthCompleted > 0 ? round((($totalCompletedCampaigns - $lastMonthCompleted) / $lastMonthCompleted) * 100, 2) : null;
 
-        // dd([
-        //     'percentActive' => $percentActive,
-        //     'percentPending' => $percentPending,
-        //     'percentCompleted' => $percentCompleted,
-        // ], 'campaign stats');
         $this->success([
             'campaigns' => $data,
             'generalSettings' => $generalSettings,
@@ -391,6 +415,4 @@ class CampaignController extends Controller
 
         return $campaign->toArray();
     }
-
-    
 }
