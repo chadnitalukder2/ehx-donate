@@ -27,31 +27,35 @@ class ReceiptController extends Controller
             return;
         }
         $general_settings = get_option('ehx_donate_settings_general', []);
+        $colorSettings = get_option('ehx_donate_settings_color', []);
 
         $html = View::make('donation-receipt', [
             'donation' => $donation->toArray(),
             'campaign' => $campaign->toArray(),
             'general_settings' => $general_settings,
+            'colorSettings'  => $colorSettings,
         ]);
-        
+
         $options = new Options();
         $options->set('isHtml5ParserEnabled', true);
         $options->set('isRemoteEnabled', true);
-        $options->set('debugKeepTemp', true); // For debugging
+        $options->set('debugKeepTemp', true);
         $dompdf = new Dompdf($options);
         $dompdf->loadHtml($html);
         $dompdf->setPaper('A4', 'portrait');
         $dompdf->render();
-        
+
         $output = $dompdf->output();
         // Validate PDF output
         if (empty($output)) {
-            return response()->json(['error' => 'PDF generation failed'], 500);
+            $this->error('PDF generation failed.', 500);
+            return;
         }
-        
+
         // Check if output starts with PDF header
         if (substr($output, 0, 4) !== '%PDF') {
-            return response()->json(['error' => 'Invalid PDF generated'], 500);
+             $this->error('Invalid PDF generated.', 500);
+            return;
         }
 
         return wp_send_json([
