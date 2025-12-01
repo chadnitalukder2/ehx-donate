@@ -30,7 +30,7 @@ class SettingsDefault
                     'clientSecret' => '',
                     'live_clientKey' => '',
                     'live_clientSecret' => '',
-                    'enabled' => 'no',
+                    'enabled' => 'yes',
                 ]
             ],
             'email' => [
