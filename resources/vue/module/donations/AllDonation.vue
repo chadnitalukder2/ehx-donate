@@ -47,11 +47,14 @@
                     </template>
                 </el-table-column>
 
+                <el-table-column prop="campaign_id" label="Campaign">
+                    <template #default="{ row }">
+                        {{ row.campaign.title}}
+                    </template>
+                </el-table-column>
 
-                <el-table-column prop="campaign_id" label="Campaign"/>
 
-
-                 <el-table-column prop="donation_type" label="Donation Type">
+                <el-table-column prop="donation_type" label="Donation Type">
                     <template #default="{ row }">
                         {{ row.donation_type ?? 0 }}
                     </template>
@@ -83,7 +86,7 @@
                                 :popper-style="{ minWidth: '100px', borderRadius: '16px' }"
                                 popper-class="ehxdo-action-popover" trigger="click" v-model:visible="row.showActions">
                                 <div class="action-popup">
-                                   
+
                                     <el-button type="text" @click="viewDonation(row)" class="ehxdo_view"> <el-icon>
                                             <View />
                                         </el-icon> View</el-button>
@@ -182,7 +185,7 @@ export default {
             },
             immediate: false
         },
-         status_filter: {
+        status_filter: {
             handler() {
                 this.currentPage = 1;
                 this.getAllDonations();
@@ -291,7 +294,7 @@ export default {
             }
         },
 
-    
+
         handleAddedCampaign(newCampaign) {
             this.getAllDonations();
         }

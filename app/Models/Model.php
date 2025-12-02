@@ -171,7 +171,7 @@ abstract class Model implements JsonSerializable
         // Add loaded relations
         foreach ($this->relations as $name => $value) {
             if (is_array($value)) {
-                $attributes[$name] = array_map(function($model) {
+                $attributes[$name] = array_map(function ($model) {
                     return $model instanceof self ? $model->toArray() : $model;
                 }, $value);
             } else {
@@ -507,7 +507,7 @@ abstract class Model implements JsonSerializable
             'value' => $value,
             'boolean' => 'AND'
         ];
-        
+
         return $this;
     }
 
@@ -634,7 +634,7 @@ abstract class Model implements JsonSerializable
     public function get(): array
     {
         $table = $this->wpdb->prefix . $this->table;
-        
+
         // Handle SELECT columns
         $selectColumns = !empty($this->selects) ? implode(', ', $this->selects) : '*';
         $sql = "SELECT {$selectColumns} FROM {$table}";
@@ -826,6 +826,67 @@ abstract class Model implements JsonSerializable
         ];
     }
 
+      public function paginateDonation($perPage = 10, $page = 1, $search = '', $status = null): array
+    {
+        if (!empty($search)) {
+            $this->where('donor_name', 'LIKE', '%' . $this->wpdb->esc_like($search) . '%');
+        }
+
+        if ($status !== null) {
+            $this->where('payment_status', '=', $status);
+        }
+
+        $whereConditions = $this->query['where'] ?? [];
+
+        // Calculate offset
+        $offset = ($page - 1) * $perPage;
+        $this->query['limit'] = $perPage;
+        $this->query['offset'] = $offset;
+
+        // Get the paginated results
+        $results = $this->get();
+
+        // Build count query
+        $table = $this->wpdb->prefix . $this->table;
+        $countSql = "SELECT COUNT(*) FROM {$table}";
+        $params = [];
+
+        // Apply WHERE conditions to count
+        if (!empty($whereConditions)) {
+            $countSql .= " WHERE ";
+            $firstWhere = true;
+
+            foreach ($whereConditions as $condition) {
+                if (!$firstWhere) {
+                    $boolean = $condition['boolean'] ?? 'AND';
+                    $countSql .= " {$boolean} ";
+                } else {
+                    $firstWhere = false;
+                }
+
+                $countSql .= "{$condition['column']} {$condition['operator']} %s";
+                $params[] = $condition['value'];
+            }
+        }
+
+        // Execute count query
+        if (!empty($params)) {
+            $countSql = $this->wpdb->prepare($countSql, $params);
+        }
+
+        $total = (int) $this->wpdb->get_var($countSql);
+
+        return [
+            'data' => $results,
+            'total' => $total,
+            'per_page' => $perPage,
+            'current_page' => $page,
+            'last_page' => ceil($total / $perPage),
+            'from' => $offset + 1,
+            'to' => min($offset + $perPage, $total),
+        ];
+    }
+
     /**
      * Reset query builder
      */
@@ -892,6 +953,27 @@ abstract class Model implements JsonSerializable
         }
 
         return $instance->where($foreignKey, $this->attributes[$localKey])->get();
+    }
+
+    /**
+     * Define a belongs-to relationship
+     */
+    public function belongsTo($relatedClass, $foreignKey, $ownerKey = 'id')
+    {
+        $instance = new $relatedClass();
+
+        // Check if foreign key exists in current model
+        if (!isset($this->attributes[$foreignKey])) {
+            return null;
+        }
+
+        // Get the foreign key value
+        $foreignKeyValue = $this->attributes[$foreignKey];
+
+        // Find the related model by its primary key
+        $results = $instance->where($ownerKey, $foreignKeyValue)->get();
+
+        return $results[0] ?? null;
     }
 
     /**

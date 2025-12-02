@@ -49,10 +49,6 @@ class Donation extends Model
      */
     protected $hidden = [];
 
-     public function campaign()
-    {
-        return $this->hasOne(Campaign::class, 'campaign_id', 'id');
-    }
     /**
      * Get trips by status
      */
