@@ -36,6 +36,8 @@ class ApiRoutes
             //Donation routes
             $router->get('/getAllDonations', 'DonationController@index', ['auth']);
             $router->get('/donations/{id}', 'DonationController@show', ['auth']);
+             $router->delete('/deleteDonation/{id}', 'DonationController@destroy', ['auth']);
+              $router->get('/export-donation', 'DonationController@export_donation_csv', ['auth']);
 
             // Settings routes
             $router->get('/settings/{key}', 'SettingsController@getSettings');

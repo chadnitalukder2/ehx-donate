@@ -506,6 +506,9 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+.ehxdo-title-link:hover{
+    color: #3366FF;
+}
 //action popup styles============
 .ehxdo_action_section {
     .el-button {

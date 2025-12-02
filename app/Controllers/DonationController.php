@@ -9,6 +9,7 @@ use EHXDonate\Services\DonationService;
 use EHXDonate\Services\Payment\Stripe;
 use EHXDonate\Models\Transaction;
 use EHXDonate\Models\Campaign;
+use EHXDonate\Helpers\Currency;
 
 /**
  * Donation Controller
@@ -471,4 +472,100 @@ class DonationController extends Controller
 <?php
         return ob_get_clean();
     }
+
+
+    public function destroy(int $id): void
+    {
+        $this->requireAuth();
+
+        $donation = Donation::find($id);
+
+        if (!$donation) {
+            $this->error('Donation not found', 404);
+            return;
+        }
+        if ($donation->user_id !== $this->getCurrentUserId() && !$this->can('manage_options')) {
+            $this->error('Unauthorized', 403);
+            return;
+        }
+
+        $donation->delete();
+
+        $this->success([], 'Donation deleted successfully');
+    }
+
+     function export_donation_csv()
+    {
+        // Set headers for CSV download
+        header('Content-Type: text/csv; charset=utf-8');
+        header('Content-Disposition: attachment; filename=campaigns-' . date('Y-m-d-H-i-s') . '.csv');
+        header('Pragma: no-cache');
+        header('Expires: 0');
+
+        // Create output stream
+        $output = fopen('php://output', 'w');
+
+        // Add BOM for UTF-8 encoding
+        fprintf($output, chr(0xEF) . chr(0xBB) . chr(0xBF));
+
+        // Add CSV headers
+        fputcsv($output, array(
+            'ID',
+            'Title',
+            'Goal Amount',
+            'Total Donations',
+            'Total Raised',
+            'Start Date',
+            'End Date',
+            'Status',
+            'Created Date'
+        ));
+
+        // Get general settings for currency formatting
+        $generalSettings = get_option('ehx_donate_settings_general', []);
+        $currency = $generalSettings['currency'] ?? 'USD';
+        $currencySymbols = Currency::getCurrencySymbol('');
+        $symbol = $currencySymbols[$currency] ?? $currency;
+
+        // Fetch all campaigns
+        $campaigns = (new Campaign)->orderBy('created_at', 'desc')->get();
+
+        // Process and write each campaign
+        foreach ($campaigns as $campaign) {
+            // Get donations for this campaign
+            $donations = (new Donation)->where('campaign_id', $campaign->id)->get();
+
+            $totalDonations = 0;
+            $totalRaised = 0;
+
+            foreach ($donations as $donation) {
+                $totalDonations++;
+                if ($donation->payment_status === 'completed') {
+                    $totalRaised += floatval($donation->total_payment);
+                }
+            }
+
+            // Format dates properly - just date without time
+            $startDate = !empty($campaign->start_date) ? date('d/m/Y', strtotime($campaign->start_date)) : 'N/A';
+            $endDate = !empty($campaign->end_date) ? date('d/m/Y', strtotime($campaign->end_date)) : 'N/A';
+            $createdDate = !empty($campaign->created_at) ? date('d/m/Y', strtotime($campaign->created_at)) : 'N/A';
+
+            // Write row to CSV
+            fputcsv($output, array(
+                $campaign->id,
+                $campaign->title,
+                $symbol . ' ' . number_format($campaign->goal_amount ?? 0, 2),
+                $totalDonations,
+                $symbol . ' ' . number_format($totalRaised, 2),
+                $startDate,
+                $endDate,
+                ucfirst($campaign->status ?? 'pending'),
+                $createdDate  
+            ));
+        }
+
+        fclose($output);
+        exit();
+    }
+
 }

@@ -20,7 +20,7 @@
                         <el-option label="Pending" value="pending"></el-option>
                         <el-option label="Failed" value="failed"></el-option>
                     </el-select>
-                    <el-button @click="getAllDonations()" class="ehxdo_export_btn" size="medium" type="info" style="">
+                    <el-button @click="exportCSV()" class="ehxdo_export_btn" size="medium" type="info" style="">
                         <!-- <el-icon class="ehxdo_ex_icon"><Bottom /></el-icon> -->
 
                         Export CSV</el-button>
@@ -122,14 +122,14 @@
 
                 <div class="delete-modal-body">
                     <h1>Are you sure ?</h1>
-                    <p>You want to delete this donor</p>
+                    <p>You want to delete this Donation</p>
                 </div>
             </template>
             <template #footer>
                 <div class="exd-modal-footer" style="text-align: center;">
                     <el-button @click="$refs.delete_campaign_modal.handleClose()" type="info"
                         size="medium">Cancel</el-button>
-                    <el-button @click="deleteDonor" type="primary" size="medium"
+                    <el-button @click="deleteDonation" type="primary" size="medium"
                         style="background: #DF1C41 !important ;">Delete</el-button>
                 </div>
             </template>
@@ -255,16 +255,16 @@ export default {
             this.$refs.delete_donation_modal.openModel();
         },
         async deleteDonation() {
-            // this.loading = true;
+             this.loading = true;
             const id = this.active_id;
 
             try {
-                // const response = await axios.delete(`${this.rest_api}api/deleteDonor/${id}`, {
-                //     headers: {
-                //         'Content-Type': 'application/json',
-                //         'X-WP-Nonce': this.nonce
-                //     }
-                // });
+                 const response = await axios.delete(`${this.rest_api}api/deleteDonation/${id}`, {
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-WP-Nonce': this.nonce
+                    }
+                });
 
                 if (response.data.success === true) {
                     this.$notify({
@@ -294,10 +294,49 @@ export default {
             }
         },
 
+         async exportCSV() {
+            try {
+                this.loading = true;
 
-        handleAddedCampaign(newCampaign) {
-            this.getAllDonations();
-        }
+                const response = await axios.get(
+                    `${this.rest_api}api/export-donation`,
+                    {
+                        headers: {
+                            'X-WP-Nonce': this.nonce
+                        },
+                        responseType: 'blob' 
+                    }
+                );
+
+                const blob = new Blob([response.data], { type: 'text/csv' });
+
+                const link = document.createElement('a');
+                link.href = window.URL.createObjectURL(blob);
+                link.download = `campaigns-${new Date().toISOString().split('T')[0]}.csv`;
+
+                document.body.appendChild(link);
+                link.click();
+
+                document.body.removeChild(link);
+                window.URL.revokeObjectURL(link.href);
+
+                this.$notify({
+                    title: 'Success',
+                    message: 'CSV exported successfully',
+                    type: 'success',
+                });
+
+            } catch (error) {
+                console.error('Export error:', error);
+                this.$notify({
+                    title: 'Error',
+                    message: 'Failed to export CSV',
+                    type: 'error',
+                });
+            } finally {
+                this.loading = false;
+            }
+        },
 
     },
 
@@ -310,6 +349,9 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+.ehxdo-title-link:hover{
+    color: #3366FF;
+}
 //action popup styles============
 .ehxdo_action_section {
     .el-button {
