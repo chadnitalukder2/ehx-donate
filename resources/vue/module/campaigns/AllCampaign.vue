@@ -55,7 +55,9 @@
                             </span>
                         </div>
                         <div class="ehxdo-stat-value">{{ totalPendingCampaigns }}</div>
-                        <div class="ehxdo-stat-change "><span :class="percentPending >= 0 ? 'ehxdo_positive' : 'ehxdo_negative'"> {{ percentPending }}%</span> from
+                        <div class="ehxdo-stat-change "><span
+                                :class="percentPending >= 0 ? 'ehxdo_positive' : 'ehxdo_negative'"> {{ percentPending
+                                }}%</span> from
                             last month</div>
                     </div>
 
@@ -79,7 +81,9 @@
                             </span>
                         </div>
                         <div class="ehxdo-stat-value">{{ totalCompletedCampaigns }}</div>
-                        <div class="ehxdo-stat-change"> <span :class="percentCompleted >= 0 ? 'ehxdo_positive' : 'ehxdo_negative'">{{ percentCompleted }}%</span> from
+                        <div class="ehxdo-stat-change"> <span
+                                :class="percentCompleted >= 0 ? 'ehxdo_positive' : 'ehxdo_negative'">{{ percentCompleted
+                                }}%</span> from
                             last month</div>
                     </div>
 
@@ -98,9 +102,9 @@
                         <el-option label="Pending" value="pending"></el-option>
                         <el-option label="Completed" value="completed"></el-option>
                     </el-select>
-                    <el-button @click="getAllCampaigns()" class="ehxdo_export_btn" size="medium" type="info" style="">
+                    <el-button @click="exportCSV()" class="ehxdo_export_btn" size="medium" type="info"
+                        :loading="loading" style="">
                         <!-- <el-icon class="ehxdo_ex_icon"><Bottom /></el-icon> -->
-
                         Export CSV</el-button>
                 </div>
 
@@ -300,6 +304,7 @@ export default {
                 return `${formattedAmount} ${symbol}`;
             }
         },
+
         editCampaign(row) {
             this.$router.push({
                 name: 'edit_campaign',
@@ -345,6 +350,54 @@ export default {
             } catch (error) {
                 this.loading = false;
                 console.error('Error fetching couriers:', error);
+            }
+        },
+
+        async exportCSV() {
+            try {
+                this.loading = true;
+
+                const response = await axios.get(
+                    `${this.rest_api}api/export-campaigns`,
+                    {
+                        headers: {
+                            'X-WP-Nonce': this.nonce
+                        },
+                        responseType: 'blob' // Important for file download
+                    }
+                );
+
+                // Create blob from response
+                const blob = new Blob([response.data], { type: 'text/csv' });
+
+                // Create download link
+                const link = document.createElement('a');
+                link.href = window.URL.createObjectURL(blob);
+                link.download = `campaigns-${new Date().toISOString().split('T')[0]}.csv`;
+
+                // Trigger download
+                document.body.appendChild(link);
+                link.click();
+
+                // Cleanup
+                document.body.removeChild(link);
+                window.URL.revokeObjectURL(link.href);
+
+                this.$notify({
+                    title: 'Success',
+                    message: 'CSV exported successfully',
+                    type: 'success',
+                });
+
+            } catch (error) {
+                console.error('Export error:', error);
+                this.$notify({
+                    title: 'Error',
+                    message: 'Failed to export CSV',
+                    type: 'error',
+                });
+            } finally {
+                this.loading = false;
             }
         },
 

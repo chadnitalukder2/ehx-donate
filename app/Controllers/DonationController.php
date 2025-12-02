@@ -37,13 +37,14 @@ class DonationController extends Controller
         if ($data['status']) {
             $status = sanitize_text_field($data['status']);
         }
-        $res = (new Donation())->paginate($limit, $page, $search, $status);
+        $res = (new Donation())->with('campaign')->paginate($limit, $page, $search, $status);
         $data = array_map(fn($cat) => $cat->toArray(), $res['data']);
+        dd($data);
       //  $donations = (new Donation())->orderBy('created_at', 'DESC')->get();
         $generalSettings = get_option('ehx_donate_settings_general', []);
 
         $this->success([
-             'donations' => $data,
+            'donations' => $data,
             'generalSettings' => $generalSettings,
             'total' => $res['total'],
             'per_page' => $res['per_page'],

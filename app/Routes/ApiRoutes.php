@@ -28,6 +28,7 @@ class ApiRoutes
             $router->put('/campaigns/{id}', 'CampaignController@update', ['auth']);
             $router->delete('/deleteCampaign/{id}', 'CampaignController@destroy', ['auth']);
             $router->post('/updateCampaignStatus/{id}', 'CampaignController@updateCampaignStatus', ['auth']);
+             $router->get('/export-campaigns', 'CampaignController@export_campaigns_csv', ['auth']);
 
             //Donor routes
             $router->get('/getAllDonors', 'DonorController@index', ['auth']);
