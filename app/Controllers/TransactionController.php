@@ -74,19 +74,13 @@ class TransactionController extends Controller
 
     public function export_transaction_csv()
     {
-        // Set headers for CSV download
         header('Content-Type: text/csv; charset=utf-8');
         header('Content-Disposition: attachment; filename=transactions-' . date('Y-m-d-H-i-s') . '.csv');
         header('Pragma: no-cache');
         header('Expires: 0');
-
-        // Create output stream
         $output = fopen('php://output', 'w');
-
-        // Add BOM for UTF-8 encoding
         fprintf($output, chr(0xEF) . chr(0xBB) . chr(0xBF));
 
-        // Add CSV headers
         fputcsv($output, array(
             'ID',
             'Donor',
@@ -97,21 +91,16 @@ class TransactionController extends Controller
             'Date',
         ));
 
-        // Get general settings for currency formatting
         $generalSettings = get_option('ehx_donate_settings_general', []);
         $currency = $generalSettings['currency'] ?? 'GBP';
         $currencySymbols = Currency::getCurrencySymbol('');
         $symbol = $currencySymbols[$currency] ?? $currency;
 
-        // Fetch all transactions
         $transactions = (new Transaction())->orderBy('created_at', 'desc')->get();
 
-        // Process each transaction (same pattern as index method)
         foreach ($transactions as $transaction) {
-            // Load relations for this transaction
             $transactionArray = $transaction->with('campaign')->with('donor')->toArray();
 
-            // Get donor name
             $donorName = 'N/A';
             if (!empty($transactionArray['donor'])) {
                 $donorName = trim(
@@ -120,17 +109,14 @@ class TransactionController extends Controller
                 );
             }
 
-            // Get campaign name
             $campaignName = !empty($transactionArray['campaign'])
                 ? $transactionArray['campaign']['title']
                 : 'N/A';
 
-            // Format date
             $createdDate = !empty($transaction->created_at)
                 ? date('d/m/Y', strtotime($transaction->created_at))
                 : 'N/A';
 
-            // Write row to CSV
             fputcsv($output, array(
                 $transaction->id,
                 $donorName,
