@@ -494,78 +494,59 @@ class DonationController extends Controller
         $this->success([], 'Donation deleted successfully');
     }
 
-     function export_donation_csv()
+    function export_donation_csv()
     {
-        // Set headers for CSV download
+        // Set CSV headers
         header('Content-Type: text/csv; charset=utf-8');
-        header('Content-Disposition: attachment; filename=campaigns-' . date('Y-m-d-H-i-s') . '.csv');
+        header('Content-Disposition: attachment; filename=donations-' . date('Y-m-d-H-i-s') . '.csv');
         header('Pragma: no-cache');
         header('Expires: 0');
 
-        // Create output stream
         $output = fopen('php://output', 'w');
+        fprintf($output, chr(0xEF) . chr(0xBB) . chr(0xBF)); // UTF-8 BOM
 
-        // Add BOM for UTF-8 encoding
-        fprintf($output, chr(0xEF) . chr(0xBB) . chr(0xBF));
-
-        // Add CSV headers
-        fputcsv($output, array(
+        // CSV headers
+        fputcsv($output, [
             'ID',
-            'Title',
-            'Goal Amount',
-            'Total Donations',
-            'Total Raised',
-            'Start Date',
-            'End Date',
-            'Status',
-            'Created Date'
-        ));
+            'Donor',
+            'Amount',
+            'Campaign',
+            'Recurring',
+            'Gift Aid',
+            'Anonymous',
+            'Payment Status',
+            'Created at'
+        ]);
 
-        // Get general settings for currency formatting
+        // Currency setup
         $generalSettings = get_option('ehx_donate_settings_general', []);
-        $currency = $generalSettings['currency'] ?? 'USD';
-        $currencySymbols = Currency::getCurrencySymbol('');
+        $currency = $generalSettings['currency'] ?? 'GBP';
+        $currencySymbols = Currency::getCurrencySymbol($currency);
         $symbol = $currencySymbols[$currency] ?? $currency;
 
-        // Fetch all campaigns
-        $campaigns = (new Campaign)->orderBy('created_at', 'desc')->get();
+        // Fetch all donations
+        $donations = (new Donation())->orderBy('created_at', 'desc')->get();
 
-        // Process and write each campaign
-        foreach ($campaigns as $campaign) {
-            // Get donations for this campaign
-            $donations = (new Donation)->where('campaign_id', $campaign->id)->get();
+        foreach ($donations as $donation) {
 
-            $totalDonations = 0;
-            $totalRaised = 0;
+            // Get campaign manually
+            $campaign = (new Campaign())->find($donation->campaign_id);
+            $campaignTitle = $campaign ? $campaign->title : '';
 
-            foreach ($donations as $donation) {
-                $totalDonations++;
-                if ($donation->payment_status === 'completed') {
-                    $totalRaised += floatval($donation->total_payment);
-                }
-            }
-
-            // Format dates properly - just date without time
-            $startDate = !empty($campaign->start_date) ? date('d/m/Y', strtotime($campaign->start_date)) : 'N/A';
-            $endDate = !empty($campaign->end_date) ? date('d/m/Y', strtotime($campaign->end_date)) : 'N/A';
-            $createdDate = !empty($campaign->created_at) ? date('d/m/Y', strtotime($campaign->created_at)) : 'N/A';
-
-            // Write row to CSV
-            fputcsv($output, array(
-                $campaign->id,
-                $campaign->title,
-                $symbol . ' ' . number_format($campaign->goal_amount ?? 0, 2),
-                $totalDonations,
-                $symbol . ' ' . number_format($totalRaised, 2),
-                $startDate,
-                $endDate,
-                ucfirst($campaign->status ?? 'pending'),
-                $createdDate  
-            ));
+            fputcsv($output, [
+                $donation->id,
+                $donation->donor_name,
+                $symbol . ' ' . number_format($donation->net_amount ?? 0, 2),
+                $campaignTitle,
+                $donation->donation_type,
+                $donation->gift_aid ? 'True' : 'False',
+                $donation->anonymous_donation ? 'True' : 'False',
+                $donation->payment_status,
+                $donation->created_at ? date('d/m/Y', strtotime($donation->created_at)) : 'N/A'
+            ]);
         }
 
         fclose($output);
         exit();
     }
-
 }

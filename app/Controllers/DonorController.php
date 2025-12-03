@@ -11,8 +11,27 @@ use EHXDonate\Models\Trip;
 class DonorController extends Controller
 {
 
-      public function index(): void
+    public function index(): void
     {
+        $data = $this->request;
+
+        $page = 1;
+        $limit = 10;
+        $search = null;
+        $status = null;
+
+        if ($data['page']) {
+            $page = intval($data['page']);
+        }
+        if ($data['limit']) {
+            $limit =  intval($data['limit']);
+        }
+        if ($data['search']) {
+            $search = sanitize_text_field($data['search']);
+        }
+        if ($data['status']) {
+            $status = sanitize_text_field($data['status']);
+        }
 
         $donors = (new Donor())->orderBy('created_at', 'DESC')->get();
         $generalSettings = get_option('ehx_donate_settings_general', []);

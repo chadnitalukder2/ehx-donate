@@ -14,12 +14,6 @@
                     placeholder="Search" prefix-icon="Search" />
 
                 <div>
-                    <el-select v-model="status_filter" size="medium" style="margin-left: 16px; width: 140px;">
-                        <el-option label="All Status" :value="undefined"></el-option>
-                        <el-option label="Active" value="active"></el-option>
-                        <el-option label="Pending" value="pending"></el-option>
-                        <el-option label="Completed" value="completed"></el-option>
-                    </el-select>
                     <el-button @click="getAllDonors()" class="ehxdo_export_btn" size="medium" type="info" style="">
                         <!-- <el-icon class="ehxdo_ex_icon"><Bottom /></el-icon> -->
 
@@ -203,7 +197,6 @@ export default {
                         page: this.currentPage,
                         limit: this.pageSize,
                         search: this.search || '',
-                        status: this.status_filter || '',
                     },
                     headers: {
                         'Content-Type': 'application/json',

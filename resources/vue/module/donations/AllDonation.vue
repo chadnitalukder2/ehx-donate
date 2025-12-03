@@ -49,18 +49,34 @@
 
                 <el-table-column prop="campaign_id" label="Campaign">
                     <template #default="{ row }">
-                        {{ row.campaign.title}}
+                        {{ row.campaign.title }}
                     </template>
                 </el-table-column>
 
-
-                <el-table-column prop="donation_type" label="Donation Type">
+                <el-table-column prop="donation_type" label="Recurring">
                     <template #default="{ row }">
                         {{ row.donation_type ?? 0 }}
                     </template>
                 </el-table-column>
 
-                <el-table-column prop="payment" label="Payment Status">
+                <el-table-column prop="gift_aid" label="Gift Aid">
+                    <template #default="{ row }">
+                        <span :style="{ color: row.gift_aid == 1 ? 'green' : '#da1a1a' }">
+                            {{ row.gift_aid == 1 ? 'True' : 'False' }}
+                        </span>
+                    </template>
+                </el-table-column>
+
+                <el-table-column prop="anonymous_donation" label="Anonymous">
+
+                    <template #default="{ row }">
+                        <span :style="{ color: row.anonymous_donation == 1 ? 'green' : '#da1a1a' }">
+                            {{ row.anonymous_donation == 1 ? 'True' : 'False' }}
+                        </span>
+                    </template>
+                </el-table-column>
+
+                <el-table-column prop="payment" label="Payment" width="120">
                     <template #default="{ row }">
                         <span :class="[
                             'status-badge',
@@ -255,11 +271,11 @@ export default {
             this.$refs.delete_donation_modal.openModel();
         },
         async deleteDonation() {
-             this.loading = true;
+            this.loading = true;
             const id = this.active_id;
 
             try {
-                 const response = await axios.delete(`${this.rest_api}api/deleteDonation/${id}`, {
+                const response = await axios.delete(`${this.rest_api}api/deleteDonation/${id}`, {
                     headers: {
                         'Content-Type': 'application/json',
                         'X-WP-Nonce': this.nonce
@@ -294,7 +310,7 @@ export default {
             }
         },
 
-         async exportCSV() {
+        async exportCSV() {
             try {
                 this.loading = true;
 
@@ -304,7 +320,7 @@ export default {
                         headers: {
                             'X-WP-Nonce': this.nonce
                         },
-                        responseType: 'blob' 
+                        responseType: 'blob'
                     }
                 );
 
@@ -349,9 +365,10 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.ehxdo-title-link:hover{
+.ehxdo-title-link:hover {
     color: #3366FF;
 }
+
 //action popup styles============
 .ehxdo_action_section {
     .el-button {
