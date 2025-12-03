@@ -31,6 +31,7 @@ class CreateTransactionTable
             'id' => 'bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT',
             'campaign_id' => 'bigint(20) UNSIGNED DEFAULT NULL',
             'user_id' => 'bigint(20) UNSIGNED DEFAULT NULL',
+            'donor_id' => 'bigint(20) UNSIGNED DEFAULT NULL',
             'donation_id' => 'bigint(20) UNSIGNED DEFAULT NULL',
             'subscription_id' => 'bigint(20) UNSIGNED DEFAULT NULL',
             'transaction_type' => "varchar(255) NOT NULL DEFAULT 'charge'",

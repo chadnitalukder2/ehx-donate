@@ -19,6 +19,7 @@ class Transaction extends Model
         'id',
         'campaign_id',
         'user_id',
+        'donor_id',
         'donation_id',
         'transaction_type',
         'vendor_charge_id',
@@ -43,21 +44,13 @@ class Transaction extends Model
      */
     protected $hidden = [];
 
-    /**
-     * Get trips by status
-     */
-    public static function getByStatus(string $status): array
-    {
-        return self::where('status', $status);
+    public function donor(){
+         return $this->belongsTo(Donor::class, 'donor_id', 'id');
+    }
+     public function campaign(){
+         return $this->belongsTo(Campaign::class, 'campaign_id', 'id');
     }
 
-    /**
-     * Get trips by user
-     */
-    public static function getByUser(int $userId): array
-    {
-        return self::where('user_id', $userId);
-    }
 
     /**
      * Get upcoming trips

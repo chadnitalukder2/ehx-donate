@@ -1,11 +1,11 @@
 <template>
     <div class="ehxd_wrapper">
 
-        <AppTable :tableData="donors" v-loading="loading">
+        <AppTable :tableData="transactions" v-loading="loading">
 
             <template #header>
                 <div class="ehxd_title">
-                    <h1 class="table-title">All Transactions</h1>
+                    <h1 class="table-title"> All Transactions</h1>
                 </div>
             </template>
 
@@ -19,7 +19,7 @@
                         <el-option label="Pending" value="pending"></el-option>
                         <el-option label="Completed" value="completed"></el-option>
                     </el-select>
-                    <el-button @click="getAllDonors()" class="ehxdo_export_btn" size="medium" type="info" style="">
+                    <el-button @click="exportCSV()" class="ehxdo_export_btn" size="medium" type="info" style="">
                         <!-- <el-icon class="ehxdo_ex_icon"><Bottom /></el-icon> -->
 
                         Export CSV</el-button>
@@ -33,27 +33,45 @@
                         {{ scope.$index + 1 }}
                     </template>
                 </el-table-column>
-                <el-table-column prop="name" label="Name">
+                <el-table-column prop="donor_name" label="Donor">
                     <template #default="{ row }">
-                        {{ row.first_name }} {{ row.last_name }}
+                        {{ row.donor_name ?? '---' }}
                     </template>
                 </el-table-column>
-                <el-table-column prop="email" label="Email">
+                <el-table-column prop="campaign_name" label="Campaign">
                     <template #default="{ row }">
-                        {{ row.email }}
-                    </template>
-                </el-table-column>
-
-
-                <el-table-column prop="donation" label="Donation">
-                    <template #default="{ row }">
-                        {{ row.donation ?? 0 }}
+                        {{ row.campaign_name ?? '---' }}
                     </template>
                 </el-table-column>
 
-                <el-table-column prop="phone" label="Phone">
+                <el-table-column prop="payment_total" label="Amount">
                     <template #default="{ row }">
-                        {{ row.phone ? row.phone : '---' }}
+                        {{ formatCurrency(row.payment_total) }}
+                    </template>
+                </el-table-column>
+
+                <el-table-column prop="status" label="Status" width="120">
+                    <template #default="{ row }">
+                        <span :class="[
+                            'status-badge',
+                            row.status === 'pending' ? 'ehxdo_status-pending' :
+                            row.status === 'completed' ? 'ehxdo_status-active' : ''
+                        ]">
+                            {{ row.status }}
+                        </span>
+
+                    </template>
+                </el-table-column>
+
+                <el-table-column prop="payment_mode" label="Mode">
+                    <template #default="{ row }">
+                        {{ row.payment_mode }}
+                    </template>
+                </el-table-column>
+
+                <el-table-column prop="created_at" label="Date">
+                    <template #default="{ row }">
+                        {{ formatAddedDate(row.created_at) }}
                     </template>
                 </el-table-column>
 
@@ -70,7 +88,7 @@
                                     <el-button type="text" @click="viewCampaign(row)" class="ehxdo_view"> <el-icon>
                                             <View />
                                         </el-icon> View</el-button>
-                                    <el-button type="text" @click="opendeleteDonorModal(row)" class="ehxdo_delete">
+                                    <el-button type="text" @click="openDeleteTransactionModal(row)" class="ehxdo_delete">
                                         <el-icon>
                                             <DeleteFilled />
                                         </el-icon> Delete</el-button>
@@ -90,26 +108,26 @@
                 </div>
 
                 <el-pagination v-model:current-page="currentPage" v-model:page-size="pageSize"
-                    :page-sizes="[10, 20, 30, 40]" large :disabled="total_campaign <= pageSize" background
-                    layout="total, sizes, prev, pager, next" :total="+total_campaign" />
+                    :page-sizes="[10, 20, 30, 40]" large :disabled="total_transaction <= pageSize" background
+                    layout="total, sizes, prev, pager, next" :total="+total_transaction" />
             </template>
 
         </AppTable>
 
 
-        <AppModal :title="'Delete Donor'" :width="500" :showFooter="false" ref="delete_campaign_modal">
+        <AppModal :title="'Delete Transaction'" :width="500" :showFooter="false" ref="delete_transaction_modal">
             <template #body>
 
                 <div class="delete-modal-body">
                     <h1>Are you sure ?</h1>
-                    <p>You want to delete this donor</p>
+                    <p>You want to delete this transaction</p>
                 </div>
             </template>
             <template #footer>
                 <div class="exd-modal-footer" style="text-align: center;">
-                    <el-button @click="$refs.delete_campaign_modal.handleClose()" type="info"
+                    <el-button @click="$refs.delete_transaction_modal.handleClose()" type="info"
                         size="medium">Cancel</el-button>
-                    <el-button @click="deleteDonor" type="primary" size="medium"
+                    <el-button @click="deleteTransaction" type="primary" size="medium"
                         style="background: #DF1C41 !important ;">Delete</el-button>
                 </div>
             </template>
@@ -133,12 +151,11 @@ export default {
     data() {
         return {
             search: '',
-            donors: [],
+            transactions: [],
             generalSettings: {},
             currencies: window.EHXDonate.currencies,
             currencySymbols: window.EHXDonate.currencySymbols,
-            campaign: {},
-            total_campaign: 0,
+            total_transaction: 0,
             loading: false,
             currentPage: 1,
             last_page: 1,
@@ -151,16 +168,16 @@ export default {
     },
     watch: {
         currentPage() {
-            this.getAllDonors();
+            this.getAllTransaction();
         },
         pageSize() {
             this.currentPage = 1;
-            this.getAllDonors();
+            this.getAllTransaction();
         },
         search: {
             handler() {
                 this.currentPage = 1;
-                this.getAllDonors();
+                this.getAllTransaction();
             },
             immediate: false
         },
@@ -194,10 +211,10 @@ export default {
         },
 
 
-        async getAllDonors() {
+        async getAllTransaction() {
             this.loading = true;
             try {
-                const response = await axios.get(`${this.rest_api}api/getAllDonors`, {
+                const response = await axios.get(`${this.rest_api}api/getAllTransaction`, {
                     params: {
                         page: this.currentPage,
                         limit: this.pageSize,
@@ -211,54 +228,54 @@ export default {
                     withCredentials: true
                 });
                 console.log('donors response:', response.data.data);
-                this.donors = response?.data?.data?.donors;
+                this.transactions = response?.data?.data?.transactions;
                 this.generalSettings = response?.data?.data?.generalSettings || {};
-                // this.total_campaign = response?.data?.total || 0;
-                // this.last_page = response?.data?.last_page || 1;
+                this.total_transaction = response?.data?.data?.total || 0;
+                this.last_page = response?.data?.data?.last_page || 1;
                 this.loading = false;
             } catch (error) {
                 this.loading = false;
-                console.error('Error fetching donors:', error);
+                console.error('Error fetching transaction:', error);
             }
         },
 
-        opendeleteDonorModal(row) {
+        openDeleteTransactionModal(row) {
             this.active_id = row.id;
-            this.$refs.delete_campaign_modal.openModel();
+            this.$refs.delete_transaction_modal.openModel();
         },
-        async deleteDonor() {
-            // this.loading = true;
+        async deleteTransaction() {
+            this.loading = true;
             const id = this.active_id;
 
             try {
-                // const response = await axios.delete(`${this.rest_api}api/deleteDonor/${id}`, {
-                //     headers: {
-                //         'Content-Type': 'application/json',
-                //         'X-WP-Nonce': this.nonce
-                //     }
-                // });
+                const response = await axios.delete(`${this.rest_api}api/deleteTransaction/${id}`, {
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-WP-Nonce': this.nonce
+                    }
+                });
 
                 if (response.data.success === true) {
                     this.$notify({
                         title: 'Success',
-                        message: 'campaign deleted successfully',
+                        message: 'Transaction deleted successfully',
                         type: 'success',
                     });
-                    this.getAllDonors();
-                    this.$refs.delete_campaign_modal.handleClose();
+                    this.getAllTransaction();
+                    this.$refs.delete_transaction_modal.handleClose();
                 } else {
                     this.$notify({
                         title: 'Error',
-                        message: 'Failed to delete campaign',
+                        message: 'Failed to delete transaction',
                         type: 'error',
                     });
                 }
 
             } catch (error) {
-                console.error('Error deleting campaign:', error);
+                console.error('Error deleting transaction:', error);
                 this.$notify({
                     title: 'Error',
-                    message: 'An unexpected error occurred while deleting the campaign.',
+                    message: 'An unexpected error occurred while deleting the transaction.',
                     type: 'error',
                 });
             } finally {
@@ -266,62 +283,55 @@ export default {
             }
         },
 
-        async updateStatus(row) {
+         async exportCSV() {
             try {
-                await this.$confirm(
-                    `Are you sure you want to change the status.`,
-                    'Confirm Status Update',
-                    {
-                        confirmButtonText: 'Yes, Update',
-                        cancelButtonText: 'Cancel',
-                        type: 'warning',
-                        iconClass: '',
-                    }
-                );
+                this.loading = true;
 
-                const response = await axios.post(
-                    `${this.rest_api}api/updateCampaignStatus/${row.id}`,
-                    {
-                        status: row.status
-                    },
+                const response = await axios.get(
+                    `${this.rest_api}api/export-transaction`,
                     {
                         headers: {
-                            'Content-Type': 'application/json',
                             'X-WP-Nonce': this.nonce
-                        }
+                        },
+                        responseType: 'blob'
                     }
                 );
 
-                if (response.data.success) {
-                    this.$notify({
-                        title: 'Success',
-                        message: 'Status updated!',
-                        type: 'success'
-                    });
-                } else {
-                    throw new Error("Failed");
-                }
-            } catch (error) {
+                const blob = new Blob([response.data], { type: 'text/csv' });
+
+                const link = document.createElement('a');
+                link.href = window.URL.createObjectURL(blob);
+                link.download = `campaigns-${new Date().toISOString().split('T')[0]}.csv`;
+
+                document.body.appendChild(link);
+                link.click();
+
+                document.body.removeChild(link);
+                window.URL.revokeObjectURL(link.href);
+
                 this.$notify({
-                    title: 'Error',
-                    message: 'Could not update status!',
-                    type: 'error'
+                    title: 'Success',
+                    message: 'CSV exported successfully',
+                    type: 'success',
                 });
 
-                // revert switch UI
-                row.status = row.status === "active" ? "pending" : "active";
+            } catch (error) {
+                console.error('Export error:', error);
+                this.$notify({
+                    title: 'Error',
+                    message: 'Failed to export CSV',
+                    type: 'error',
+                });
+            } finally {
+                this.loading = false;
             }
         },
-
-        handleAddedCampaign(newCampaign) {
-            this.getAllDonors();
-        }
 
     },
 
     mounted() {
-        console.log('Mounted AllCampaign.vue', window.EHXDonate);
-        this.getAllDonors();
+        console.log('Mounted AllCampaign.vue', this.getAllTransaction);
+        this.getAllTransaction();
     },
 
 }

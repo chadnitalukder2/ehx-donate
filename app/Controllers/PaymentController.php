@@ -32,6 +32,7 @@ class PaymentController extends Controller
         // create transaction
         $transaction = Transaction::create([
             'campaign_id' => $donation->campaign_id,
+            'donor_id'  => $donation->donor_id,
             'vendor_charge_id' => $session_id,
             'user_id' => $donation->user_id,
             'donation_id' => $donation->id,
@@ -40,11 +41,11 @@ class PaymentController extends Controller
             'rate' => 1,
             'card_last_4' => $session['payment_method_details']['card']['last4'] ?? '',
             'card_brand' => $session['payment_method_details']['card']['brand'] ?? '',
-            'payment_total' => $donation->total_payment,
+            'payment_total' => $donation->net_amount,
             'status' => 'completed',
             'currency' => $donation->currency,
             'payment_mode' => $donation->payment_mode,
-            'reporting_total' => $donation->total_payment,
+            'reporting_total' => $donation->net_amount,
             'reporting_currency' => $donation->currency,
             'reporting_exchange_rate' => 1,
         ]);

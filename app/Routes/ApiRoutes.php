@@ -35,6 +35,11 @@ class ApiRoutes
             $router->delete('/deleteDonor/{id}', 'DonorController@destroy', ['auth']);
             $router->get('/export-donor', 'DonorController@export_donor_csv', ['auth']);
 
+            //Transaction routes
+            $router->get('/getAllTransaction', 'TransactionController@index', ['auth']);
+            $router->delete('/deleteTransaction/{id}', 'TransactionController@destroy', ['auth']);
+            $router->get('/export-transaction', 'TransactionController@export_transaction_csv', ['auth']);
+
             //Donation routes
             $router->get('/getAllDonations', 'DonationController@index', ['auth']);
             $router->get('/donations/{id}', 'DonationController@show', ['auth']);
