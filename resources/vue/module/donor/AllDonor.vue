@@ -14,7 +14,7 @@
                     placeholder="Search" prefix-icon="Search" />
 
                 <div>
-                    <el-button @click="getAllDonors()" class="ehxdo_export_btn" size="medium" type="info" style="">
+                    <el-button @click="exportCSV()" class="ehxdo_export_btn" size="medium" type="info" style="">
                         <!-- <el-icon class="ehxdo_ex_icon"><Bottom /></el-icon> -->
 
                         Export CSV</el-button>
@@ -40,9 +40,15 @@
                 </el-table-column>
 
 
-                <el-table-column prop="donation" label="Donation">
+                <el-table-column prop="donation" label="Success Donation">
                     <template #default="{ row }">
                         {{ row.total_donations ?? 0 }}
+                    </template>
+                </el-table-column>
+
+                 <el-table-column prop="total_amount" label="Total Amount">
+                    <template #default="{ row }">
+                        {{ formatCurrency(row.total_amount) }}
                     </template>
                 </el-table-column>
 
@@ -59,13 +65,10 @@
                                 :popper-style="{ minWidth: '100px', borderRadius: '16px' }"
                                 popper-class="ehxdo-action-popover" trigger="click" v-model:visible="row.showActions">
                                 <div class="action-popup">
-                                    <el-button type="text" @click="editCampaign(row)" class="ehxdo_edit"> <el-icon>
-                                            <EditPen />
-                                        </el-icon> Edit</el-button>
-                                    <el-button type="text" @click="viewCampaign(row)" class="ehxdo_view"> <el-icon>
+                                    <!-- <el-button type="text" @click="viewCampaign(row)" class="ehxdo_view"> <el-icon>
                                             <View />
-                                        </el-icon> View</el-button>
-                                    <el-button type="text" @click="opendeleteDonorModal(row)" class="ehxdo_delete">
+                                        </el-icon> View</el-button> -->
+                                    <el-button type="text" @click="openDeleteDonorModal(row)" class="ehxdo_delete">
                                         <el-icon>
                                             <DeleteFilled />
                                         </el-icon> Delete</el-button>
@@ -92,7 +95,7 @@
         </AppTable>
 
 
-        <AppModal :title="'Delete Donor'" :width="500" :showFooter="false" ref="delete_campaign_modal">
+        <AppModal :title="'Delete Donor'" :width="500" :showFooter="false" ref="delete_donor_modal">
             <template #body>
 
                 <div class="delete-modal-body">
@@ -102,7 +105,7 @@
             </template>
             <template #footer>
                 <div class="exd-modal-footer" style="text-align: center;">
-                    <el-button @click="$refs.delete_campaign_modal.handleClose()" type="info"
+                    <el-button @click="$refs.delete_donor_modal.handleClose()" type="info"
                         size="medium">Cancel</el-button>
                     <el-button @click="deleteDonor" type="primary" size="medium"
                         style="background: #DF1C41 !important ;">Delete</el-button>
@@ -132,14 +135,12 @@ export default {
             generalSettings: {},
             currencies: window.EHXDonate.currencies,
             currencySymbols: window.EHXDonate.currencySymbols,
-            campaign: {},
             total_donor: 0,
             loading: false,
             currentPage: 1,
             last_page: 1,
             pageSize: 10,
             active_id: null,
-            add_campaign_modal: false,
             nonce: window.EHXDonate.restNonce,
             rest_api: window.EHXDonate.restUrl,
         }
@@ -216,43 +217,43 @@ export default {
             }
         },
 
-        opendeleteDonorModal(row) {
+        openDeleteDonorModal(row) {
             this.active_id = row.id;
-            this.$refs.delete_campaign_modal.openModel();
+            this.$refs.delete_donor_modal.openModel();
         },
         async deleteDonor() {
-            // this.loading = true;
+            this.loading = true;
             const id = this.active_id;
 
             try {
-                // const response = await axios.delete(`${this.rest_api}api/deleteDonor/${id}`, {
-                //     headers: {
-                //         'Content-Type': 'application/json',
-                //         'X-WP-Nonce': this.nonce
-                //     }
-                // });
+                const response = await axios.delete(`${this.rest_api}api/deleteDonor/${id}`, {
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-WP-Nonce': this.nonce
+                    }
+                });
 
                 if (response.data.success === true) {
                     this.$notify({
                         title: 'Success',
-                        message: 'campaign deleted successfully',
+                        message: 'Donor deleted successfully',
                         type: 'success',
                     });
                     this.getAllDonors();
-                    this.$refs.delete_campaign_modal.handleClose();
+                    this.$refs.delete_donor_modal.handleClose();
                 } else {
                     this.$notify({
                         title: 'Error',
-                        message: 'Failed to delete campaign',
+                        message: 'Failed to delete donor',
                         type: 'error',
                     });
                 }
 
             } catch (error) {
-                console.error('Error deleting campaign:', error);
+                console.error('Error deleting donor:', error);
                 this.$notify({
                     title: 'Error',
-                    message: 'An unexpected error occurred while deleting the campaign.',
+                    message: 'An unexpected error occurred while deleting the donor.',
                     type: 'error',
                 });
             } finally {
@@ -260,56 +261,49 @@ export default {
             }
         },
 
-        async updateStatus(row) {
+           async exportCSV() {
             try {
-                await this.$confirm(
-                    `Are you sure you want to change the status.`,
-                    'Confirm Status Update',
-                    {
-                        confirmButtonText: 'Yes, Update',
-                        cancelButtonText: 'Cancel',
-                        type: 'warning',
-                        iconClass: '',
-                    }
-                );
+                this.loading = true;
 
-                const response = await axios.post(
-                    `${this.rest_api}api/updateCampaignStatus/${row.id}`,
-                    {
-                        status: row.status
-                    },
+                const response = await axios.get(
+                    `${this.rest_api}api/export-donor`,
                     {
                         headers: {
-                            'Content-Type': 'application/json',
                             'X-WP-Nonce': this.nonce
-                        }
+                        },
+                        responseType: 'blob'
                     }
                 );
 
-                if (response.data.success) {
-                    this.$notify({
-                        title: 'Success',
-                        message: 'Status updated!',
-                        type: 'success'
-                    });
-                } else {
-                    throw new Error("Failed");
-                }
-            } catch (error) {
+                const blob = new Blob([response.data], { type: 'text/csv' });
+
+                const link = document.createElement('a');
+                link.href = window.URL.createObjectURL(blob);
+                link.download = `campaigns-${new Date().toISOString().split('T')[0]}.csv`;
+
+                document.body.appendChild(link);
+                link.click();
+
+                document.body.removeChild(link);
+                window.URL.revokeObjectURL(link.href);
+
                 this.$notify({
-                    title: 'Error',
-                    message: 'Could not update status!',
-                    type: 'error'
+                    title: 'Success',
+                    message: 'CSV exported successfully',
+                    type: 'success',
                 });
 
-                // revert switch UI
-                row.status = row.status === "active" ? "pending" : "active";
+            } catch (error) {
+                console.error('Export error:', error);
+                this.$notify({
+                    title: 'Error',
+                    message: 'Failed to export CSV',
+                    type: 'error',
+                });
+            } finally {
+                this.loading = false;
             }
         },
-
-        handleAddedCampaign(newCampaign) {
-            this.getAllDonors();
-        }
 
     },
 

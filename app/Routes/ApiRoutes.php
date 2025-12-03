@@ -32,12 +32,14 @@ class ApiRoutes
 
             //Donor routes
             $router->get('/getAllDonors', 'DonorController@index', ['auth']);
+            $router->delete('/deleteDonor/{id}', 'DonorController@destroy', ['auth']);
+            $router->get('/export-donor', 'DonorController@export_donor_csv', ['auth']);
 
             //Donation routes
             $router->get('/getAllDonations', 'DonationController@index', ['auth']);
             $router->get('/donations/{id}', 'DonationController@show', ['auth']);
-             $router->delete('/deleteDonation/{id}', 'DonationController@destroy', ['auth']);
-              $router->get('/export-donation', 'DonationController@export_donation_csv', ['auth']);
+            $router->delete('/deleteDonation/{id}', 'DonationController@destroy', ['auth']);
+            $router->get('/export-donation', 'DonationController@export_donation_csv', ['auth']);
 
             // Settings routes
             $router->get('/settings/{key}', 'SettingsController@getSettings');
