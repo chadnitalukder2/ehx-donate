@@ -887,6 +887,71 @@ abstract class Model implements JsonSerializable
         ];
     }
 
+     public function paginateDonor($perPage = 10, $page = 1, $search = '', $status = null): array
+    {
+        if (!empty($search)) {
+            $this->where('first_name', 'LIKE', '%' . $this->wpdb->esc_like($search) . '%')
+                ->orWhere('last_name', 'LIKE', '%' . $this->wpdb->esc_like($search) . '%')
+                ->orWhere('email', 'LIKE', '%' . $this->wpdb->esc_like($search) . '%')
+                ->orWhere('phone', 'LIKE', '%' . $this->wpdb->esc_like($search) . '%');
+        }
+
+        if ($status !== null) {
+            $this->where('status', '=', $status);
+        }
+
+        $whereConditions = $this->query['where'] ?? [];
+
+        // Calculate offset
+        $offset = ($page - 1) * $perPage;
+        $this->query['limit'] = $perPage;
+        $this->query['offset'] = $offset;
+
+        // Get the paginated results
+        $results = $this->get();
+
+        // Build count query
+        $table = $this->wpdb->prefix . $this->table;
+        $countSql = "SELECT COUNT(*) FROM {$table}";
+        $params = [];
+
+        // Apply WHERE conditions to count
+        if (!empty($whereConditions)) {
+            $countSql .= " WHERE ";
+            $firstWhere = true;
+
+            foreach ($whereConditions as $condition) {
+                if (!$firstWhere) {
+                    $boolean = $condition['boolean'] ?? 'AND';
+                    $countSql .= " {$boolean} ";
+                } else {
+                    $firstWhere = false;
+                }
+
+                $countSql .= "{$condition['column']} {$condition['operator']} %s";
+                $params[] = $condition['value'];
+            }
+        }
+
+        // Execute count query
+        if (!empty($params)) {
+            $countSql = $this->wpdb->prepare($countSql, $params);
+        }
+
+        $total = (int) $this->wpdb->get_var($countSql);
+
+        return [
+            'data' => $results,
+            'total' => $total,
+            'per_page' => $perPage,
+            'current_page' => $page,
+            'last_page' => ceil($total / $perPage),
+            'from' => $offset + 1,
+            'to' => min($offset + $perPage, $total),
+        ];
+    }
+  
+
     /**
      * Reset query builder
      */

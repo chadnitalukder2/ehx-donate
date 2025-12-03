@@ -29,18 +29,33 @@ class DonorController extends Controller
         if ($data['search']) {
             $search = sanitize_text_field($data['search']);
         }
-        if ($data['status']) {
-            $status = sanitize_text_field($data['status']);
-        }
 
-        $donors = (new Donor())->orderBy('created_at', 'DESC')->get();
+        // $donors = (new Donor())->orderBy('created_at', 'DESC')->get();
+        // $donors = (new Donor())->paginate($limit, $page, $search, $status);
+        $res = (new Donor)->orderBy('created_at', 'desc')->paginateDonor($limit, $page, $search, $status);
+
+        $data = array_map(function ($donor) {
+            $donorArray = $donor->with('donations')->toArray();
+            $totalDonations = 0;
+            if (!empty($donorArray['donations'])) {
+                foreach ($donorArray['donations'] as $donation) {
+                    $totalDonations++;
+                }
+            }
+
+            $donorArray['total_donations'] = $totalDonations;
+            return $donorArray;
+        }, $res['data']);
+
         $generalSettings = get_option('ehx_donate_settings_general', []);
 
         $this->success([
-            'donors' => array_map(function ($donor) {
-                return $donor->toArray();
-            }, $donors),
+            'donors' => $data,
             'generalSettings' => $generalSettings,
+            'total' => $res['total'],
+            'per_page' => $res['per_page'],
+            'current_page' => $res['current_page'],
+            'last_page' => $res['last_page'],
         ]);
     }
 

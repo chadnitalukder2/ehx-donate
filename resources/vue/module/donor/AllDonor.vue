@@ -42,7 +42,7 @@
 
                 <el-table-column prop="donation" label="Donation">
                     <template #default="{ row }">
-                        {{ row.donation ?? 0 }}
+                        {{ row.total_donations ?? 0 }}
                     </template>
                 </el-table-column>
 
@@ -85,8 +85,8 @@
                 </div>
 
                 <el-pagination v-model:current-page="currentPage" v-model:page-size="pageSize"
-                    :page-sizes="[10, 20, 30, 40]" large :disabled="total_campaign <= pageSize" background
-                    layout="total, sizes, prev, pager, next" :total="+total_campaign" />
+                    :page-sizes="[10, 20, 30, 40]" large :disabled="total_donor <= pageSize" background
+                    layout="total, sizes, prev, pager, next" :total="+total_donor" />
             </template>
 
         </AppTable>
@@ -133,7 +133,7 @@ export default {
             currencies: window.EHXDonate.currencies,
             currencySymbols: window.EHXDonate.currencySymbols,
             campaign: {},
-            total_campaign: 0,
+            total_donor: 0,
             loading: false,
             currentPage: 1,
             last_page: 1,
@@ -207,8 +207,8 @@ export default {
                 console.log('donors response:', response.data.data);
                 this.donors = response?.data?.data?.donors;
                 this.generalSettings = response?.data?.data?.generalSettings || {};
-                // this.total_campaign = response?.data?.total || 0;
-                // this.last_page = response?.data?.last_page || 1;
+                this.total_donor = response?.data?.data?.total || 0;
+                this.last_page = response?.data?.data?.last_page || 1;
                 this.loading = false;
             } catch (error) {
                 this.loading = false;

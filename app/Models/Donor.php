@@ -33,6 +33,10 @@ class Donor extends Model
      */
     protected $hidden = [];
 
+    public function donations(){
+           return $this->hasMany(Donation::class, 'donor_id', 'id');
+    }
+
     /**
      * Get trips by status
      */
