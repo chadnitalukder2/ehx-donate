@@ -24,7 +24,6 @@
                             </div>
                         </div>
 
-
                         <!-- Currency -->
                         <div class="ehxdo-form-group">
                             <div class="ehxdo-form-row" style="margin-bottom: 30px;">
@@ -54,7 +53,7 @@
 
                         <!-- Service Fee Switch -->
                         <div class="ehxdo-form-group">
-                            <div class="ehxdo-form-row" style="margin-bottom: 30px; " >
+                            <div class="ehxdo-form-row" style="margin-bottom: 30px; ">
                                 <label class="ehxdo-form-label">Service Fee</label>
                                 <div class="ehxdo-input-wrapper">
                                     <el-switch v-model="settings.service_fee" class="ml-2"
@@ -67,7 +66,7 @@
 
                         <!-- Service Fee Percentage (Show only when enabled) -->
                         <div class="ehxdo-form-group" v-if="settings.service_fee">
-                            <div class="ehxdo-form-row" style="align-items: start;">
+                            <div class="ehxdo-form-row" style="align-items: start; margin-bottom: 30px;">
                                 <label class="ehxdo-form-label">Percentage (%)</label>
                                 <div class="ehxdo-input-wrapper">
                                     <el-input v-model.number="settings.service_fee_percentage" type="number"
@@ -79,6 +78,32 @@
                                             settings.service_fee_percentage || 0 }}% fee,
                                         total will be {{ formatCurrency(calculateTotalWithFee(100)) }}
                                     </p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Anonymous donation -->
+                        <div class="ehxdo-form-group">
+                            <div class="ehxdo-form-row" style="margin-bottom: 30px;">
+                                <label class="ehxdo-form-label">Anonymous Donation</label> <!-- Custom label -->
+                                <div class="ehxdo-input-wrapper">
+                                    <el-switch v-model="settings.anonymous" class="ml-2"
+                                        style="--el-switch-on-color: #00A63E; --el-switch-off-color: #d1d5db" />
+                                    <p style="margin: 0px; color: #6b7280;">
+                                        Enable this option so donors can hide their name if they want to donate anonymously.
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!--  Recapcharings Switch -->
+                        <div class="ehxdo-form-group">
+                            <div class="ehxdo-form-row" style="margin-bottom: 30px;">
+                                <label class="ehxdo-form-label">Recapture</label>
+                                <div class="ehxdo-input-wrapper">
+                                    <el-switch v-model="settings.recapture" class="ml-2"
+                                        style="--el-switch-on-color: #00A63E; --el-switch-off-color: #d1d5db" />
+                                    <p style="margin: 0px; color: #6b7280;">Enable this to keep your donation form safe from spam and bots.</p>
                                 </div>
                             </div>
                         </div>
@@ -147,7 +172,7 @@
                         </div>
 
                         <!-- City -->
-                         <div class="ehxdo-form-group">
+                        <div class="ehxdo-form-group">
                             <div class="ehxdo-form-row" style="margin-bottom: 30px; ">
                                 <label class="ehxdo-form-label">City</label>
                                 <div class="ehxdo-input-wrapper">
@@ -155,14 +180,14 @@
                                 </div>
                             </div>
                         </div>
-            
+
 
                         <!-- Address + Postal Code -->
-                           <div class="ehxdo-form-group">
+                        <div class="ehxdo-form-group">
                             <div class="ehxdo-form-row">
                                 <label class="ehxdo-form-label">Postal Code</label>
                                 <div class="ehxdo-input-wrapper">
-                                     <el-input v-model="settings.postal_code" />
+                                    <el-input v-model="settings.postal_code" />
                                 </div>
                             </div>
                         </div>
@@ -182,7 +207,7 @@ export default {
             type: Object,
             default: () => ({
                 service_fee: false,
-                service_fee_percentage: 5, // Default 5%
+                service_fee_percentage: 1, // Default 5%
                 currency: 'GBP',
                 currency_position: 'Before'
             })
@@ -245,7 +270,7 @@ export default {
     grid-template-columns: 160px 1fr;
     gap: 20px;
     align-items: center;
-    
+
 
     .ehxdo-form-label {
         color: #606266;

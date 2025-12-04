@@ -1,4 +1,5 @@
 <?php
+
 use EHXDonate\Models\Donation;
 
 $primaryBtnColor = $colorSettings['primary_btn'] ?? '#079455';
@@ -6,7 +7,7 @@ $primaryBtnTextColor = $colorSettings['primary_btn_text'] ?? '#ececec';
 $fontFamily = $colorSettings['fontFamily'] ?? 'Inter Tight, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen, Ubuntu, Cantarell, sans-serif';
 
 $donations = (new Donation())
-->where('campaign_id', $campaign['id'])->get();
+    ->where('campaign_id', $campaign['id'])->get();
 $raised = 0;
 $donationsCount = 0;
 // dd($donations);
@@ -248,7 +249,7 @@ $default_amount = 0.00;
                                 <option value="dr">Dr.</option>
                             </select>
                         </div> -->
-                      <input type="hidden" name="payment_mode" value="<?php echo $isTestMode ? 'test' : 'live'; ?>">
+                        <input type="hidden" name="payment_mode" value="<?php echo $isTestMode ? 'test' : 'live'; ?>">
 
                         <input type="hidden" name="campaign_id" value="<?php echo esc_attr($campaign['id']); ?>">
                         <input type="hidden" name="net_amount" id="ehxdo-net_amount" value="<?php echo $default_amount; ?>">
@@ -331,15 +332,17 @@ $default_amount = 0.00;
                         </div> -->
 
 
-                        <div class="ehxdo-anonymous-option" style="padding-top: 15px;">
-                            <label style="display: flex; align-items: center; gap: 0.5rem; cursor: pointer;">
-                                <input type="checkbox" name="anonymous_donation" id="anonymous_checkbox" value="1" style="cursor: pointer;">
-                                <span style="font-size: 0.875rem;">Make this donation anonymous</span>
-                            </label>
-                            <p style="font-size: 0.75rem; color: #666; margin-top: 0.25rem; margin-left: 1.5rem;">
-                                Your donation will be recorded, but your name won't be displayed publicly.
-                            </p>
-                        </div>
+                        <?php if ($generalSettings['anonymous'] ?? false): ?>
+                            <div class="ehxdo-anonymous-option" style="padding-top: 15px;">
+                                <label style="display: flex; align-items: center; gap: 0.5rem; cursor: pointer;">
+                                    <input type="checkbox" name="anonymous_donation" id="anonymous_checkbox" value="1" style="cursor: pointer;">
+                                    <span style="font-size: 0.875rem;">Make this donation anonymous</span>
+                                </label>
+                                <p style="font-size: 0.75rem; color: #666; margin-top: 0.25rem; margin-left: 1.5rem;">
+                                    Your donation will be recorded, but your name won't be displayed publicly.
+                                </p>
+                            </div>
+                        <?php endif; ?>
 
                         <div class="ehxdo-summary" style="padding-top: 20px;">
                             <div class="ehxdo-summary-row">

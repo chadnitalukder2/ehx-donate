@@ -20,6 +20,8 @@ class SettingsDefault
                 'state' => '',
                 'postal_code' => '',
                 'progressbar' => true,
+                'anonymous' => false,
+                'recapture' => false,
                 'service_fee' => false,
                 'service_fee_percentage' => 0,
             ],
