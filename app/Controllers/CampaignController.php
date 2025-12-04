@@ -429,7 +429,7 @@ class CampaignController extends Controller
 
         // Add CSV headers
         fputcsv($output, array(
-            'ID',
+            'SI',
             'Title',
             'Goal Amount',
             'Total Donations',
@@ -448,12 +448,10 @@ class CampaignController extends Controller
 
         // Fetch all campaigns
         $campaigns = (new Campaign)->orderBy('created_at', 'desc')->get();
-
+        $si = 1;
         // Process and write each campaign
         foreach ($campaigns as $campaign) {
-            // Get donations for this campaign
             $donations = (new Donation)->where('campaign_id', $campaign->id)->get();
-
             $totalDonations = 0;
             $totalRaised = 0;
 
@@ -468,10 +466,10 @@ class CampaignController extends Controller
             $startDate = !empty($campaign->start_date) ? date('d/m/Y', strtotime($campaign->start_date)) : 'N/A';
             $endDate = !empty($campaign->end_date) ? date('d/m/Y', strtotime($campaign->end_date)) : 'N/A';
             $createdDate = !empty($campaign->created_at) ? date('d/m/Y', strtotime($campaign->created_at)) : 'N/A';
-
-            // Write row to CSV
+            
+            
             fputcsv($output, array(
-                $campaign->id,
+                $si,
                 $campaign->title,
                 $symbol . ' ' . number_format($campaign->goal_amount ?? 0, 2),
                 $totalDonations,
@@ -481,6 +479,7 @@ class CampaignController extends Controller
                 ucfirst($campaign->status ?? 'pending'),
                 $createdDate  
             ));
+            $si++;
         }
 
         fclose($output);

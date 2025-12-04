@@ -123,16 +123,12 @@ class DonorController extends Controller
         header('Content-Disposition: attachment; filename=campaigns-' . date('Y-m-d-H-i-s') . '.csv');
         header('Pragma: no-cache');
         header('Expires: 0');
-
-        // Create output stream
         $output = fopen('php://output', 'w');
-
-        // Add BOM for UTF-8 encoding
         fprintf($output, chr(0xEF) . chr(0xBB) . chr(0xBF));
 
         // Add CSV headers
         fputcsv($output, array(
-            'ID',
+            'SI',
             'Name',
             'Email',
             'phone',
@@ -145,7 +141,7 @@ class DonorController extends Controller
         $currency = $generalSettings['currency'] ?? 'GBP';
         $currencySymbols = Currency::getCurrencySymbol('');
         $symbol = $currencySymbols[$currency] ?? $currency;
-
+        $si = 1;        
         // Fetch all campaigns
         $donors = (new Donor)->orderBy('created_at', 'desc')->get();
         foreach ($donors as $donor) {
@@ -161,13 +157,14 @@ class DonorController extends Controller
             }
 
             fputcsv($output, array(
-                $donor->id,
+                $si,
                 $donor->first_name . ' ' .  $donor->last_name,
                 $donor->email,
                 $donor->phone ?? '---',
                 $totalDonations,
                 $symbol . ' ' . number_format($totalAmount ?? 0, 2),
             ));
+            $si++;
         }
 
         fclose($output);

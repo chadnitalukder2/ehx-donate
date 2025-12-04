@@ -16,18 +16,18 @@
 
         <div class="ehxdo-donation__item">
             <span class="ehxdo-donation__label">Donation</span>
-            <span class="ehxdo-donation__value"> {{ donation?.currency }} {{ donation?.total_payment }}</span>
+            <span class="ehxdo-donation__value"> {{ getSymbol(donation?.currency) }} {{ donation?.total_payment }}</span>
         </div>
         <div class="ehxdo-donation__item">
             <span class="ehxdo-donation__label">Payment Processing Fee</span>
-            <span class="ehxdo-donation__value"> {{ donation?.currency }} {{ donation?.processing_fee || 0 }}</span>
+            <span class="ehxdo-donation__value">{{ getSymbol(donation?.currency) }} {{ donation?.processing_fee || 0 }}</span>
         </div>
 
         <hr class="ehxdo-donation__divider" />
 
         <div class="ehxdo-donation__total">
             <span class="ehxdo-donation__label">Total</span>
-            <span class="ehxdo-donation__total-value"> {{ donation?.currency }} {{ getTotal(donation) }}</span>
+            <span class="ehxdo-donation__total-value"> {{ getSymbol(donation?.currency) }} {{ getTotal(donation) }}</span>
         </div>
     </div>
 </template>
@@ -41,7 +41,15 @@ export default {
             default: {}
         }
     },
+    data() {
+        return {
+            currencySymbols: window.EHXDonate.currencySymbols,
+        }
+    },
     methods: {
+        getSymbol(currency) {
+            return this.currencySymbols[currency] || currency;
+        },
         getTotal(donation) {
             return parseFloat(donation?.total_payment) + parseFloat(donation?.processing_fee || 0);
         }

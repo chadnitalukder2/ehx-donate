@@ -10,16 +10,20 @@
             </template>
 
             <template #filter>
-                <el-input class="ehxd-search-input ehxd_input" v-model="search" style="width: 250px" size="medium"
-                    placeholder="Search" prefix-icon="Search" />
                 <div>
-                    <el-select v-model="status_filter" size="medium" style="margin-left: 16px; width: 140px;">
+                    <!-- <el-input class="ehxd-search-input ehxd_input" v-model="search" style="width: 250px" size="medium"
+                    placeholder="Search" prefix-icon="Search" /> -->
+                </div>
+
+                <div>
+                    <!-- <el-select v-model="status_filter" size="medium" style="margin-left: 16px; width: 140px;">
                         <el-option label="All Status" :value="undefined"></el-option>
                         <el-option label="Active" value="active"></el-option>
                         <el-option label="Pending" value="pending"></el-option>
                         <el-option label="Completed" value="completed"></el-option>
-                    </el-select>
-                    <el-button @click="exportCSV()" class="ehxdo_export_btn" size="medium" type="info" style="">
+                    </el-select> -->
+                    <el-button @click="exportCSV()" class="ehxdo_export_btn" size="medium" :loading="export" type="info"
+                        style="">
                         <!-- <el-icon class="ehxdo_ex_icon"><Bottom /></el-icon> -->
 
                         Export CSV</el-button>
@@ -55,7 +59,7 @@
                         <span :class="[
                             'status-badge',
                             row.status === 'pending' ? 'ehxdo_status-pending' :
-                            row.status === 'completed' ? 'ehxdo_status-active' : ''
+                                row.status === 'completed' ? 'ehxdo_status-active' : ''
                         ]">
                             {{ row.status }}
                         </span>
@@ -88,7 +92,8 @@
                                     <el-button type="text" @click="viewCampaign(row)" class="ehxdo_view"> <el-icon>
                                             <View />
                                         </el-icon> View</el-button>
-                                    <el-button type="text" @click="openDeleteTransactionModal(row)" class="ehxdo_delete">
+                                    <el-button type="text" @click="openDeleteTransactionModal(row)"
+                                        class="ehxdo_delete">
                                         <el-icon>
                                             <DeleteFilled />
                                         </el-icon> Delete</el-button>
@@ -157,6 +162,7 @@ export default {
             currencySymbols: window.EHXDonate.currencySymbols,
             total_transaction: 0,
             loading: false,
+            export: false,
             currentPage: 1,
             last_page: 1,
             pageSize: 10,
@@ -283,9 +289,9 @@ export default {
             }
         },
 
-         async exportCSV() {
+        async exportCSV() {
             try {
-                this.loading = true;
+                this.export = true;
 
                 const response = await axios.get(
                     `${this.rest_api}api/export-transaction`,
@@ -323,7 +329,7 @@ export default {
                     type: 'error',
                 });
             } finally {
-                this.loading = false;
+                this.export = false;
             }
         },
 

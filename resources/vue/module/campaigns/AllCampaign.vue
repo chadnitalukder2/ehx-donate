@@ -103,7 +103,7 @@
                         <el-option label="Completed" value="completed"></el-option>
                     </el-select>
                     <el-button @click="exportCSV()" class="ehxdo_export_btn" size="medium" type="info"
-                        :loading="loading" style="">
+                        :loading="export" style="">
                         <!-- <el-icon class="ehxdo_ex_icon"><Bottom /></el-icon> -->
                         Export CSV</el-button>
                 </div>
@@ -250,6 +250,7 @@ export default {
             campaign: {},
             total_campaign: 0,
             loading: false,
+            export: false,
             currentPage: 1,
             last_page: 1,
             pageSize: 10,
@@ -355,31 +356,24 @@ export default {
 
         async exportCSV() {
             try {
-                this.loading = true;
-
+                this.export = true;
                 const response = await axios.get(
                     `${this.rest_api}api/export-campaigns`,
                     {
                         headers: {
                             'X-WP-Nonce': this.nonce
                         },
-                        responseType: 'blob' // Important for file download
+                        responseType: 'blob'
                     }
                 );
 
-                // Create blob from response
                 const blob = new Blob([response.data], { type: 'text/csv' });
-
-                // Create download link
                 const link = document.createElement('a');
                 link.href = window.URL.createObjectURL(blob);
                 link.download = `campaigns-${new Date().toISOString().split('T')[0]}.csv`;
 
-                // Trigger download
                 document.body.appendChild(link);
                 link.click();
-
-                // Cleanup
                 document.body.removeChild(link);
                 window.URL.revokeObjectURL(link.href);
 
@@ -397,7 +391,7 @@ export default {
                     type: 'error',
                 });
             } finally {
-                this.loading = false;
+                this.export = false;
             }
         },
 

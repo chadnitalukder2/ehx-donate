@@ -507,7 +507,7 @@ class DonationController extends Controller
 
         // CSV headers
         fputcsv($output, [
-            'ID',
+            'SI',
             'Donor',
             'Amount',
             'Campaign',
@@ -523,7 +523,7 @@ class DonationController extends Controller
         $currency = $generalSettings['currency'] ?? 'GBP';
         $currencySymbols = Currency::getCurrencySymbol($currency);
         $symbol = $currencySymbols[$currency] ?? $currency;
-
+        $si = 1;
         // Fetch all donations
         $donations = (new Donation())->orderBy('created_at', 'desc')->get();
 
@@ -534,7 +534,7 @@ class DonationController extends Controller
             $campaignTitle = $campaign ? $campaign->title : '';
 
             fputcsv($output, [
-                $donation->id,
+                $si,
                 $donation->donor_name,
                 $symbol . ' ' . number_format($donation->net_amount ?? 0, 2),
                 $campaignTitle,
@@ -544,6 +544,7 @@ class DonationController extends Controller
                 $donation->payment_status,
                 $donation->created_at ? date('d/m/Y', strtotime($donation->created_at)) : 'N/A'
             ]);
+            $si++;
         }
 
         fclose($output);

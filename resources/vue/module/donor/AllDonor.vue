@@ -14,7 +14,7 @@
                     placeholder="Search" prefix-icon="Search" />
 
                 <div>
-                    <el-button @click="exportCSV()" class="ehxdo_export_btn" size="medium" type="info" style="">
+                    <el-button @click="exportCSV()" class="ehxdo_export_btn" :loading="export" size="medium" type="info" style="">
                         <!-- <el-icon class="ehxdo_ex_icon"><Bottom /></el-icon> -->
 
                         Export CSV</el-button>
@@ -137,6 +137,7 @@ export default {
             currencySymbols: window.EHXDonate.currencySymbols,
             total_donor: 0,
             loading: false,
+            export: false,
             currentPage: 1,
             last_page: 1,
             pageSize: 10,
@@ -263,7 +264,7 @@ export default {
 
            async exportCSV() {
             try {
-                this.loading = true;
+                this.export = true;
 
                 const response = await axios.get(
                     `${this.rest_api}api/export-donor`,
@@ -301,7 +302,7 @@ export default {
                     type: 'error',
                 });
             } finally {
-                this.loading = false;
+                this.export = false;
             }
         },
 

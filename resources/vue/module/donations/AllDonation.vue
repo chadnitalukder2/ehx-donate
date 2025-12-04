@@ -20,7 +20,7 @@
                         <el-option label="Pending" value="pending"></el-option>
                         <el-option label="Failed" value="failed"></el-option>
                     </el-select>
-                    <el-button @click="exportCSV()" class="ehxdo_export_btn" size="medium" type="info" style="">
+                    <el-button @click="exportCSV()" class="ehxdo_export_btn" :loading="export" size="medium" type="info" style="">
                         <!-- <el-icon class="ehxdo_ex_icon"><Bottom /></el-icon> -->
 
                         Export CSV</el-button>
@@ -177,6 +177,7 @@ export default {
             donation: {},
             total_donations: 0,
             loading: false,
+            export: false,
             currentPage: 1,
             last_page: 1,
             pageSize: 10,
@@ -312,7 +313,7 @@ export default {
 
         async exportCSV() {
             try {
-                this.loading = true;
+                this.export = true;
 
                 const response = await axios.get(
                     `${this.rest_api}api/export-donation`,
@@ -350,7 +351,7 @@ export default {
                     type: 'error',
                 });
             } finally {
-                this.loading = false;
+                this.export = false;
             }
         },
 

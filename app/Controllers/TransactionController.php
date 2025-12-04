@@ -82,7 +82,7 @@ class TransactionController extends Controller
         fprintf($output, chr(0xEF) . chr(0xBB) . chr(0xBF));
 
         fputcsv($output, array(
-            'ID',
+            'SI',
             'Donor',
             'Campaign',
             'Amount',
@@ -97,7 +97,7 @@ class TransactionController extends Controller
         $symbol = $currencySymbols[$currency] ?? $currency;
 
         $transactions = (new Transaction())->orderBy('created_at', 'desc')->get();
-
+        $si = 1;
         foreach ($transactions as $transaction) {
             $transactionArray = $transaction->with('campaign')->with('donor')->toArray();
 
@@ -118,7 +118,7 @@ class TransactionController extends Controller
                 : 'N/A';
 
             fputcsv($output, array(
-                $transaction->id,
+               $si,
                 $donorName,
                 $campaignName,
                 $symbol . ' ' . number_format($transaction->payment_total ?? 0, 2),
@@ -126,6 +126,7 @@ class TransactionController extends Controller
                 ucfirst($transaction->payment_mode ?? 'N/A'),
                 $createdDate,
             ));
+            $si++;
         }
 
         fclose($output);
