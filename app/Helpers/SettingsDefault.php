@@ -14,14 +14,10 @@ class SettingsDefault
                 'currency' => 'GBP',
                 'currency_position' => 'Before',
                 'address_name' => '',
-                'address_line_1' => '',
-                'address_line_2' => '',
                 'city' => '',
-                'state' => '',
                 'postal_code' => '',
                 'progressbar' => true,
                 'anonymous' => false,
-                'recapture' => false,
                 'service_fee' => false,
                 'service_fee_percentage' => 0,
             ],
@@ -45,6 +41,11 @@ class SettingsDefault
                 'primary_btn' => '#067a3b',
                 'primary_btn_text' => '#FFFFFF',
                 'fontFamily' =>  'Inter Tight, Arial, sans-serif',
+            ],
+            'recaptcha' => [
+                'siteKey' => '',
+                'secretKey' => '',
+                'mode' =>  'disabled',
             ],
         ];
     }

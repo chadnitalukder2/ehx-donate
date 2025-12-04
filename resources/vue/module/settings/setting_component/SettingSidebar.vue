@@ -7,14 +7,17 @@
       <router-link :to="{ name: 'shortcode' }" class="ehxdo_menu_item">
         Shortcode
       </router-link>
-       <router-link :to="{ name: 'color' }" class="ehxdo_menu_item">
-        Colors & Style
-      </router-link>
       <router-link :to="{ name: 'email' }" class="ehxdo_menu_item">
         Email
       </router-link>
        <router-link :to="{ name: 'integration' }"class="ehxdo_menu_item">
         Integration
+      </router-link>
+        <router-link :to="{ name: 'recaptcha' }"class="ehxdo_menu_item">
+        reCAPTCHA
+      </router-link>
+        <router-link :to="{ name: 'color' }" class="ehxdo_menu_item">
+        Colors & Style
       </router-link>
 
      

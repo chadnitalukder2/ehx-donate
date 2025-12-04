@@ -151,6 +151,7 @@ export default {
         .ehxdo_settings_details {
             width: 100%;
             background: #fff;
+            overflow: hidden;
             border-radius: 0px 16px 16px 0px;
         }
     }

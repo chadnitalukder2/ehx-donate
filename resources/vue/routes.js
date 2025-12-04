@@ -15,6 +15,7 @@ import Shortcode from './module/settings/setting_component/Shortcode.vue';
 import Color from './module/settings/setting_component/Color.vue';
 import Email from './module/settings/setting_component/Email.vue';
 import Integration from './module/settings/setting_component/Instigation.vue';
+import Recaptcha from './module/settings/setting_component/Recaptcha.vue';
 // Create router
 const router = createRouter({
     history: createWebHashHistory(),
@@ -132,6 +133,12 @@ const router = createRouter({
                     path: 'integration',
                     component: Integration,
                     name: 'integration',
+                    meta: { active_menu: 0 }
+                },
+                {
+                    path: 'recaptcha',
+                    component: Recaptcha,
+                    name: 'recaptcha',
                     meta: { active_menu: 0 }
                 }
             ]

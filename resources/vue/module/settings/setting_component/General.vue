@@ -96,18 +96,6 @@
                             </div>
                         </div>
 
-                        <!--  Recapcharings Switch -->
-                        <div class="ehxdo-form-group">
-                            <div class="ehxdo-form-row" style="margin-bottom: 30px;">
-                                <label class="ehxdo-form-label">Recapture</label>
-                                <div class="ehxdo-input-wrapper">
-                                    <el-switch v-model="settings.recapture" class="ml-2"
-                                        style="--el-switch-on-color: #00A63E; --el-switch-off-color: #d1d5db" />
-                                    <p style="margin: 0px; color: #6b7280;">Enable this to keep your donation form safe from spam and bots.</p>
-                                </div>
-                            </div>
-                        </div>
-
                     </div>
                 </el-form>
             </div>
@@ -207,7 +195,7 @@ export default {
             type: Object,
             default: () => ({
                 service_fee: false,
-                service_fee_percentage: 1, // Default 5%
+                service_fee_percentage: 1,
                 currency: 'GBP',
                 currency_position: 'Before'
             })
