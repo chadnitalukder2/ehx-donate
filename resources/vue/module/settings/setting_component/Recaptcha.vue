@@ -150,7 +150,7 @@ export default {
 
 .ehxdo-mode-option {
     padding: 8px 12px;
-    border: 1.5px dashed #e0e0e0;
+    border: 1px dashed #e0e0e0;
     border-radius: 10px;
     background: white;
     cursor: pointer;
@@ -196,14 +196,14 @@ export default {
 }
 
 .ehxdo-keys-section {
-    border: 1.5px solid #e0e0e0;
+    border: 1px solid #e0e0e0;
     border-radius: 16px;
     margin-top: 24px;
 }
 
 .ehxdo-rechaptcha-header {
     padding: 20px;
-    border-bottom: 1.5px solid #e0e0e0;
+    border-bottom: 1px solid #e0e0e0;
 }
 
 .ehxdo-keys-info {
