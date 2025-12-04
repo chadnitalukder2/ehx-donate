@@ -13,64 +13,76 @@
                     <div class="ehxdo-fields-container">
                         <!--  Progressbar Switch -->
                         <div class="ehxdo-form-group">
-                            <div class="ehxdo-form-row" style="margin-bottom: 15px;">
+                            <div class="ehxdo-form-row" style="margin-bottom: 30px;">
                                 <label class="ehxdo-form-label">Progressbar</label>
                                 <div class="ehxdo-input-wrapper">
                                     <el-switch v-model="settings.progressbar" class="ml-2"
                                         style="--el-switch-on-color: #00A63E; --el-switch-off-color: #d1d5db" />
-                                        <p style="margin: 0px; color: #6b7280;">Enable the progress bar to show campaign progress on your frontend view.</p>
+                                    <p style="margin: 0px; color: #6b7280;">Enable the progress bar to show campaign
+                                        progress on your frontend view.</p>
                                 </div>
                             </div>
                         </div>
 
-                        
-                            <!-- Currency -->
-                            <div class="ehxdo-form-group" style="flex-basis: 50%;">
-                                <el-form-item label="Currency" prop="currency">
+
+                        <!-- Currency -->
+                        <div class="ehxdo-form-group">
+                            <div class="ehxdo-form-row" style="margin-bottom: 30px;">
+                                <label class="ehxdo-form-label">Currency</label>
+                                <div class="ehxdo-input-wrapper">
                                     <el-select v-model="settings.currency" placeholder="Select currency" searchable>
                                         <el-option v-for="(label, value) in currencies" :key="value" :label="label"
                                             :value="value" />
                                     </el-select>
-                                </el-form-item>
+                                </div>
                             </div>
+                        </div>
 
-                            <!-- Currency Position -->
-                            <div class="ehxdo-form-group" style="flex-basis: 50%;">
-                                <el-form-item label="Currency Position" prop="currency_position">
+                        <!-- Currency Position -->
+                        <div class="ehxdo-form-group">
+                            <div class="ehxdo-form-row" style="margin-bottom: 30px;">
+                                <label class="ehxdo-form-label">Currency Position</label>
+                                <div class="ehxdo-input-wrapper">
                                     <el-select v-model="settings.currency_position"
                                         placeholder="Select currency position">
                                         <el-option label="Before" value="Before" />
                                         <el-option label="After" selected value="After" />
                                     </el-select>
-                                </el-form-item>
+                                </div>
                             </div>
-                        
+                        </div>
+
                         <!-- Service Fee Switch -->
                         <div class="ehxdo-form-group">
-                            <div class="ehxdo-form-row">
+                            <div class="ehxdo-form-row" style="margin-bottom: 30px; " >
                                 <label class="ehxdo-form-label">Service Fee</label>
                                 <div class="ehxdo-input-wrapper">
                                     <el-switch v-model="settings.service_fee" class="ml-2"
                                         style="--el-switch-on-color: #00A63E; --el-switch-off-color: #d1d5db" />
-                                        <p style="margin:0; color:#6b7280;">Turn on to apply a service fee percentage to all donations.</p>
+                                    <p style="margin:0; color:#6b7280;">Turn on to apply a service fee percentage to all
+                                        donations.</p>
                                 </div>
                             </div>
                         </div>
 
                         <!-- Service Fee Percentage (Show only when enabled) -->
-                        <div class="ehxdo-form-group" v-if="settings.service_fee" style="margin-top: 20px;">
-                            <el-form-item label="Service Fee Percentage (%)" prop="service_fee_percentage">
-                                <el-input v-model.number="settings.service_fee_percentage" type="number"
-                                    placeholder="Enter percentage (e.g., 5 for 5%)" min="0" max="100" step="0.01">
-                                    <template #append>%</template>
-                                </el-input>
-                            </el-form-item>
-                            <p class="ehxdo-fee-hint">
-                                Example: If donation is {{ formatCurrency(100) }} with {{
-                                    settings.service_fee_percentage || 0 }}% fee,
-                                total will be {{ formatCurrency(calculateTotalWithFee(100)) }}
-                            </p>
+                        <div class="ehxdo-form-group" v-if="settings.service_fee">
+                            <div class="ehxdo-form-row" style="align-items: start;">
+                                <label class="ehxdo-form-label">Percentage (%)</label>
+                                <div class="ehxdo-input-wrapper">
+                                    <el-input v-model.number="settings.service_fee_percentage" type="number"
+                                        placeholder="Enter percentage (e.g., 5 for 5%)" min="0" max="100" step="0.01">
+                                        <template #append>%</template>
+                                    </el-input>
+                                    <p class="ehxdo-fee-hint">
+                                        Example: If donation is {{ formatCurrency(100) }} with {{
+                                            settings.service_fee_percentage || 0 }}% fee,
+                                        total will be {{ formatCurrency(calculateTotalWithFee(100)) }}
+                                    </p>
+                                </div>
+                            </div>
                         </div>
+
                     </div>
                 </el-form>
             </div>
@@ -86,59 +98,72 @@
                     <div class="ehxdo-fields-container">
                         <!-- Company Name -->
                         <div class="ehxdo-form-group">
-                            <el-form-item label="Company Name" prop="company_name">
-                                <el-input v-model="settings.company_name" />
-                            </el-form-item>
+                            <div class="ehxdo-form-row" style="margin-bottom: 30px; ">
+                                <label class="ehxdo-form-label">Company Name</label>
+                                <div class="ehxdo-input-wrapper">
+                                    <el-input v-model="settings.company_name" />
+                                </div>
+                            </div>
                         </div>
 
                         <!-- Industry -->
                         <div class="ehxdo-form-group">
-                            <el-form-item label="Industry" prop="industry">
-                                <el-select v-model="settings.industry" placeholder="Select industry">
-                                    <el-option label="Social" value="Social" />
-                                    <el-option label="Technology" value="Technology" />
-                                    <el-option label="Finance" value="Finance" />
-                                    <el-option label="Healthcare" value="Healthcare" />
-                                </el-select>
-                            </el-form-item>
+                            <div class="ehxdo-form-row" style="margin-bottom: 30px; ">
+                                <label class="ehxdo-form-label">Industry</label>
+                                <div class="ehxdo-input-wrapper">
+                                    <el-select v-model="settings.industry" placeholder="Select industry">
+                                        <el-option label="Social" value="Social" />
+                                        <el-option label="Technology" value="Technology" />
+                                        <el-option label="Finance" value="Finance" />
+                                        <el-option label="Healthcare" value="Healthcare" />
+                                    </el-select>
+                                </div>
+                            </div>
                         </div>
+
 
                         <!-- Country -->
                         <div class="ehxdo-form-group">
-                            <el-form-item label="Country or Region" prop="country">
-                                <el-select v-model="settings.country" placeholder="Select country">
-                                    <el-option v-for="(label, value) in countries" :key="value" :label="label"
-                                        :value="value" />
-                                </el-select>
-                            </el-form-item>
+                            <div class="ehxdo-form-row" style="margin-bottom: 30px; ">
+                                <label class="ehxdo-form-label">Country or Region</label>
+                                <div class="ehxdo-input-wrapper">
+                                    <el-select v-model="settings.country" placeholder="Select country">
+                                        <el-option v-for="(label, value) in countries" :key="value" :label="label"
+                                            :value="value" />
+                                    </el-select>
+                                </div>
+                            </div>
                         </div>
+
 
                         <!-- Address Name -->
                         <div class="ehxdo-form-group">
-                            <el-form-item label="Address" prop="address_name">
-                                <el-input v-model="settings.address_name" />
-                            </el-form-item>
+                            <div class="ehxdo-form-row" style="margin-bottom: 30px; ">
+                                <label class="ehxdo-form-label">Address</label>
+                                <div class="ehxdo-input-wrapper">
+                                    <el-input v-model="settings.address_name" />
+                                </div>
+                            </div>
                         </div>
 
                         <!-- City -->
-                        <div class="ehxdo-form-group">
-                            <el-form-item label="City" prop="city">
-                                <el-input v-model="settings.city" />
-                            </el-form-item>
+                         <div class="ehxdo-form-group">
+                            <div class="ehxdo-form-row" style="margin-bottom: 30px; ">
+                                <label class="ehxdo-form-label">City</label>
+                                <div class="ehxdo-input-wrapper">
+                                    <el-input v-model="settings.city" />
+                                </div>
+                            </div>
                         </div>
+            
 
                         <!-- Address + Postal Code -->
-                        <div class="ehxdo-grid-container">
-                            <div class="ehxdo-form-group ehxdo-grid-col-2">
-                                <el-form-item label="Address" prop="address">
-                                    <el-input v-model="settings.address" />
-                                </el-form-item>
-                            </div>
-
-                            <div class="ehxdo-form-group">
-                                <el-form-item label="Postal Code" prop="postal_code">
-                                    <el-input v-model="settings.postal_code" />
-                                </el-form-item>
+                           <div class="ehxdo-form-group">
+                            <div class="ehxdo-form-row">
+                                <label class="ehxdo-form-label">Postal Code</label>
+                                <div class="ehxdo-input-wrapper">
+                                     <el-input v-model="settings.postal_code" />
+                                </div>
                             </div>
                         </div>
 
@@ -217,9 +242,10 @@ export default {
 <style scoped lang="scss">
 .ehxdo-form-row {
     display: grid;
-    grid-template-columns: 120px 1fr;
+    grid-template-columns: 160px 1fr;
     gap: 20px;
     align-items: center;
+    
 
     .ehxdo-form-label {
         color: #606266;
@@ -231,7 +257,6 @@ export default {
 .ehxdo-fee-hint {
     font-size: 0.8125rem;
     color: #6b7280;
-    margin-top: -12px;
     padding: 0.75rem;
     background-color: #F8F9FC;
     border-radius: 6px;
