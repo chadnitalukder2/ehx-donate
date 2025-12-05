@@ -1,12 +1,17 @@
 jQuery(document).ready(function ($) {
 
-    // Get currency settings from hidden inputs or data attributes
+    // Get currency settings
     const currencySymbol = $('input[name="currency_symbol"]').val() || '£';
     const currencyPosition = $('input[name="currency_position"]').val() || 'Before';
 
     // Get service fee settings
     const serviceFeeEnabled = $('#ehxdo_service_fee_enabled').val() === '1' || $('#ehxdo_service_fee_enabled').val() === 'true';
     const serviceFeePercentage = parseFloat($('#ehxdo_service_fee_percentage').val()) || 0;
+
+    // Get reCAPTCHA settings
+    const recaptchaEnabled = $('input[name="recaptcha_enabled"]').length > 0;
+    const recaptchaMode = $('input[name="recaptcha_mode"]').val() || '';
+    const recaptchaSiteKey = $('#recaptcha-site-key').val() || '';
 
     // Helper function to format currency
     function formatCurrency(amount) {
@@ -41,7 +46,6 @@ jQuery(document).ready(function ($) {
             $(this).toggleClass('ehxdo-hidden', i !== index);
         });
 
-        // Update button states
         $('.ehxdo-prev').prop('disabled', index === 0);
         $('.ehxdo-next').css('display', index === $sections.length - 1 ? 'none' : 'inline-block');
     }
@@ -78,7 +82,6 @@ jQuery(document).ready(function ($) {
 
         $amountInput.val(donationAmount);
 
-        // Update donate button with icon - show total with fee if enabled
         const displayAmount = (serviceFeeEnabled && serviceFeePercentage > 0) ? formattedTotalWithFee : formattedDonationAmount;
         const numericAmount = (serviceFeeEnabled && serviceFeePercentage > 0) ? totalWithFee : donationAmount;
 
@@ -90,22 +93,18 @@ jQuery(document).ready(function ($) {
             Donate ${displayAmount}
         `);
 
-        // Update summary amounts
         $summaryAmount.text(formattedDonationAmount);
 
-        // Only show fee calculation if service fee is enabled
         if (serviceFeeEnabled && serviceFeePercentage > 0) {
             $summaryTotalWithFee.text(formattedTotalWithFee);
         } else {
             $summaryTotalWithFee.text(formattedDonationAmount);
         }
 
-        // Update final summary amount (same as donate button)
         if ($finalSummaryAmount.length) {
             $finalSummaryAmount.text(displayAmount);
         }
 
-        //update net amount input
         if ($netAmount.length) {
             $netAmount.val(numericAmount.toFixed(2));
         }
@@ -128,7 +127,6 @@ jQuery(document).ready(function ($) {
         }
     });
 
-    // Donate button click with validation
     $donateBtn.on('click', function () {
         const selectedAmount = parseFloat($amountInput.val()) || 0;
         if (selectedAmount <= 0) {
@@ -151,7 +149,6 @@ jQuery(document).ready(function ($) {
 
     showSection(currentSection);
 
-    // Function to generate unique donation hash
     function generateDonationHash() {
         const timestamp = Date.now();
         const random = Math.random().toString(36).substring(2, 15);
@@ -159,21 +156,45 @@ jQuery(document).ready(function ($) {
         return hash;
     }
 
-    // reCAPTCHA callback functions (global scope)
-    window.onRecaptchaSuccess = function(token) {
+    // ===================reCAPTCHA V2 (Visible) Callbacks=========================
+    window.onRecaptchaSuccess = function (token) {
         $('#recaptcha-response').val(token);
         $('.ehxdo-recaptcha-error').hide();
+        console.log('reCAPTCHA V2 verified successfully');
     };
 
-    window.onRecaptchaExpired = function() {
+    window.onRecaptchaExpired = function () {
         $('#recaptcha-response').val('');
+        console.log('reCAPTCHA V2 expired');
     };
 
-    // Form submission handling with reCAPTCHA validation
-    $('#ehxdo-donation-form').on('submit', function (e) {
+    // ====================reCAPTCHA V3 (Invisible) - Execute on form submit========================
+    function executeRecaptchaV3() {
+        return new Promise((resolve, reject) => {
+            if (typeof grecaptcha === 'undefined') {
+                reject('reCAPTCHA not loaded');
+                return;
+            }
+
+            grecaptcha.ready(function () {
+                grecaptcha.execute(recaptchaSiteKey, { action: 'donation_submit' })
+                    .then(function (token) {
+                        $('#recaptcha-response').val(token);
+                        console.log('reCAPTCHA V3 token generated');
+                        resolve(token);
+                    })
+                    .catch(function (error) {
+                        console.error('reCAPTCHA V3 error:', error);
+                        reject(error);
+                    });
+            });
+        });
+    }
+
+    // ====================Form Submission Handler========================
+    $('#ehxdo-donation-form').on('submit', async function (e) {
         e.preventDefault();
 
-        // Remove any existing error messages
         $('.ehxdo-form-error-msg').remove();
 
         let errors = [];
@@ -181,12 +202,10 @@ jQuery(document).ready(function ($) {
         const lastName = $(this).find('input[name="last_name"]')[0];
         const email = $(this).find('input[name="email"]')[0];
 
-        // Reset borders
         $(firstName).css('border', '');
         $(lastName).css('border', '');
         $(email).css('border', '');
 
-        // Validate fields
         if (!firstName.value.trim()) {
             $(firstName).css('border', '1.5px solid red');
             errors.push('First name is required');
@@ -196,30 +215,43 @@ jQuery(document).ready(function ($) {
             errors.push('Last name is required');
         }
 
-        // Email validation
         const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
         if (!email.value.trim() || !emailRegex.test(email.value.trim())) {
             $(email).css('border', '1.5px solid red');
             errors.push('Please enter a valid email address.');
         }
 
-        // Check if reCAPTCHA is enabled and validate
-        const recaptchaEnabled = $('input[name="recaptcha_enabled"]').length > 0;
+        // reCAPTCHA Validation by Mode
         if (recaptchaEnabled) {
-            const recaptchaResponse = $('#recaptcha-response').val();
-            if (!recaptchaResponse || recaptchaResponse.trim() === '') {
-                $('.ehxdo-recaptcha-error').show();
-                errors.push('Please complete the reCAPTCHA verification.');
-                
-                // Scroll to reCAPTCHA
-                $('.ehxdo-recaptcha-container')[0]?.scrollIntoView({ 
-                    behavior: 'smooth', 
-                    block: 'center' 
-                });
+            if (recaptchaMode === 'visible') {
+                // V2 Visible - Check if user clicked checkbox
+                const recaptchaResponse = $('#recaptcha-response').val();
+                if (!recaptchaResponse || recaptchaResponse.trim() === '') {
+                    $('.ehxdo-recaptcha-error').show();
+                    errors.push('Please complete the reCAPTCHA verification.');
+
+                    $('.ehxdo-recaptcha-container')[0]?.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'center'
+                    });
+                }
+            } else if (recaptchaMode === 'invisible') {
+                // V3 Invisible - Generate token automatically
+                try {
+                    const $submitBtn = $(this).find('.ehxdo-submit');
+                    $submitBtn.prop('disabled', true).text('Verifying...');
+
+                    await executeRecaptchaV3();
+
+                    $submitBtn.prop('disabled', false).text('Submit');
+                } catch (error) {
+                    console.error('reCAPTCHA V3 failed:', error);
+                    errors.push('reCAPTCHA verification failed. Please try again.');
+                }
             }
         }
 
-        // If there are errors, show error message and return
+        // If there are errors, show and return
         if (errors.length > 0) {
             const errorMsg = `<p class="ehxdo-form-error-msg" style="color: red; font-size: 14px; margin: 15px 0; padding: 10px; background-color: #ffebee; border-radius: 4px;">
                 <strong>Error:</strong> Please complete all required fields
@@ -242,16 +274,11 @@ jQuery(document).ready(function ($) {
         const originalText = $submitBtn.text();
 
         $submitBtn.prop('disabled', true)
-            .html('<span style="display: inline-block; margin-right: 8px;">⏳</span> Submitting...')
+            .html('Submitting...')
             .css('opacity', '0.7');
 
-        // Get the base donation amount (without fee)
         const donationAmount = parseFloat($('#ehxdo-selected-amount').val()) || 0;
-        
-        // Calculate service fee
         const serviceFee = calculateServiceFee(donationAmount);
-        
-        // Get total amount (donation + fee)
         const totalAmount = parseFloat($('#ehxdo-net_amount').val()) || donationAmount;
 
         const data = {
@@ -259,22 +286,19 @@ jQuery(document).ready(function ($) {
             last_name: $('input[name="last_name"]').val() || '',
             email: $('input[name="email"]').val() || '',
             phone: $('input[name="phone"]').val() || '',
-            donation_hash: generateDonationHash(), 
+            donation_hash: generateDonationHash(),
             campaign_id: $('input[name="campaign_id"]').val() || '',
             donation_note: $('textarea[name="donation_note"]').val() || '',
             anonymous_donation: $('input[name="anonymous_donation"]').is(':checked') ? 1 : 0,
             gift_aid: $('input[name="gift_aid"]').is(':checked') ? 1 : 0,
-            
-            // Amount fields
+
             amount: donationAmount.toFixed(2),
             service_fee: serviceFee.toFixed(2),
             net_amount: totalAmount.toFixed(2),
-            
-            // Other fields
-            currency: $('input[name="currency"]').val() || '', 
+
+            currency: $('input[name="currency"]').val() || '',
             donation_type: $('#donation_type').val() || 'one-time',
-            
-            // Address fields (if gift aid is checked)
+
             address_line_1: $('input[name="address_line_1"]').val() || '',
             address_line_2: $('input[name="address_line_2"]').val() || '',
             city: $('input[name="city"]').val() || '',
@@ -285,13 +309,14 @@ jQuery(document).ready(function ($) {
             payment_mode: $('input[name="payment_mode"]').val() || 'live',
         };
 
-        // Add reCAPTCHA response if enabled
+        // Add reCAPTCHA data
         if (recaptchaEnabled) {
             data.recaptcha_response = $('#recaptcha-response').val();
+            data.recaptcha_mode = recaptchaMode;
         }
-        
+
         console.log('Submitting donation with data:', data);
-        
+
         $.ajax({
             url: `${window.EHXDonate.restUrl}donationSubmission`,
             type: 'POST',
@@ -301,10 +326,10 @@ jQuery(document).ready(function ($) {
             data: data,
             success: function (response) {
                 if (response.success) {
-                    $submitBtn.html('<span style="display: inline-block; margin-right: 8px;">✓</span> Success! Redirecting...');
+                    $submitBtn.html('<span style="display: inline-block; margin-right: 8px;">✓</span> Success!');
                     let redirect_url = response?.data?.redirect_url;
                     console.log('Redirecting to:', response);
-                    if(redirect_url) {
+                    if (redirect_url) {
                         window.location.href = redirect_url;
                     }
                 } else {
@@ -317,16 +342,18 @@ jQuery(document).ready(function ($) {
                         .text(originalText)
                         .css('opacity', '1');
 
-                    // Reset reCAPTCHA if validation failed
-                    if (recaptchaEnabled && typeof grecaptcha !== 'undefined') {
-                        grecaptcha.reset();
+                    // Reset reCAPTCHA
+                    if (recaptchaEnabled) {
+                        if (recaptchaMode === 'visible' && typeof grecaptcha !== 'undefined') {
+                            grecaptcha.reset();
+                        }
                         $('#recaptcha-response').val('');
                     }
                 }
             },
             error: function (xhr, status, error) {
                 console.error('AJAX Error:', status, error);
-                
+
                 const errorMsg = `<p class="ehxdo-form-error-msg" style="color: red; font-size: 14px; margin: 15px 0; padding: 10px; background-color: #ffebee; border-radius: 4px;">
                     <strong>Error:</strong> An unexpected error occurred. Please try again later.
                 </p>`;
@@ -336,9 +363,11 @@ jQuery(document).ready(function ($) {
                     .text(originalText)
                     .css('opacity', '1');
 
-                // Reset reCAPTCHA on error
-                if (recaptchaEnabled && typeof grecaptcha !== 'undefined') {
-                    grecaptcha.reset();
+                // Reset reCAPTCHA
+                if (recaptchaEnabled) {
+                    if (recaptchaMode === 'visible' && typeof grecaptcha !== 'undefined') {
+                        grecaptcha.reset();
+                    }
                     $('#recaptcha-response').val('');
                 }
             }

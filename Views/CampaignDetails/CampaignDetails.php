@@ -38,8 +38,18 @@ $maxDonation = $campaign['settings']['max_donation'] ?? 999999;
 
 $default_amount = 0.00;
 
- if (($recaptchaSettings['mode'] ?? 'disabled') !== 'disabled' ): ?>
-<script src="https://www.google.com/recaptcha/api.js" async defer></script>
+$recaptchaMode = $recaptchaSettings['mode'] ?? 'disabled';
+$recaptchaSiteKey = $recaptchaSettings['siteKey'] ?? '';
+$recaptchaSecretKey = $recaptchaSettings['secretKey'] ?? '';
+
+if ($recaptchaMode !== 'disabled' && !empty($recaptchaSiteKey)): ?>
+    <?php if ($recaptchaMode === 'visible'): ?>
+        <!-- reCAPTCHA V2 - Visible Checkbox -->
+        <script src="https://www.google.com/recaptcha/api.js" async defer></script>
+    <?php elseif ($recaptchaMode === 'invisible'): ?>
+        <!-- reCAPTCHA V3 - Invisible -->
+        <script src="https://www.google.com/recaptcha/api.js?render=<?php echo htmlspecialchars($recaptchaSiteKey); ?>"></script>
+    <?php endif; ?>
 <?php endif; ?>
 
 
@@ -347,19 +357,7 @@ $default_amount = 0.00;
                             </div>
                         <?php endif; ?>
                         <!-- && !empty($recaptchaSettings['siteKey']) -->
-                        <?php  ?>
-                            <div class="ehxdo-recaptcha-container" style="padding-top: 15px;">
-                                <div class="g-recaptcha"
-                                    data-sitekey="<?php echo htmlspecialchars($recaptchaSettings['siteKey']); ?>"
-                                    data-callback="onRecaptchaSuccess"
-                                    data-expired-callback="onRecaptchaExpired"></div>
-                                <p class="ehxdo-recaptcha-error" style="color: red; font-size: 14px; margin-top: 5px; display: none;">
-                                    Please complete the reCAPTCHA verification.
-                                </p>
-                            </div>
-                            <input type="hidden" name="recaptcha_enabled" value="1">
-                            <input type="hidden" name="recaptcha_response" id="recaptcha-response" value="">
-                        <?php  ?>
+
 
                         <div class="ehxdo-summary" style="padding-top: 20px;">
                             <div class="ehxdo-summary-row">
@@ -375,6 +373,28 @@ $default_amount = 0.00;
                                 </span>
                             </div> -->
                         </div>
+
+                        <?php if ($recaptchaMode === 'visible' && !empty($recaptchaSiteKey)): ?>
+                            <!-- V2 Visible Checkbox -->
+                            <div class="ehxdo-recaptcha-container" style="padding-top: 15px;">
+                                <div class="g-recaptcha"
+                                    data-sitekey="<?php echo htmlspecialchars($recaptchaSiteKey); ?>"
+                                    data-callback="onRecaptchaSuccess"
+                                    data-expired-callback="onRecaptchaExpired"></div>
+                                <p class="ehxdo-recaptcha-error" style="color: red; font-size: 14px; margin-top: 5px; display: none;">
+                                    Please complete the reCAPTCHA verification.
+                                </p>
+                            </div>
+                            <input type="hidden" name="recaptcha_enabled" value="1">
+                            <input type="hidden" name="recaptcha_mode" value="visible">
+                            <input type="hidden" name="recaptcha_response" id="recaptcha-response" value="">
+                        <?php elseif ($recaptchaMode === 'invisible' && !empty($recaptchaSiteKey)): ?>
+                            <!-- V3 Invisible - No visible widget -->
+                            <input type="hidden" name="recaptcha_enabled" value="1">
+                            <input type="hidden" name="recaptcha_mode" value="invisible">
+                            <input type="hidden" name="recaptcha_response" id="recaptcha-response" value="">
+                            <input type="hidden" id="recaptcha-site-key" value="<?php echo htmlspecialchars($recaptchaSiteKey); ?>">
+                        <?php endif; ?>
 
                         <div class="ehxdo_button_wrapper">
 
