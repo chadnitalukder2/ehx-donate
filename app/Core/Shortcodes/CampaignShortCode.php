@@ -45,6 +45,7 @@ class CampaignShortCode
         $currencySymbols = Currency::getCurrencySymbol('');
         $colorSettings = get_option('ehx_donate_settings_color', []);
         $integrationsSettings = get_option('ehx_donate_settings_integration', []);
+        $recaptchaSettings = get_option('ehx_donate_settings_recaptcha');
         $isTestMode = $integrationsSettings['stripe']['test_mode'] ?? false;
         $stripeEnabled = $integrationsSettings['stripe']['enabled'] ?? false;
 
@@ -56,6 +57,7 @@ class CampaignShortCode
             'integrationsSettings' => $integrationsSettings,
             'isTestMode' => $isTestMode,
             'stripeEnabled' => $stripeEnabled,
+            'recaptchaSettings' => $recaptchaSettings,
         ]);
     }
 }

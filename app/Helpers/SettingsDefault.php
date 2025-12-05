@@ -43,8 +43,8 @@ class SettingsDefault
                 'fontFamily' =>  'Inter Tight, Arial, sans-serif',
             ],
             'recaptcha' => [
-                'siteKey' => '',
-                'secretKey' => '',
+                'siteKey' => '6LeIxAcTAAAAAJcZVRqyHh71UMIEGNQ_MXjiZKhI',
+                'secretKey' => '6LeIxAcTAAAAAGG-vFI1TnRWxMZNFuojJ4WifJWe',
                 'mode' =>  'disabled',
             ],
         ];

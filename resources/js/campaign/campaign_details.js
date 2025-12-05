@@ -159,7 +159,17 @@ jQuery(document).ready(function ($) {
         return hash;
     }
 
-    //form submission handling    
+    // reCAPTCHA callback functions (global scope)
+    window.onRecaptchaSuccess = function(token) {
+        $('#recaptcha-response').val(token);
+        $('.ehxdo-recaptcha-error').hide();
+    };
+
+    window.onRecaptchaExpired = function() {
+        $('#recaptcha-response').val('');
+    };
+
+    // Form submission handling with reCAPTCHA validation
     $('#ehxdo-donation-form').on('submit', function (e) {
         e.preventDefault();
 
@@ -186,18 +196,33 @@ jQuery(document).ready(function ($) {
             errors.push('Last name is required');
         }
 
-        // More robust email regex
+        // Email validation
         const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
-
         if (!email.value.trim() || !emailRegex.test(email.value.trim())) {
             $(email).css('border', '1.5px solid red');
             errors.push('Please enter a valid email address.');
         }
 
+        // Check if reCAPTCHA is enabled and validate
+        const recaptchaEnabled = $('input[name="recaptcha_enabled"]').length > 0;
+        if (recaptchaEnabled) {
+            const recaptchaResponse = $('#recaptcha-response').val();
+            if (!recaptchaResponse || recaptchaResponse.trim() === '') {
+                $('.ehxdo-recaptcha-error').show();
+                errors.push('Please complete the reCAPTCHA verification.');
+                
+                // Scroll to reCAPTCHA
+                $('.ehxdo-recaptcha-container')[0]?.scrollIntoView({ 
+                    behavior: 'smooth', 
+                    block: 'center' 
+                });
+            }
+        }
+
         // If there are errors, show error message and return
         if (errors.length > 0) {
-            const errorMsg = `<p class="ehxdo-form-error-msg" style="color: red; font-size: 14px;">
-                Please complete all required fields<br>
+            const errorMsg = `<p class="ehxdo-form-error-msg" style="color: red; font-size: 14px; margin: 15px 0; padding: 10px; background-color: #ffebee; border-radius: 4px;">
+                <strong>Error:</strong> Please complete all required fields
             </p>`;
 
             $('.ehxdo-section-nav').before(errorMsg);
@@ -259,6 +284,11 @@ jQuery(document).ready(function ($) {
 
             payment_mode: $('input[name="payment_mode"]').val() || 'live',
         };
+
+        // Add reCAPTCHA response if enabled
+        if (recaptchaEnabled) {
+            data.recaptcha_response = $('#recaptcha-response').val();
+        }
         
         console.log('Submitting donation with data:', data);
         
@@ -286,6 +316,12 @@ jQuery(document).ready(function ($) {
                     $submitBtn.prop('disabled', false)
                         .text(originalText)
                         .css('opacity', '1');
+
+                    // Reset reCAPTCHA if validation failed
+                    if (recaptchaEnabled && typeof grecaptcha !== 'undefined') {
+                        grecaptcha.reset();
+                        $('#recaptcha-response').val('');
+                    }
                 }
             },
             error: function (xhr, status, error) {
@@ -299,6 +335,12 @@ jQuery(document).ready(function ($) {
                 $submitBtn.prop('disabled', false)
                     .text(originalText)
                     .css('opacity', '1');
+
+                // Reset reCAPTCHA on error
+                if (recaptchaEnabled && typeof grecaptcha !== 'undefined') {
+                    grecaptcha.reset();
+                    $('#recaptcha-response').val('');
+                }
             }
         });
     });

@@ -37,8 +37,11 @@ $minDonation = $campaign['settings']['min_donation'] ?? 1;
 $maxDonation = $campaign['settings']['max_donation'] ?? 999999;
 
 $default_amount = 0.00;
-// dd($campaign);
-?>
+
+ if (($recaptchaSettings['mode'] ?? 'disabled') !== 'disabled' ): ?>
+<script src="https://www.google.com/recaptcha/api.js" async defer></script>
+<?php endif; ?>
+
 
 <style>
     :root {
@@ -343,6 +346,20 @@ $default_amount = 0.00;
                                 </p>
                             </div>
                         <?php endif; ?>
+                        <!-- && !empty($recaptchaSettings['siteKey']) -->
+                        <?php  ?>
+                            <div class="ehxdo-recaptcha-container" style="padding-top: 15px;">
+                                <div class="g-recaptcha"
+                                    data-sitekey="<?php echo htmlspecialchars($recaptchaSettings['siteKey']); ?>"
+                                    data-callback="onRecaptchaSuccess"
+                                    data-expired-callback="onRecaptchaExpired"></div>
+                                <p class="ehxdo-recaptcha-error" style="color: red; font-size: 14px; margin-top: 5px; display: none;">
+                                    Please complete the reCAPTCHA verification.
+                                </p>
+                            </div>
+                            <input type="hidden" name="recaptcha_enabled" value="1">
+                            <input type="hidden" name="recaptcha_response" id="recaptcha-response" value="">
+                        <?php  ?>
 
                         <div class="ehxdo-summary" style="padding-top: 20px;">
                             <div class="ehxdo-summary-row">
@@ -358,6 +375,7 @@ $default_amount = 0.00;
                                 </span>
                             </div> -->
                         </div>
+
                         <div class="ehxdo_button_wrapper">
 
                             <div class="ehxdo-section-nav">
