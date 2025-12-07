@@ -250,7 +250,7 @@ if ($recaptchaMode !== 'disabled' && !empty($recaptchaSiteKey)): ?>
                         Donate <span id="donate-amount-display"><?php echo formatAmount($default_amount, $currencySymbol, $position); ?></span>
                     </button>
 
-                    <p class="ehxdo-disclaimer">Protected by Google reCAPTCHA. Issues payment via Stripe.</p>
+                    <!-- <p class="ehxdo-disclaimer">Protected by Google reCAPTCHA. Issues payment via Stripe.</p> -->
 
                 </div>
 
@@ -310,15 +310,20 @@ if ($recaptchaMode !== 'disabled' && !empty($recaptchaSiteKey)): ?>
                             </div>
                         </div>
 
-                        <!-- <div class="ehxdo-gift-aid">
-                            <label style="display: flex; align-items: center; gap: 0.5rem; cursor: pointer;">
+                        <div >
+                            <!-- <label style="display: flex; align-items: center; gap: 0.5rem; cursor: pointer;">
                                 <input type="checkbox" name="gift_aid" id="gift_aid_checkbox" value="1" style="cursor: pointer;">
                                 <span style="font-size: 0.875rem;">Gift Aid</span>
+                            </label> -->
+                            <label class="ehxdo-checkbox-container">
+                                <input type="checkbox" name="gift_aid" id="gift_aid_checkbox" value="1">
+                                <span class="ehxdo-checkmark"></span>
+                                <span class="ehxdo-checkbox-label">Gift Aid</span>
                             </label>
-                        </div> -->
+                        </div>
 
                         <!-- Gift Aid Address Fields (Initially Hidden) -->
-                        <!-- <div id="gift_aid_fields" style="display: none;">
+                        <div id="gift_aid_fields" style="display: none;">
                             <div class="ehxdo-form-group">
                                 <label class="ehxdo-label">Address line 1</label>
                                 <input type="text" name="address_line_1" class="ehxdo-input">
@@ -349,22 +354,21 @@ if ($recaptchaMode !== 'disabled' && !empty($recaptchaSiteKey)): ?>
                                     <input type="text" name="post_code" class="ehxdo-input">
                                 </div>
                             </div>
-                        </div> -->
+                        </div>
 
 
                         <?php if ($generalSettings['anonymous'] ?? false): ?>
                             <div class="ehxdo-anonymous-option" style="padding-top: 15px;">
-                                <label style="display: flex; align-items: center; gap: 0.5rem; cursor: pointer;">
-                                    <input type="checkbox" name="anonymous_donation" id="anonymous_checkbox" value="1" style="cursor: pointer;">
-                                    <span style="font-size: 0.875rem;">Make this donation anonymous</span>
+                                <label class="ehxdo-checkbox-container" style="padding: 0px ">
+                                    <input type="checkbox" name="anonymous_donation" id="anonymous_donation" value="1">
+                                    <span class="ehxdo-checkmark"></span>
+                                    <span class="ehxdo-checkbox-label">Make this donation anonymous</span>
                                 </label>
-                                <p style="font-size: 0.75rem; color: #666; margin-top: 0.25rem; margin-left: 1.5rem;">
+                                <p style="font-size: 0.75rem; color: #666; margin-top: 2px; margin-left: 35px;">
                                     Your donation will be recorded, but your name won't be displayed publicly.
                                 </p>
                             </div>
                         <?php endif; ?>
-                        <!-- && !empty($recaptchaSettings['siteKey']) -->
-
 
                         <div class="ehxdo-summary" style="padding-top: 20px;">
                             <div class="ehxdo-summary-row">
@@ -423,36 +427,6 @@ if ($recaptchaMode !== 'disabled' && !empty($recaptchaSiteKey)): ?>
 </div>
 
 <script>
-    //Gift Aid Toggle-===========================================
-    // const giftAidCheckbox = document.getElementById('gift_aid_checkbox');
-    // const giftAidFields = document.getElementById('gift_aid_fields');
-
-    // giftAidCheckbox.addEventListener('change', function() {
-    //     if (this.checked) {
-    //         giftAidFields.style.display = 'block';
-    //     } else {
-    //         giftAidFields.style.display = 'none';
-    //     }
-    // });
-
-    //=====================note word count=========================
-    // document.addEventListener('DOMContentLoaded', function() {
-    //     const noteTextarea = document.querySelector('textarea[name="donation_note"]');
-    //     const charCount = document.getElementById('note-char-count');
-    //     if (noteTextarea && charCount) {
-    //         noteTextarea.addEventListener('input', function() {
-    //             const length = this.value.length;
-    //             charCount.textContent = length;
-    //             if (length > 450) {
-    //                 charCount.style.color = '#dc3545';
-    //             } else if (length > 400) {
-    //                 charCount.style.color = '#ffc107';
-    //             } else {
-    //                 charCount.style.color = '#999';
-    //             }
-    //         });
-    //     }
-    // });
 
     // Custom Amount Validation and Restriction
     document.addEventListener('DOMContentLoaded', function() {
