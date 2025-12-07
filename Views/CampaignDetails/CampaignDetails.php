@@ -200,23 +200,26 @@ if ($recaptchaMode !== 'disabled' && !empty($recaptchaSiteKey)): ?>
                                 Maximum: <?php echo formatAmount($maxDonation, $currencySymbol, $position); ?>
                             </p>
                         <?php endif; ?>
-                        <?php if(defined('EHXRD_VERSION') && $campaign['settings']['allow_recurring_amount'] === true): ?>
-                        <div class="ehxdo-recurring-option" style="padding-top: 15px;">
-                            <label style="display: flex; align-items: center; gap: 0.5rem; cursor: pointer;">
-                                <input type="checkbox" name="recurring_donation" id="recurring_checkbox" value="1" style="cursor: pointer;">
-                                <span style="font-size: 0.875rem;">Make this a recurring donation</span>
-                            </label>
-                        </div>
+                        <?php if (defined('EHXRD_VERSION') && $campaign['settings']['allow_recurring_amount'] === true): ?>
+                            <div class="ehxdo-recurring-option" style="padding-top: 15px;">
+                                <div class="ehxdo-recurring-option" style="padding-top: 15px;">
+                                    <label class="ehxdo-checkbox-container">
+                                        <input type="checkbox" name="recurring_donation" id="recurring_checkbox" value="1">
+                                        <span class="ehxdo-checkmark"></span>
+                                        <span class="ehxdo-checkbox-label">Make this a recurring donation</span>
+                                    </label>
+                                </div>
+                            </div>
 
-                        <div class="ehxdo-recurring-interval" style="display: none; padding-top: 15px;">
-                            <label for="recurring_interval" style="font-size: 0.875rem;">Frequency</label>
-                            <select name="recurring_interval" id="recurring_interval" style="font-size: 0.875rem; padding: 0.5rem; border-radius: 0.5rem; border: 1px solid #ccc; margin-top: 0.5rem;">
-                                <option value="week">Weekly</option>
-                                <option value="month">Monthly</option>
-                                <option value="quarter">Quarterly</option>
-                                <option value="year">Yearly</option>
-                            </select>
-                        </div>
+                            <div class="ehxdo-recurring-interval" style="display: none; padding-top: 15px;">
+                                <label for="recurring_interval" class="ehxdo-label">Frequency</label>
+                                <select name="recurring_interval" id="recurring_interval" class="ehxdo-custom-amount" style="margin-top: 10px;">
+                                    <option value="week">Weekly</option>
+                                    <option value="month">Monthly</option>
+                                    <option value="quarter">Quarterly</option>
+                                    <option value="year">Yearly</option>
+                                </select>
+                            </div>
                         <?php endif; ?>
                     </div>
                     <input type="hidden" id="ehxdo_service_fee_percentage" value="<?php echo $generalSettings['service_fee_percentage'] ?? ''; ?>">
@@ -404,10 +407,10 @@ if ($recaptchaMode !== 'disabled' && !empty($recaptchaSiteKey)): ?>
 
                             <div class="ehxdo-section-nav">
                                 <button type="button" class="ehxdo-nav-btn ehxdo-prev">Previous</button>
-                                <?php if($stripeEnabled): ?>
+                                <?php if ($stripeEnabled): ?>
                                     <button type="submit" class="ehxdo-nav-btn ehxdo-submit">Submit</button>
                                 <?php endif; ?>
-                                <?php if(!$stripeEnabled): ?>
+                                <?php if (!$stripeEnabled): ?>
                                     <p style="color: red;">Please configure Stripe payment method to enable donation.</p>
                                 <?php endif; ?>
                             </div>

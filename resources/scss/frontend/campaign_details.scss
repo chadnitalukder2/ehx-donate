@@ -643,6 +643,90 @@ select.ehxdo-input {
   padding: 12px;
 }
 
+//===================checkbox===============================
+.ehxdo-checkbox-container {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    cursor: pointer;
+    user-select: none;
+    position: relative;
+    padding: 0.5rem 0;
+}
+
+/* Hide default checkbox */
+.ehxdo-checkbox-container input[type="checkbox"] {
+    position: absolute;
+    opacity: 0;
+    cursor: pointer;
+    height: 0;
+    width: 0;
+}
+
+/* Custom Checkmark */
+.ehxdo-checkmark {
+    position: relative;
+    height: 20px;
+    width: 20px;
+    background-color: #ffffff;
+    border: 2px solid #d1d5db;
+    border-radius: 4px;
+    transition: all 0.3s ease;
+    flex-shrink: 0;
+}
+
+/* Hover effect */
+.ehxdo-checkbox-container:hover .ehxdo-checkmark {
+    border-color: var(--ehxdo-primary-btn, #079455);
+    background-color: #f9fafb;
+}
+
+/* Checked state */
+.ehxdo-checkbox-container input:checked ~ .ehxdo-checkmark {
+    background-color: var(--ehxdo-primary-btn, #079455);
+    border-color: var(--ehxdo-primary-btn, #079455);
+}
+
+/* Checkmark icon (hidden by default) */
+.ehxdo-checkmark:after {
+    content: "";
+    position: absolute;
+    display: none;
+    left: 6px;
+    top: 2px;
+    width: 5px;
+    height: 10px;
+    border: solid white;
+    border-width: 0 2px 2px 0;
+    transform: rotate(45deg);
+}
+
+/* Show checkmark when checked */
+.ehxdo-checkbox-container input:checked ~ .ehxdo-checkmark:after {
+    display: block;
+}
+
+/* Label text */
+.ehxdo-checkbox-label {
+    font-size: 0.875rem;
+    color: #374151;
+    line-height: 1.5;
+    font-family: var(--ehxdo-font-family);
+}
+
+/* Disabled state */
+.ehxdo-checkbox-container input:disabled ~ .ehxdo-checkmark {
+    background-color: #f3f4f6;
+    border-color: #d1d5db;
+    cursor: not-allowed;
+}
+
+.ehxdo-checkbox-container input:disabled ~ .ehxdo-checkbox-label {
+    color: #9ca3af;
+    cursor: not-allowed;
+}
+
+
 /* Responsive Design */
 
 @media (max-width: 1024px) {
