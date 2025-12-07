@@ -249,6 +249,7 @@ class Plugin
             'ajaxUrl' => admin_url('admin-ajax.php'),
             'restUrl' => rest_url('ehx-donate/v1/'),
             'restNonce' => wp_create_nonce('wp_rest'),
+            'has_recurring_donation' => defined('EHXRD_VERSION') ? true : false,
 
             // 'nonce' => wp_create_nonce('exh_donate_nonce'),
             'strings' => [

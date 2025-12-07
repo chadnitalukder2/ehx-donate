@@ -46,6 +46,8 @@ class CreateDonationTable
         'tip_amount' => 'decimal(10,2) NOT NULL DEFAULT 0.00',
         'custom_form_data' => 'json DEFAULT NULL',
         'currency' => "varchar(10) NOT NULL DEFAULT 'GBP'",
+        'interval' => "varchar(50) DEFAULT NULL",
+        'interval_count' => 'int(11) NOT NULL DEFAULT 1',
         'payment_status' => "enum('pending','completed','failed','refunded') NOT NULL DEFAULT 'pending'",
         'comment_status' => "enum('publish','pending','spam') NOT NULL DEFAULT 'pending'",
         'message_replies' => 'json DEFAULT NULL',

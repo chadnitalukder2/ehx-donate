@@ -30,6 +30,8 @@ class Donation extends Model
         'charge',
         'total_payment',
         'processing_fee',
+        'interval',
+        'interval_count',
         'net_amount',
         'tip_amount',
         'custom_form_data',

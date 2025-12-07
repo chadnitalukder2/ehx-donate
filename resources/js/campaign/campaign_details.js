@@ -13,6 +13,15 @@ jQuery(document).ready(function ($) {
     const recaptchaMode = $('input[name="recaptcha_mode"]').val() || '';
     const recaptchaSiteKey = $('#recaptcha-site-key').val() || '';
 
+    // shows and hide recurring interval based on checkbox
+    $('#recurring_checkbox').on('change', function () {
+        if ($(this).is(':checked')) {
+            $('.ehxdo-recurring-interval').show();
+        } else {
+            $('.ehxdo-recurring-interval').hide();
+        }
+    });
+
     // Helper function to format currency
     function formatCurrency(amount) {
         const formatted = parseFloat(amount).toFixed(2);
@@ -201,6 +210,8 @@ jQuery(document).ready(function ($) {
         const firstName = $(this).find('input[name="first_name"]')[0];
         const lastName = $(this).find('input[name="last_name"]')[0];
         const email = $(this).find('input[name="email"]')[0];
+        const isRecurring = $(this).find('input[name="recurring_donation"]')[0];
+        const recurringInterval = $(this).find('select[name="recurring_interval"]')[0];
 
         $(firstName).css('border', '');
         $(lastName).css('border', '');
@@ -297,7 +308,8 @@ jQuery(document).ready(function ($) {
             net_amount: totalAmount.toFixed(2),
 
             currency: $('input[name="currency"]').val() || '',
-            donation_type: $('#donation_type').val() || 'one-time',
+            donation_type: isRecurring?.checked ? 'recurring' : 'one-time',
+            interval: recurringInterval?.value || 'week',
 
             address_line_1: $('input[name="address_line_1"]').val() || '',
             address_line_2: $('input[name="address_line_2"]').val() || '',

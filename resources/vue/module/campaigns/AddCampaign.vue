@@ -112,7 +112,7 @@
                             <!-- Predefined Pricing -->
                             <div class="ehxdo-section-inner">
                                 <div class="ehxdo-checkbox-group">
-                                    <el-checkbox v-model="form.settings.predefined_pricing" class="ehxdo-checkbox">
+                                    <el-checkbox  v-model="form.settings.predefined_pricing" class="ehxdo-checkbox">
                                       Allow Predefined Pricing
                                     </el-checkbox>
                                 </div>
@@ -159,12 +159,21 @@
                             <!-- Allow Recurring Amount -->
                             <div class="ehxdo-section-inner">
                                 <div class="ehxdo-checkbox-group">
-                                    <el-checkbox v-model="form.settings.allow_recurring_amount" class="ehxdo-checkbox">
-                                        Allow Recurring Amount
+                                    <el-checkbox 
+                                        :disabled="!has_recurring_donation"
+                                        v-model="form.settings.allow_recurring_amount" class="ehxdo-checkbox">
+                                        Allow Recurring Amount <span v-if="!has_recurring_donation">
+                                            <el-icon>
+                                                <Lock />
+                                            </el-icon>
+                                        </span>
                                     </el-checkbox>
                                 </div>
-                                <p class="ehxdo-description">
+                                <p class="ehxdo-description" v-if="has_recurring_donation">
                                     Enable this option to allow commission payments on recurring product subscriptions.
+                                </p>
+                                <p class="ehxdo-description" v-if="!has_recurring_donation">
+                                    Recurring Donation is not available. Please install EHx Recurring Donation plugin It's a pro feature.
                                 </p>
                             </div>
 
@@ -297,6 +306,7 @@ export default {
     },
     data() {
         return {
+            has_recurring_donation: window.EHXDonate?.has_recurring_donation || false,
             form: {},
             generalSettings: {},
             submitting: false,

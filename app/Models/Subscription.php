@@ -10,20 +10,27 @@ class Subscription extends Model
     /**
      * The table name
      */
-    protected $table = 'ehxdo_subscriptions';
+    protected $table = 'ehxdo_subscription';
 
     /**
      * The attributes that are mass assignable
      */
     protected $fillable = [
-        'title',
-        'description',
-        'destination',
-        'start_date',
-        'end_date',
-        'price',
+        'user_id',
+        'donor_id',
+        'campaign_id',
+        'donation_id',
+        'interval',
+        'interval_count',
+        'amount',
         'status',
-        'user_id'
+        'start_date',
+        'cancelled_at',
+        'next_payment_date',
+        'vendor_subscription_id',
+        'meta',
+        'created_at',
+        'updated_at',
     ];
 
     /**

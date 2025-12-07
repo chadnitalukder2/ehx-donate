@@ -8,6 +8,7 @@ use EHXDonate\Models\Trip;
 use EHXDonate\Services\DonationService;
 use EHXDonate\Services\Payment\Stripe;
 use EHXDonate\Models\Transaction;
+use EHXDonate\Models\Subscription;
 use EHXDonate\Models\Campaign;
 use EHXDonate\Helpers\Currency;
 
@@ -66,13 +67,17 @@ class DonationController extends Controller
             $this->error('Donation not found', 404);
             return;
         }
+        
         $transactions = (new Transaction())->where('donation_id', $id)->get();
+        $subscription = (new Subscription())->where('donation_id', $id)->first();
         $donor = Donor::find($donation->donor_id);
         $donor->profile = get_avatar_url($donor->email);
+
         $this->success([
             'donation' => $donation->toArray(),
             'transactions' => $transactions,
             'donor' => $donor,
+            'subscription' => $subscription,
         ]);
     }
     public function store(): void
@@ -94,6 +99,7 @@ class DonationController extends Controller
             'service_fee' => 'numeric',
             'currency' => 'string',
             'donation_type' => 'string',
+            'interval' => 'string',
             // Gift Aid address fields
             'address_line_1' => 'nullable|string',
             'address_line_2' => 'nullable|string',
@@ -189,6 +195,7 @@ class DonationController extends Controller
             'amount' => $data['amount'],
             'currency' => $data['currency'] ?? 'GBP',
             'donation_type' => $data['donation_type'] ?? 'one-time',
+            'interval' => $data['interval'] ?? 'monthly',
             'created_at' => current_time('mysql'),
             'updated_at' => current_time('mysql'),
         ];

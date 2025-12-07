@@ -54,6 +54,7 @@ class ApiRoutes
         $router->group(['prefix' => '/payment'], function ($router) {
             $router->get('/stripe/success', 'PaymentController@stripeSuccess', [], ['public' => true]);
             $router->get('/stripe/cancel', 'PaymentController@stripeCancel', [], ['public' => true]);
+            $router->post('/stripe/webhook', 'PaymentController@stripeWebhook', [], ['public' => true]);
         });
         $router->get('/receipt/download/{donation_id}', 'ReceiptController@downloadReceipt', [], ['public' => true]);
     }

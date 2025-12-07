@@ -3,6 +3,7 @@
         <Breadcrumb :donation="donation" />
         <UserCard :donor="donor" />
         <DonationDetailsCard :donation="donation" />
+        <SubscriptionDetails :subscription="subscription" :currency="donation.currency" />
         <TransactionsHistory :transactions="transactions" />
     </div>
 </template>
@@ -12,6 +13,7 @@ import axios from 'axios';
 import UserCard from './components/UserCard.vue';
 import DonationDetailsCard from './components/DonationDetailsCard.vue';
 import TransactionsHistory from './components/TransactionsHistory.vue';
+import SubscriptionDetails from './components/SubscriptionDetails.vue';
 import Breadcrumb from './components/Breadcrumb.vue';
 
 export default {
@@ -20,6 +22,7 @@ export default {
         UserCard,
         DonationDetailsCard,
         TransactionsHistory,
+        SubscriptionDetails,
         Breadcrumb
     },
     data() {
@@ -27,6 +30,7 @@ export default {
             donation: {},
             donor: {},
             transactions: [],
+            subscription: {},
             loading: false,
             nonce: window.EHXDonate.restNonce,
             rest_api: window.EHXDonate.restUrl,
@@ -45,6 +49,7 @@ export default {
                 this.donation = response?.data?.data?.donation;
                 this.donor = response?.data?.data?.donor;
                 this.transactions = response?.data?.data?.transactions;
+                this.subscription = response?.data?.data?.subscription;
 
                 this.loading = false;
             } catch (error) {
