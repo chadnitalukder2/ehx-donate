@@ -324,37 +324,7 @@ class CampaignController extends Controller
         $this->success([], 'Campaign deleted successfully');
     }
 
-    /**
-     * Get upcoming campaigns
-     */
-    public function upcoming(): void
-    {
-        $campaigns = Campaign::getUpcoming();
-
-        $this->success([
-            'campaigns' => array_map(function ($campaign) {
-                return $campaign->toArray();
-            }, $campaigns)
-        ]);
-    }
-
-    /**
-     * Get past campaigns
-     */
-    public function past(): void
-    {
-        $campaigns = Campaign::getPast();
-
-        $this->success([
-            'campaigns' => array_map(function ($campaign) {
-                return $campaign->toArray();
-            }, $campaigns)
-        ]);
-    }
-
-    /**
-     * Get campaigns by status
-     */
+  
     public function updateCampaignStatus(string $id): void
     {
         $this->requireAuth();
@@ -379,21 +349,6 @@ class CampaignController extends Controller
         ]);
     }
 
-    /**
-     * Get user's campaigns
-     */
-    public function myCampaigns(): void
-    {
-        $this->requireAuth();
-
-        $campaigns = Campaign::getByUser($this->getCurrentUserId());
-
-        $this->success([
-            'campaigns' => array_map(function ($campaign) {
-                return $campaign->toArray();
-            }, $campaigns)
-        ]);
-    }
 
     public function getCampaignByPostId(int $id)
     {

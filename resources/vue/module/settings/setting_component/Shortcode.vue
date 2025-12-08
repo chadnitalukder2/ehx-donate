@@ -1,7 +1,7 @@
 <template>
     <div class="ehxdo-shortcode-container">
         <!-- Donation Form Shortcode -->
-        <div class="ehxdo-shortcode-section" style="padding-top: 0px;">
+        <!-- <div class="ehxdo-shortcode-section" style="padding-top: 0px;">
             <h3 class="ehxdo-shortcode-title">Donation Form Shortcode</h3>
             <div class="ehxdo-shortcode-content">
                 <div class="ehxdo-shortcode-code">
@@ -12,10 +12,10 @@
                     into the content editor.
                 </p>
             </div>
-        </div>
+        </div> -->
 
         <!-- Donation Table Shortcode -->
-        <div class="ehxdo-shortcode-section">
+        <!-- <div class="ehxdo-shortcode-section">
             <h3 class="ehxdo-shortcode-title">Donation Table Shortcode</h3>
             <div class="ehxdo-shortcode-content">
                 <div class="ehxdo-shortcode-code">
@@ -26,7 +26,7 @@
                     into the content editor.
                 </p>
             </div>
-        </div>
+        </div> -->
 
         <!-- Campaign Lists Shortcode -->
         <div class="ehxdo-shortcode-section">

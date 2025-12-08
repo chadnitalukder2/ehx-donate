@@ -259,16 +259,6 @@ if ($recaptchaMode !== 'disabled' && !empty($recaptchaSiteKey)): ?>
                     <h3 class="ehxdo-card-title">Personal Information</h3>
 
                     <div class="ehxdo-form">
-                        <!-- <div class="ehxdo-form-group">
-                            <label class="ehxdo-label">Title *</label>
-                            <select name="title" class="ehxdo-input" required>
-                                <option value="">Select title</option>
-                                <option value="mr">Mr.</option>
-                                <option value="mrs">Mrs.</option>
-                                <option value="ms">Ms.</option>
-                                <option value="dr">Dr.</option>
-                            </select>
-                        </div> -->
                         <input type="hidden" name="payment_mode" value="<?php echo $isTestMode ? 'test' : 'live'; ?>">
 
                         <input type="hidden" name="campaign_id" value="<?php echo esc_attr($campaign['id']); ?>">
