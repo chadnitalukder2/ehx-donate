@@ -7,12 +7,12 @@
             <div class="ehxdo-recurring__plan">Standard Donation</div>
 
             <div class="ehxdo-recurring__amount">
-                <strong>{{ subscription?.amount }} {{ currency }}</strong>
+                <strong>{{ subscription?.amount }} {{ getSymbol(currency) }} </strong>
                 <span> / Billed {{ subscription?.interval }}</span>
             </div>
 
             <div class="ehxdo-recurring__next-bill">
-                Your next bill is for {{ subscription?.amount }} {{ currency }} on {{ subscription?.next_payment_date }}
+                Your next bill is for {{ subscription?.amount }} {{ getSymbol(currency) }} on {{ subscription?.next_payment_date }}
             </div>
 
             <div class="ehxdo-recurring__status">
@@ -38,6 +38,55 @@ export default {
         currency: {
             type: String,
             default: 'USD'
+        }
+    },
+    data() {
+        return {
+            currencies: window.EHXDonate.currencies,
+            currencySymbols: window.EHXDonate.currencySymbols,
+        }
+    },
+    methods: {
+         getSymbol(currency) {
+            return this.currencySymbols[currency] || currency;
+        },
+        getDate(date) {
+            if (!date) return '';
+            const options = { day: 'numeric', month: 'short', year: 'numeric' };
+            return new Date(date).toLocaleDateString('en-GB', options);
+        },
+        formatCurrency(amount, currency) {
+            const symbol = this.currencySymbols[currency] || currency;
+
+            const formattedAmount = parseFloat(amount || 0).toLocaleString('en-US', {
+                minimumFractionDigits: 2,
+                maximumFractionDigits: 2
+            });
+
+            return `${symbol} ${formattedAmount}`;
+        },
+        methods: {
+            getDate(date) {
+                if (!date) return '';
+                const options = { day: 'numeric', month: 'short', year: 'numeric' };
+                return new Date(date).toLocaleDateString('en-GB', options);
+            },
+            formatCurrency(amount, currency) {
+                const symbol = this.currencySymbols[currency] || currency;
+
+                const formattedAmount = parseFloat(amount || 0).toLocaleString('en-US', {
+                    minimumFractionDigits: 2,
+                    maximumFractionDigits: 2
+                });
+
+                return `${symbol} ${formattedAmount}`;
+            },
+
+            getTime(date) {
+                if (!date) return '';
+                const options = { hour: 'numeric', minute: 'numeric' };
+                return new Date(date).toLocaleTimeString('en-GB', options);
+            }
         }
     }
 }

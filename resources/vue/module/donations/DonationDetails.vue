@@ -3,7 +3,10 @@
         <Breadcrumb :donation="donation" />
         <UserCard :donor="donor" />
         <DonationDetailsCard :donation="donation" />
-        <SubscriptionDetails :subscription="subscription" :currency="donation.currency" />
+        <div v-if="donation.donation_type !== 'one-time'" >
+            <SubscriptionDetails :subscription="subscription" :currency="donation.currency" />
+        </div>
+       
         <TransactionsHistory :transactions="transactions" />
     </div>
 </template>
