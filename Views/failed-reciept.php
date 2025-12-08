@@ -1,4 +1,5 @@
 <?php
+use EHXDonate\Helpers\Currency;
 
 $primaryBtnColor = $colorSettings['primary_btn'] ?? '#079455';
 $primaryBtnTextColor = $colorSettings['primary_btn_text'] ?? '#ececec';
@@ -8,6 +9,19 @@ $donation_type_display = ucwords(str_replace('-', ' ', $donation['donation_type'
 
 // Format date
 $donation_date = date('F d, Y', strtotime($donation['created_at']));
+
+
+$currencySymbols = Currency::getCurrencySymbol('');
+$currency = $generalSettings['currency'] ?? 'GBP';
+$currencySymbol = $currencySymbols[$currency] ?? '£';
+$position = $generalSettings['currency_position'] ?? 'Before';
+
+function formatAmount($amount, $symbol, $position)
+{
+    $formatted = number_format($amount, 2);
+    return $position === 'Before' ? $symbol  . $formatted : $formatted . $symbol;
+}
+
 ?>
 
 <!DOCTYPE html>
@@ -347,7 +361,10 @@ $donation_date = date('F d, Y', strtotime($donation['created_at']));
         <div class="ehxdo_failed_details">
             <div class="ehxdo_failed_row">
                 <span class="ehxdo_failed_label">Attempted Amount:</span>
-                <span class="ehxdo_failed_value">$<?php echo number_format(floatval($donation['total_payment']), 2); ?></span>
+                <span class="ehxdo_failed_value">
+                     <?php echo formatAmount($donation['net_amount'], $currencySymbol, $position); ?>
+                    
+                </span>
             </div>
             <div class="ehxdo_failed_row">
                 <span class="ehxdo_failed_label">Campaign:</span>

@@ -67,7 +67,7 @@ class DonationController extends Controller
             $this->error('Donation not found', 404);
             return;
         }
-        
+
         $transactions = (new Transaction())->where('donation_id', $id)->get();
         $subscription = (new Subscription())->where('donation_id', $id)->first();
         $donor = Donor::find($donation->donor_id);
@@ -80,6 +80,7 @@ class DonationController extends Controller
             'subscription' => $subscription,
         ]);
     }
+    
     public function store(): void
     {
         $this->requireAuth();
@@ -258,115 +259,115 @@ class DonationController extends Controller
     {
         ob_start();
         ?>
-                <!DOCTYPE html>
-                <html>
+        <!DOCTYPE html>
+        <html>
 
-                <head>
-                    <style>
-                        body {
-                            font-family: Arial, sans-serif;
-                            line-height: 1.6;
-                            color: #333;
-                        }
+        <head>
+            <style>
+                body {
+                    font-family: Arial, sans-serif;
+                    line-height: 1.6;
+                    color: #333;
+                }
 
-                        .container {
-                            max-width: 600px;
-                            margin: 0 auto;
-                            padding: 20px;
-                        }
+                .container {
+                    max-width: 600px;
+                    margin: 0 auto;
+                    padding: 20px;
+                }
 
-                        .header {
-                            background: #4CAF50;
-                            color: white;
-                            padding: 20px;
-                            text-align: center;
-                        }
+                .header {
+                    background: #4CAF50;
+                    color: white;
+                    padding: 20px;
+                    text-align: center;
+                }
 
-                        .content {
-                            padding: 20px;
-                            background: #f9f9f9;
-                        }
+                .content {
+                    padding: 20px;
+                    background: #f9f9f9;
+                }
 
-                        .info-row {
-                            margin: 10px 0;
-                            padding: 10px;
-                            background: white;
-                        }
+                .info-row {
+                    margin: 10px 0;
+                    padding: 10px;
+                    background: white;
+                }
 
-                        .label {
-                            font-weight: bold;
-                            color: #555;
-                        }
+                .label {
+                    font-weight: bold;
+                    color: #555;
+                }
 
-                        .amount {
-                            font-size: 24px;
-                            color: #4CAF50;
-                            font-weight: bold;
-                        }
-                    </style>
-                </head>
+                .amount {
+                    font-size: 24px;
+                    color: #4CAF50;
+                    font-weight: bold;
+                }
+            </style>
+        </head>
 
-                <body>
-                    <div class="container">
-                        <div class="header">
-                            <h2>New Donation Received</h2>
-                        </div>
-                        <div class="content">
-                            <div class="info-row">
-                                <span class="label">Transaction ID:</span> <?php echo esc_html($donation->transaction_id); ?>
-                            </div>
-                            <div class="info-row">
-                                <span class="label">Donor Name:</span> <?php echo esc_html($donation->donor_name); ?>
-                            </div>
-                            <div class="info-row">
-                                <span class="label">Email:</span> <?php echo esc_html($donation->donor_email); ?>
-                            </div>
-                            <div class="info-row">
-                                <span class="label">Phone:</span> <?php echo esc_html($data['phone'] ?? 'N/A'); ?>
-                            </div>
-                            <div class="info-row">
-                                <span class="label">Amount:</span>
-                                <span class="amount"><?php echo esc_html($donation->currency . ' ' . number_format($donation->total_payment, 2)); ?></span>
-                            </div>
-                            <div class="info-row">
-                                <span class="label">Net Amount:</span> <?php echo esc_html($donation->currency . ' ' . number_format($donation->net_amount, 2)); ?>
-                            </div>
-                            <div class="info-row">
-                                <span class="label">Processing Fee:</span> <?php echo esc_html($donation->currency . ' ' . number_format($donation->processing_fee, 2)); ?>
-                            </div>
-                            <div class="info-row">
-                                <span class="label">Donation Type:</span> <?php echo esc_html(ucfirst($donation->donation_type)); ?>
-                            </div>
-                            <div class="info-row">
-                                <span class="label">Payment Mode:</span> <?php echo esc_html(ucfirst($donation->payment_mode)); ?>
-                            </div>
-                            <?php if (!empty($donation->donor_message)): ?>
-                                <div class="info-row">
-                                    <span class="label">Message:</span><br>
-                                    <?php echo nl2br(esc_html($donation->donor_message)); ?>
-                                </div>
-                            <?php endif; ?>
-                            <div class="info-row">
-                                <span class="label">Anonymous:</span> <?php echo $donation->anonymous_donation ? 'Yes' : 'No'; ?>
-                            </div>
-                            <div class="info-row">
-                                <span class="label">Date:</span> <?php echo esc_html($donation->created_at); ?>
-                            </div>
-                        </div>
+        <body>
+            <div class="container">
+                <div class="header">
+                    <h2>New Donation Received</h2>
+                </div>
+                <div class="content">
+                    <div class="info-row">
+                        <span class="label">Transaction ID:</span> <?php echo esc_html($donation->transaction_id); ?>
                     </div>
-                </body>
+                    <div class="info-row">
+                        <span class="label">Donor Name:</span> <?php echo esc_html($donation->donor_name); ?>
+                    </div>
+                    <div class="info-row">
+                        <span class="label">Email:</span> <?php echo esc_html($donation->donor_email); ?>
+                    </div>
+                    <div class="info-row">
+                        <span class="label">Phone:</span> <?php echo esc_html($data['phone'] ?? 'N/A'); ?>
+                    </div>
+                    <div class="info-row">
+                        <span class="label">Amount:</span>
+                        <span class="amount"><?php echo esc_html($donation->currency . ' ' . number_format($donation->total_payment, 2)); ?></span>
+                    </div>
+                    <div class="info-row">
+                        <span class="label">Net Amount:</span> <?php echo esc_html($donation->currency . ' ' . number_format($donation->net_amount, 2)); ?>
+                    </div>
+                    <div class="info-row">
+                        <span class="label">Processing Fee:</span> <?php echo esc_html($donation->currency . ' ' . number_format($donation->processing_fee, 2)); ?>
+                    </div>
+                    <div class="info-row">
+                        <span class="label">Donation Type:</span> <?php echo esc_html(ucfirst($donation->donation_type)); ?>
+                    </div>
+                    <div class="info-row">
+                        <span class="label">Payment Mode:</span> <?php echo esc_html(ucfirst($donation->payment_mode)); ?>
+                    </div>
+                    <?php if (!empty($donation->donor_message)): ?>
+                        <div class="info-row">
+                            <span class="label">Message:</span><br>
+                            <?php echo nl2br(esc_html($donation->donor_message)); ?>
+                        </div>
+                    <?php endif; ?>
+                    <div class="info-row">
+                        <span class="label">Anonymous:</span> <?php echo $donation->anonymous_donation ? 'Yes' : 'No'; ?>
+                    </div>
+                    <div class="info-row">
+                        <span class="label">Date:</span> <?php echo esc_html($donation->created_at); ?>
+                    </div>
+                </div>
+            </div>
+        </body>
 
-                </html>
-            <?php
-                return ob_get_clean();
-            }
+        </html>
+        <?php
+        return ob_get_clean();
+    }
 
-            /**
-             * Donor email template
-             */
-            private function getDonorEmailTemplate($donation, $data)
-            {
-                ob_start();
+    /**
+     * Donor email template
+     */
+    private function getDonorEmailTemplate($donation, $data)
+    {
+        ob_start();
             ?>
                 <!DOCTYPE html>
                 <html>

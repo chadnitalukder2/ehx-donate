@@ -46,9 +46,9 @@ class PaymentController extends Controller
             }
 
             Transaction::create([
-                'campaign_id'          => $donation->campaign_id,
+                'campaign_id'         => $donation->campaign_id,
                 'donor_id'            => $donation->donor_id,
-                'vendor_charge_id'     => $payment_intent_id,
+                'vendor_charge_id'    => $payment_intent_id,
                 'user_id'             => $donation->user_id,
                 'donation_id'         => $donation->id,
                 'payment_method'      => 'stripe',
@@ -163,7 +163,7 @@ class PaymentController extends Controller
         }
 
         // Find local subscription record
-        $subscription = Subscription::where('vendor_subscription_id', $vendor_subscription_id)->first();
+        $subscription = (new Subscription())->where('vendor_subscription_id', $vendor_subscription_id)->first();
         if (!$subscription) {
             return;
         }
@@ -178,7 +178,7 @@ class PaymentController extends Controller
         $charge_id = $invoice['charge'] ?? null;
 
         // How many transactions already exist for this subscription?
-        $existingCount = Transaction::where('subscription_id', $subscription->id)->count();
+        $existingCount =(new Transaction())->where('subscription_id', $subscription->id)->count();
 
         // FIRST SUBSCRIPTION PAYMENT:
         //  - we want to record total_payment (donation + processing_fee)
@@ -224,7 +224,7 @@ class PaymentController extends Controller
             return;
         }
 
-        $subscription = Subscription::where('vendor_subscription_id', $vendor_subscription_id)->first();
+        $subscription = (new Subscription())->where('vendor_subscription_id', $vendor_subscription_id)->first();
         if (!$subscription) {
             return;
         }
@@ -251,7 +251,7 @@ class PaymentController extends Controller
             return;
         }
 
-        $subscription = Subscription::where('vendor_subscription_id', $vendor_subscription_id)->first();
+        $subscription = (new Subscription())->where('vendor_subscription_id', $vendor_subscription_id)->first();
         if (!$subscription) {
             return;
         }

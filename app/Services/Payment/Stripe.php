@@ -30,6 +30,7 @@ class Stripe
         if (!$this->isEnabled()) {
             return;
         }
+     
 
         $secret_key  = $this->getSecretKey();
         $currency    = $data['currency'] ?? 'GBP';

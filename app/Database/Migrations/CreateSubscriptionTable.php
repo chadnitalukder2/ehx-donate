@@ -33,7 +33,7 @@ class CreateSubscriptionTable
             'donor_id' => 'bigint(20) UNSIGNED DEFAULT NULL',
             'campaign_id' => 'bigint(20) UNSIGNED DEFAULT NULL',
             'donation_id' => 'bigint(20) UNSIGNED DEFAULT NULL',
-            'interval' => '`interval` varchar(50) DEFAULT NULL',
+            '`interval`' => ' varchar(50) DEFAULT NULL',
             'interval_count' => 'int(11) NOT NULL DEFAULT 1',
             'amount' => 'decimal(10,2) NOT NULL DEFAULT 0.00',
             'status' => "varchar(50) NOT NULL DEFAULT 'active'",

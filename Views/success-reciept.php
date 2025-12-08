@@ -1,4 +1,6 @@
 <?php
+use EHXDonate\Helpers\Currency;
+
 $primaryBtnColor = $colorSettings['primary_btn'] ?? '#079455';
 $primaryBtnTextColor = $colorSettings['primary_btn_text'] ?? '#ececec';
 $fontFamily = $colorSettings['fontFamily'] ?? 'Inter Tight, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen, Ubuntu, Cantarell, sans-serif';
@@ -14,6 +16,18 @@ $donation_date = date('F d, Y', strtotime($donation['created_at']));
 // Prepare share URLs
 $share_text = urlencode("I just donated to " . $campaign['title'] . "! Join me in making a difference.");
 $share_url = urlencode($campaign['post_url']);
+
+$currencySymbols = Currency::getCurrencySymbol('');
+$currency = $generalSettings['currency'] ?? 'GBP';
+$currencySymbol = $currencySymbols[$currency] ?? '£';
+$position = $generalSettings['currency_position'] ?? 'Before';
+
+function formatAmount($amount, $symbol, $position)
+{
+    $formatted = number_format($amount, 2);
+    return $position === 'Before' ? $symbol  . $formatted : $formatted . $symbol;
+}
+
 ?>
 <style>
     :root {
@@ -41,7 +55,16 @@ $share_url = urlencode($campaign['post_url']);
     <div class="ehxdo_reciept_details">
         <div class="ehxdo_reciept_row">
             <span class="ehxdo_reciept_label">Donation Amount:</span>
-            <span class="ehxdo_reciept_value"> <?php echo $donation['currency']; ?> <?php echo number_format(floatval($donation['total_payment']), 2); ?></span>
+            <span class="ehxdo_reciept_value">
+                 <?php echo formatAmount($donation['total_payment'], $currencySymbol, $position); ?>
+               
+                </span>
+        </div>
+         <div class="ehxdo_reciept_row">
+            <span class="ehxdo_reciept_label">Service Fee:</span>
+            <span class="ehxdo_reciept_value"> 
+                 <?php echo formatAmount($donation['charge'], $currencySymbol, $position); ?>
+            </span>
         </div>
         <div class="ehxdo_reciept_row">
             <span class="ehxdo_reciept_label">Campaign:</span>
