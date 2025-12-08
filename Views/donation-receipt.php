@@ -1,3 +1,21 @@
+<?php
+use EHXDonate\Helpers\Currency;
+
+$currencySymbols = Currency::getCurrencySymbol('');
+$currency = $general_settings['currency'] ?? 'GBP';
+$currencySymbol = $currencySymbols[$currency] ?? '£';
+$position = $general_settings['currency_position'] ?? 'Before';
+
+function formatAmount($amount, $symbol, $position)
+{
+    $formatted = number_format($amount, 2);
+    return $position === 'Before' ? $symbol  . $formatted : $formatted . $symbol;
+}
+
+
+
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -5,8 +23,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Donation Receipt</title>
-
-   
 </head>
 
 <body style="margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Arial, sans-serif; color: #1a1a1a;">
@@ -86,7 +102,7 @@
                         </div>
                         <div style="display: table-cell; vertical-align: middle; text-align: right;">
                             <p style="margin: 0; font-size: 28px; font-weight: 700; color: #1a1a1a;">
-                                <?php echo htmlspecialchars($donation['currency']); ?> $ <?php echo number_format($donation['total_payment'], 2); ?>
+                                <?php echo formatAmount($donation['net_amount'], $currencySymbol, $position); ?>
                             </p>
                         </div>
                     </div>

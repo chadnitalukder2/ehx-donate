@@ -18,9 +18,10 @@ $share_text = urlencode("I just donated to " . $campaign['title'] . "! Join me i
 $share_url = urlencode($campaign['post_url']);
 
 $currencySymbols = Currency::getCurrencySymbol('');
-$currency = $generalSettings['currency'] ?? 'GBP';
+$currency = $general_settings['currency'] ?? 'GBP';
 $currencySymbol = $currencySymbols[$currency] ?? '£';
-$position = $generalSettings['currency_position'] ?? 'Before';
+$position = $general_settings['currency_position'] ?? 'Before';
+
 
 function formatAmount($amount, $symbol, $position)
 {

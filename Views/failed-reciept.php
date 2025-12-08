@@ -12,9 +12,9 @@ $donation_date = date('F d, Y', strtotime($donation['created_at']));
 
 
 $currencySymbols = Currency::getCurrencySymbol('');
-$currency = $generalSettings['currency'] ?? 'GBP';
+$currency = $general_settings['currency'] ?? 'GBP';
 $currencySymbol = $currencySymbols[$currency] ?? '£';
-$position = $generalSettings['currency_position'] ?? 'Before';
+$position = $general_settings['currency_position'] ?? 'Before';
 
 function formatAmount($amount, $symbol, $position)
 {
@@ -363,7 +363,6 @@ function formatAmount($amount, $symbol, $position)
                 <span class="ehxdo_failed_label">Attempted Amount:</span>
                 <span class="ehxdo_failed_value">
                      <?php echo formatAmount($donation['net_amount'], $currencySymbol, $position); ?>
-                    
                 </span>
             </div>
             <div class="ehxdo_failed_row">
