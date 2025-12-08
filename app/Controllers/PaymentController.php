@@ -9,9 +9,7 @@ use EHXDonate\Services\Payment\Stripe;
 
 class PaymentController extends Controller
 {
-    // ======================================================
-    // SUCCESS URL (One-time + Subscription created)
-    // ======================================================
+    // ========================SUCCESS URL (One-time + Subscription created)==============================
     public function stripeSuccess()
     {
         $session_id  = sanitize_text_field($_GET['session_id'] ?? '');
@@ -33,9 +31,7 @@ class PaymentController extends Controller
             return wp_send_json_error(['message' => 'Invalid Stripe session'], 400);
         }
 
-        // =============================
-        // ONE-TIME PAYMENT
-        // =============================
+        // ==============ONE-TIME PAYMENT===============
         if ($session['mode'] === 'payment') {
             $payment_intent_id = $session['payment_intent'] ?? null;
             $card = [];
@@ -70,9 +66,7 @@ class PaymentController extends Controller
             $donation->save();
         }
 
-        // =============================
-        // SUBSCRIPTION CREATION (first payment handled via webhook)
-        // =============================
+        // =================SUBSCRIPTION CREATION (first payment handled via webhook)============
         if ($session['mode'] === 'subscription') {
             $donation->donation_type  = 'recurring';
             $donation->payment_status = 'pending'; // will be confirmed by webhook
@@ -85,13 +79,13 @@ class PaymentController extends Controller
                 'donation_id'           => $donation->id,
                 'donor_id'              => $donation->donor_id,
                 'campaign_id'           => $donation->campaign_id,
-                'amount'                => $donation->total_payment, // base donation amount per cycle
+                'amount'                => $donation->net_amount, // base donation amount per cycle
                 'interval'              => $donation->interval ?? 'month',
                 'status'                => 'active',
                 'start_date'            => current_time('mysql'),
                 'vendor_subscription_id'=> $session['subscription'],
                 'meta'                  => json_encode($session),
-                'next_payment_date'     => current_time('mysql'), // can be refined
+                'next_payment_date'     => current_time('mysql'), 
                 'created_at'            => current_time('mysql'),
                 'updated_at'            => current_time('mysql'),
             ]);
@@ -100,9 +94,7 @@ class PaymentController extends Controller
         self::redirectToCampaignPage($donation_id);
     }
 
-    // ======================================================
-    // CANCEL URL
-    // ======================================================
+    // ====================CANCEL URL==================================
     public function stripeCancel()
     {
         $donation_id = intval($_GET['donation_id'] ?? 0);
@@ -119,9 +111,8 @@ class PaymentController extends Controller
         self::redirectToCampaignPage($donation_id);
     }
 
-    // ======================================================
-    // STRIPE WEBHOOK (RECURRING PAYMENTS)
-    // ======================================================
+    // ======================STRIPE WEBHOOK (RECURRING PAYMENTS)================================
+
     public function stripeWebhook()
     {
         $stripe = new Stripe();
@@ -152,9 +143,7 @@ class PaymentController extends Controller
         return wp_send_json_success(['message' => 'Webhook handled']);
     }
 
-    // ======================================================
-    // RECURRING PAYMENT SUCCESS (first + renewals)
-    // ======================================================
+    // =========================RECURRING PAYMENT SUCCESS (first + renewals)=============================
     private function handleRecurringPayment($invoice)
     {
         $vendor_subscription_id = $invoice['subscription'] ?? null;
@@ -186,7 +175,7 @@ class PaymentController extends Controller
         //  - we record only base donation amount ($subscription->amount)
         if ($existingCount === 0) {
             // First invoice -> includes processing fee in total_payment
-            $payment_total = $donation->total_payment;       // donation + processing_fee (and tip if you use it)
+            $payment_total = $donation->net_amount;       // donation + processing_fee (and tip if you use it)
             $reporting_total = $invoice['amount_paid'] / 100; // what Stripe actually charged
         } else {
             // Renewal -> only donation amount (no internal processing fee)
