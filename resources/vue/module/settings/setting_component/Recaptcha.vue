@@ -51,12 +51,18 @@
                 <div class="ehxdo-form-row">
                     <div class="ehxdo-form-group" style="margin-bottom: 25px;">
                         <label class="ehxdo-label">Site Key</label>
-                        <el-input v-model="settings.siteKey" placeholder="reCAPTCHA Site Key" />
+                        <el-input 
+                            v-model="settings.siteKey" 
+                            placeholder="reCAPTCHA Site Key"
+                            :disabled="selectedMode === 'disabled'" />
                     </div>
 
                     <div class="ehxdo-form-group">
                         <label class="ehxdo-label">Secret key</label>
-                        <el-input v-model="settings.secretKey" placeholder="reCAPTCHA Secret Key" />
+                        <el-input 
+                            v-model="settings.secretKey" 
+                            placeholder="reCAPTCHA Secret Key"
+                            :disabled="selectedMode === 'disabled'" />
                     </div>
                 </div>
             </div>
@@ -91,9 +97,15 @@ export default {
 };
 </script>
 
-<style scoped>
+<style scoped lang="scss">
+
 .ehxdo-recaptcha-container {
     font-family: Inter Tight, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+}
+
+.ehxdo-keys-section.disabled {
+    opacity: 0.6;
+    pointer-events: none;
 }
 
 .ehxdo-settings-card {
