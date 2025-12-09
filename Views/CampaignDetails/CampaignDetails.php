@@ -39,8 +39,8 @@ $maxDonation = $campaign['settings']['max_donation'] ?? 999999;
 $default_amount = 0.00;
 
 $recaptchaMode = $recaptchaSettings['mode'] ?? 'disabled';
-$recaptchaSiteKey = $recaptchaSettings['siteKey'] ?? '';
-$recaptchaSecretKey = $recaptchaSettings['secretKey'] ?? '';
+$recaptchaSiteKey = $recaptchaSettings['siteKey'] ?? '6LeIxAcTAAAAAJcZVRqyHh71UMIEGNQ_MXjiZKhI';
+$recaptchaSecretKey = $recaptchaSettings['secretKey'] ?? '6LeIxAcTAAAAAGG-vFI1TnRWxMZNFuojJ4WifJWe';
 
 if ($recaptchaMode !== 'disabled' && !empty($recaptchaSiteKey)): ?>
     <?php if ($recaptchaMode === 'visible'): ?>
