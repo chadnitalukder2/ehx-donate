@@ -39,7 +39,7 @@ class DonationController extends Controller
         if ($data['status']) {
             $status = sanitize_text_field($data['status']);
         }
-        $res = (new Donation())
+        $res = (new Donation)
         ->orderBy('created_at', 'desc')
         ->paginateDonation($limit, $page, $search, $status);
         $data = array_map(function ($donation) {

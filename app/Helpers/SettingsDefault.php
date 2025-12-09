@@ -8,7 +8,7 @@ class SettingsDefault
     {
         return [
             'general' => [
-                'company_name' => '',
+                'company_name' => 'EHx Donate',
                 'industry' => 'Social',
                 'country' => 'GB',
                 'currency' => 'GBP',
@@ -32,9 +32,9 @@ class SettingsDefault
                 ]
             ],
             'email' => [
-                'adminEmail' => get_bloginfo('admin_email'),
-                'mailFromName' => get_bloginfo('name'),
-                'mailFromAddress' => '',
+                'adminEmail' => 'example@eh.studio',
+                'mailFromName' => 'EHx Studio',
+                'mailFromAddress' => 'example@eh.studio',
                 'enableHtml' => true,
             ],
             'color' => [
