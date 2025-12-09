@@ -15,6 +15,54 @@ class CampaignController extends Controller
     /**
      * Get all campaigns
      */
+     private function updateCampaignStatusAuto($campaign): void
+    {
+        // Skip if already completed
+        if ($campaign->status === 'completed') {
+            return;
+        }
+
+        $shouldUpdate = false;
+        $newStatus = $campaign->status;
+
+        // Calculate total raised amount
+        $donations = (new Donation)->where('campaign_id', $campaign->id)
+            ->where('payment_status', 'completed')
+            ->get();
+        
+        $totalRaised = 0;
+        foreach ($donations as $donation) {
+            $totalRaised += floatval($donation->total_payment);
+        }
+
+        // Check if end_date exists
+        if (!empty($campaign->end_date)) {
+            $endDate = strtotime($campaign->end_date);
+            $currentDate = strtotime(date('Y-m-d'));
+            
+            // Only mark as completed if end_date has expired
+            if ($currentDate > $endDate) {
+                $shouldUpdate = true;
+                $newStatus = 'completed';
+            }
+        } else {
+            // If no end_date, check if goal is reached
+            if (!empty($campaign->goal_amount) && $totalRaised >= floatval($campaign->goal_amount)) {
+                $shouldUpdate = true;
+                $newStatus = 'completed';
+            }
+        }
+
+        // Update status if needed
+        if ($shouldUpdate && $newStatus !== $campaign->status) {
+            $campaign->status = $newStatus;
+            $campaign->save();
+        }
+    }
+
+    /**
+     * Get all campaigns with auto status update
+     */
     public function index(): void
     {
         $data = $this->request;
@@ -40,18 +88,17 @@ class CampaignController extends Controller
         $res = (new Campaign)->orderBy('created_at', 'desc')->paginate($limit, $page, $search, $status);
 
         $data = array_map(function ($campaign) {
+            // Auto-update status before displaying
+            $this->updateCampaignStatusAuto($campaign);
 
             $campaignArray = $campaign->with('donations')->toArray();
 
-            // ---- Calculate totals ----
+            // Calculate totals
             $totalDonations = 0;
             $totalRaised = 0;
 
             if (!empty($campaignArray['donations'])) {
                 foreach ($campaignArray['donations'] as $donation) {
-
-                    // Count completed donations
-
                     $totalDonations++;
                     if ($donation['payment_status'] === 'completed') {
                         $totalRaised += floatval($donation['total_payment']);
@@ -59,25 +106,22 @@ class CampaignController extends Controller
                 }
             }
 
-            // Add totals to response
             $campaignArray['total_donations'] = $totalDonations;
             $campaignArray['total_raised'] = $totalRaised;
 
             return $campaignArray;
         }, $res['data']);
 
-        // $campaigns = (new Campaign())->orderBy('created_at', 'DESC')->get();
         $generalSettings = get_option('ehx_donate_settings_general', []);
 
         $totalActiveCampaigns = (new Campaign)->where('status', 'active')->count();
         $totalPendingCampaigns = (new Campaign)->where('status', 'pending')->count();
         $totalCompletedCampaigns = (new Campaign)->where('status', 'completed')->count();
 
-        // Last month date range
+        // Last month calculations
         $lastMonthStart = date('Y-m-01', strtotime('first day of last month'));
         $lastMonthEnd = date('Y-m-t', strtotime('last day of last month'));
 
-        // Last month totals
         $lastMonthActive = (new Campaign)
             ->where('status', 'active')
             ->whereBetween('created_at', [$lastMonthStart, $lastMonthEnd])
@@ -93,10 +137,9 @@ class CampaignController extends Controller
             ->whereBetween('created_at', [$lastMonthStart, $lastMonthEnd])
             ->count();
 
-        // Percentage change (current vs last month)
-        $percentActive = $lastMonthActive > 0 ? round((($totalActiveCampaigns - $lastMonthActive) / $lastMonthActive) * 100, 2) : null;
-        $percentPending = $lastMonthPending > 0 ? round((($totalPendingCampaigns - $lastMonthPending) / $lastMonthPending) * 100, 2) : null;
-        $percentCompleted = $lastMonthCompleted > 0 ? round((($totalCompletedCampaigns - $lastMonthCompleted) / $lastMonthCompleted) * 100, 2) : null;
+        $percentActive = $lastMonthActive > 0 ? round((($totalActiveCampaigns - $lastMonthActive) / $lastMonthActive) * 100, 2) : 0;
+        $percentPending = $lastMonthPending > 0 ? round((($totalPendingCampaigns - $lastMonthPending) / $lastMonthPending) * 100, 2) : 0;
+        $percentCompleted = $lastMonthCompleted > 0 ? round((($totalCompletedCampaigns - $lastMonthCompleted) / $lastMonthCompleted) * 100, 2) : 0;
 
         $this->success([
             'campaigns' => $data,
@@ -324,7 +367,7 @@ class CampaignController extends Controller
         $this->success([], 'Campaign deleted successfully');
     }
 
-  
+
     public function updateCampaignStatus(string $id): void
     {
         $this->requireAuth();
@@ -421,8 +464,8 @@ class CampaignController extends Controller
             $startDate = !empty($campaign->start_date) ? date('d/m/Y', strtotime($campaign->start_date)) : 'N/A';
             $endDate = !empty($campaign->end_date) ? date('d/m/Y', strtotime($campaign->end_date)) : 'N/A';
             $createdDate = !empty($campaign->created_at) ? date('d/m/Y', strtotime($campaign->created_at)) : 'N/A';
-            
-            
+
+
             fputcsv($output, array(
                 $si,
                 $campaign->title,
@@ -432,7 +475,7 @@ class CampaignController extends Controller
                 $startDate,
                 $endDate,
                 ucfirst($campaign->status ?? 'pending'),
-                $createdDate  
+                $createdDate
             ));
             $si++;
         }

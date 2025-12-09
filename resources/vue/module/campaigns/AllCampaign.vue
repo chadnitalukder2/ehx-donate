@@ -169,7 +169,7 @@
                                     <el-button type="text" @click="editCampaign(row)" class="ehxdo_edit"> <el-icon>
                                             <EditPen />
                                         </el-icon> Edit</el-button>
-                                    <el-button type="text" @click="viewCampaign(row)" class="ehxdo_view"> <el-icon>
+                                    <el-button  v-if="row.status !== 'completed'"  type="text" @click="viewCampaign(row)" class="ehxdo_view"> <el-icon>
                                             <View />
                                         </el-icon> View</el-button>
                                     <el-button type="text" @click="openDeleteCampaignModal(row)" class="ehxdo_delete">
