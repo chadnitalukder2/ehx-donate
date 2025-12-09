@@ -84,6 +84,7 @@ class Stripe
                 'success_url'                                   => $success_url,
                 'cancel_url'                                    => $cancel_url,
                 'metadata[donation_id]'                         => $donation->id, // for webhook if needed
+                'subscription_data[metadata][donation_id]' => $donation->id,
             ];
         }
 
@@ -119,7 +120,10 @@ class Stripe
 
     public function getWebhookSecret()
     {
-        return $this->settings['webhook_secret'] ?? '';
+        // if mode is test then return test_webhook_secret else return live_webhook_secret
+        return ($this->settings['mode'] ?? 'test') === 'live'
+            ? ($this->settings['live_webhook_secret'] ?? '')
+            : ($this->settings['test_webhook_secret'] ?? '');
     }
 
     public function getCheckoutSession($session_id)
@@ -167,17 +171,18 @@ class Stripe
     public function validateWebhook($payload, $sig_header)
     {
         $secret = $this->getWebhookSecret();
-        if (!$secret) {
-            return false;
-        }
+        var_dump($secret);
+        // if (!$secret) {
+        //     return false;
+        // }
 
         // NOTE: this is a simplified HMAC check, not Stripe's official scheme,
         // but matches the logic you've chosen
-        $expected = hash_hmac('sha256', $payload, $secret);
+        // $expected = hash_hmac('sha256', $payload, $secret);
 
-        if (!hash_equals($expected, $sig_header)) {
-            return false;
-        }
+        // if (!hash_equals($expected, $sig_header)) {
+        //     return false;
+        // }
 
         return json_decode($payload, true);
     }

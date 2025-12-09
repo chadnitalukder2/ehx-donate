@@ -68,27 +68,18 @@ class PaymentController extends Controller
 
         // =================SUBSCRIPTION CREATION (first payment handled via webhook)============
         if ($session['mode'] === 'subscription') {
-            $donation->donation_type  = 'recurring';
-            $donation->payment_status = 'pending'; // will be confirmed by webhook
-            $donation->payment_method = 'stripe';
-            $donation->save();
+            // $donation->donation_type  = 'recurring';
+            // $donation->payment_method = 'stripe';
+            // $donation->save();
 
-            // create local subscription record; amount is *per-cycle donation amount* (NO processing_fee)
-            Subscription::create([
-                'user_id'               => $donation->user_id,
-                'donation_id'           => $donation->id,
-                'donor_id'              => $donation->donor_id,
-                'campaign_id'           => $donation->campaign_id,
-                'amount'                => $donation->net_amount, // base donation amount per cycle
-                'interval'              => $donation->interval ?? 'month',
-                'status'                => 'active',
-                'start_date'            => current_time('mysql'),
-                'vendor_subscription_id'=> $session['subscription'],
-                'meta'                  => json_encode($session),
-                'next_payment_date'     => current_time('mysql'), 
-                'created_at'            => current_time('mysql'),
-                'updated_at'            => current_time('mysql'),
-            ]);
+            $subscription = (new Subscription())->where('donation_id', $donation->id)->first();
+            if (!$subscription) {
+                error_log('No subscription found for donation: ' . $donation->id);
+                return;
+            }
+            $subscription->vendor_subscription_id = $session['subscription'];
+            $subscription->meta = json_encode($session);
+            $subscription->save();
         }
 
         self::redirectToCampaignPage($donation_id);
@@ -97,6 +88,7 @@ class PaymentController extends Controller
     // ====================CANCEL URL==================================
     public function stripeCancel()
     {
+        error_log('stripeCancel');
         $donation_id = intval($_GET['donation_id'] ?? 0);
         if (!$donation_id) {
             return wp_send_json_error(['message' => 'Invalid request'], 400);
@@ -122,15 +114,14 @@ class PaymentController extends Controller
 
         $event = $stripe->validateWebhook($payload, $sig_header);
         if (!$event) {
-            return wp_send_json_error(['message' => 'Invalid webhook'], 400);
+            return error_log('Invalid webhook');
         }
-
         $type = $event['type'] ?? '';
         $data = $event['data']['object'] ?? [];
 
         switch ($type) {
             case 'invoice.payment_succeeded':
-                $this->handleRecurringPayment($data);
+                $this->handleRecurringPayment($data, $event);
                 break;
             case 'invoice.payment_failed':
                 $this->handleRecurringFailed($data);
@@ -144,15 +135,21 @@ class PaymentController extends Controller
     }
 
     // =========================RECURRING PAYMENT SUCCESS (first + renewals)=============================
-    private function handleRecurringPayment($invoice)
+    private function handleRecurringPayment($invoice, $event)
     {
         $vendor_subscription_id = $invoice['subscription'] ?? null;
+
+        $donation_id = $invoice['subscription_details']['metadata']['donation_id']
+        ?? $invoice['lines']['data'][0]['metadata']['donation_id']
+        ?? null;
+
+        error_log('Donation ID: ' . $donation_id);
+
         if (!$vendor_subscription_id) {
             return;
         }
-
-        // Find local subscription record
-        $subscription = (new Subscription())->where('vendor_subscription_id', $vendor_subscription_id)->first();
+        $subscription = (new Subscription())->where('donation_id', $donation_id)->first();
+   
         if (!$subscription) {
             return;
         }
@@ -184,24 +181,66 @@ class PaymentController extends Controller
         }
 
         Transaction::create([
-            'campaign_id'          => $donation->campaign_id,
-            'donation_id'          => $donation->id,
-            'subscription_id'      => $subscription->id,
-            'vendor_charge_id'     => $charge_id,
-            'payment_method'       => 'stripe',
-            'payment_method_type'  => 'card',
-            'payment_total'        => $payment_total,
-            'status'               => 'completed',
-            'currency'             => $currency,
-            'payment_mode'         => 'recurring',
-            'reporting_total'      => $reporting_total,
-            'reporting_currency'   => $currency,
+            'campaign_id'         => $donation->campaign_id,
+            'donor_id'            => $donation->donor_id,
+            'subscription_id'     => $subscription->id,
+            'donation_id'         => $donation->id,
+            'user_id'             => $donation->user_id,
+            'vendor_charge_id'    => $charge_id,
+            'payment_method'      => 'stripe',
+            'payment_method_type' => 'card',
+            'card_last_4'         => '',
+            'card_brand'          => '',
+            'payment_total'       => $payment_total,
+            'status'              => 'completed',
+            'currency'            => $currency,
+            'payment_mode'        => 'recurring',
+            'reporting_total'     => $reporting_total,
+            'reporting_currency'  => $currency,
             'reporting_exchange_rate' => 1,
         ]);
 
         $donation->payment_status = 'completed';
         $donation->save();
+        $nextBillingDate = $this->getNextBillingDateFromInvoice($invoice);
+        error_log('Next payment attempt: ' . $nextBillingDate);
+        $subscription->next_payment_date = $nextBillingDate;
+        $subscription->save();
     }
+
+    public function getNextBillingDateFromInvoice($invoice, $format = 'Y-m-d H:i:s')
+    {
+        // 1. Must be a subscription invoice
+        if (empty($invoice['subscription'])) {
+            return null;
+        }
+
+        // 2. Ensure line items exist
+        if (
+            empty($invoice['lines']) ||
+            empty($invoice['lines']['data']) ||
+            !is_array($invoice['lines']['data'])
+        ) {
+            return null;
+        }
+
+        // 3. Search for the subscription line item
+        foreach ($invoice['lines']['data'] as $line) {
+            if (
+                isset($line['type']) &&
+                $line['type'] === 'subscription' &&
+                !empty($line['period']['end'])
+            ) {
+                $timestamp = (int) $line['period']['end'];
+
+                // Return formatted date instead of number
+                return date($format, $timestamp);
+            }
+        }
+
+        return null;
+    }
+
 
     // ======================================================
     // RECURRING PAYMENT FAILED

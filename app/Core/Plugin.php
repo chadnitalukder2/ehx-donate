@@ -250,6 +250,7 @@ class Plugin
             'restUrl' => rest_url('ehx-donate/v1/'),
             'restNonce' => wp_create_nonce('wp_rest'),
             'has_recurring_donation' => defined('EHXRD_VERSION') ? true : false,
+            'stripe_webhook' => rest_url('ehx-donate/v1/payment/stripe/webhook'),
 
             // 'nonce' => wp_create_nonce('exh_donate_nonce'),
             'strings' => [
@@ -396,20 +397,5 @@ class Plugin
      */
     public static function uninstall(): void
     {
-        // Drop database tables
-        $database = new Database();
-        
-        $tables = [
-            'ehxdo_trips',
-            'ehxdo_activity_log',
-        ];
-        
-        foreach ($tables as $table) {
-            $database->dropTable($table);
-        }
-        
-        // Remove all plugin options
-        delete_option('exh_donate_version');
-        delete_option('exh_donate_settings');
     }
 }

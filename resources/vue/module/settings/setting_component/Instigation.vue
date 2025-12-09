@@ -73,6 +73,18 @@
                     </div>
                 </div>
             </div>
+            <div class="ehxdo-form-row">
+                <label class="ehxdo-form-label">Webhook URL</label>
+                <div class="ehxdo-input-wrapper">
+                    <el-alert title="" type="info" :closable="false">
+                        {{ webhookUrl }}
+                    </el-alert>
+                    <p class="ehxdo-checkbox-description">
+                        This is the URL you need to configure in your Stripe dashboard to receive webhook events.
+                    </p>
+                </div>
+            </div>
+
         </div>
     </div>
 </template>
@@ -97,7 +109,12 @@ export default {
         loading: {
             type: Boolean,
             default: false
-        }
+        },
+    },
+    data() {
+        return {
+            webhookUrl: window.EHXDonate?.stripe_webhook || ''
+        };
     }
 };
 </script>

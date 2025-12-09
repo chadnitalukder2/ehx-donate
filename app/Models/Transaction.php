@@ -19,6 +19,7 @@ class Transaction extends Model
         'id',
         'campaign_id',
         'user_id',
+        'subscription_id',
         'donor_id',
         'donation_id',
         'transaction_type',

@@ -16,6 +16,7 @@ class Subscription extends Model
      * The attributes that are mass assignable
      */
     protected $fillable = [
+        'id',
         'user_id',
         'donor_id',
         'campaign_id',

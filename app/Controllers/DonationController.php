@@ -39,7 +39,9 @@ class DonationController extends Controller
         if ($data['status']) {
             $status = sanitize_text_field($data['status']);
         }
-        $res = (new Donation())->paginateDonation($limit, $page, $search, $status);
+        $res = (new Donation())
+        ->orderBy('created_at', 'desc')
+        ->paginateDonation($limit, $page, $search, $status);
         $data = array_map(function ($donation) {
             $arr = $donation->toArray();
             $campaign = (new Campaign())->find($arr['campaign_id']);
@@ -202,7 +204,9 @@ class DonationController extends Controller
         ];
 
         $donation = Donation::create($donationData);
-
+        if ($donation->donation_type === 'recurring') {
+            $this->createSubscription($donation);
+        }
         $emailSettings = get_option('ehx_donate_settings_email', []);
 
         $this->sendDonationEmails($donation, $data, $emailSettings);
@@ -210,6 +214,23 @@ class DonationController extends Controller
         do_action('ehxdo_handle_payment_' . $data['payment_method'], $donation, $data);
 
         $this->success([], 'Donation created successfully', 201);
+    }
+
+    public function createSubscription($donation)
+    {
+        Subscription::create([
+            'user_id'               => $donation->user_id,
+            'donation_id'           => $donation->id,
+            'donor_id'              => $donation->donor_id,
+            'campaign_id'           => $donation->campaign_id,
+            'amount'                => $donation->net_amount, // base donation amount per cycle
+            'interval'              => $donation->interval ?? 'month',
+            'status'                => 'active',
+            'start_date'            => current_time('mysql'),
+            'next_payment_date'     => current_time('mysql'), 
+            'created_at'            => current_time('mysql'),
+            'updated_at'            => current_time('mysql'),
+        ]);
     }
 
     private function sendDonationEmails($donation, $data, $emailSettings)
