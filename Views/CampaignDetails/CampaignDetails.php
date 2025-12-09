@@ -50,7 +50,10 @@ if ($recaptchaMode !== 'disabled' && !empty($recaptchaSiteKey)): ?>
         <!-- reCAPTCHA V3 - Invisible -->
         <script src="https://www.google.com/recaptcha/api.js?render=<?php echo htmlspecialchars($recaptchaSiteKey); ?>"></script>
     <?php endif; ?>
-<?php endif; ?>
+<?php endif;
+
+$stripMode = $integrationsSettings['stripe']['enabled'];
+?>
 
 
 <style>
@@ -300,7 +303,7 @@ if ($recaptchaMode !== 'disabled' && !empty($recaptchaSiteKey)): ?>
                             </div>
                         </div>
 
-                        <div >
+                        <div>
                             <!-- <label style="display: flex; align-items: center; gap: 0.5rem; cursor: pointer;">
                                 <input type="checkbox" name="gift_aid" id="gift_aid_checkbox" value="1" style="cursor: pointer;">
                                 <span style="font-size: 0.875rem;">Gift Aid</span>
@@ -401,13 +404,19 @@ if ($recaptchaMode !== 'disabled' && !empty($recaptchaSiteKey)): ?>
 
                             <div class="ehxdo-section-nav">
                                 <button type="button" class="ehxdo-nav-btn ehxdo-prev">Previous</button>
-                                <?php if ($stripeEnabled): ?>
+                                <?php if ($stripMode === 'yes'): ?>
                                     <button type="submit" class="ehxdo-nav-btn ehxdo-submit">Submit</button>
-                                <?php endif; ?>
-                                <?php if (!$stripeEnabled): ?>
-                                    <p style="color: red;">Please configure Stripe payment method to enable donation.</p>
+                                <?php else: ?>
+                                    <button type="button" class="ehxdo-nav-btn ehxdo-submit ehxdo-submit-disabled" id="ehxdo-disabled-submit">
+                                        Submit
+                                    </button>
                                 <?php endif; ?>
                             </div>
+                            <?php if ($stripMode === 'no'): ?>
+                                <p class="ehxdo-payment-error" id="ehxdo-payment-error" style="color: #dc3545; font-size: 14px; margin-top: 20px; padding: 10px; background-color: #f8d7da; border: 1px solid #f5c6cb; border-radius: 4px;">
+                                    <strong>Payment gateway is disabled.</strong> Please enable Stripe payment method and try again.
+                                </p>
+                            <?php endif; ?>
                         </div>
                     </div>
                 </div>
@@ -417,7 +426,6 @@ if ($recaptchaMode !== 'disabled' && !empty($recaptchaSiteKey)): ?>
 </div>
 
 <script>
-
     // Custom Amount Validation and Restriction
     document.addEventListener('DOMContentLoaded', function() {
         const customAmountInput = document.getElementById('ehxdo-custom-amount');

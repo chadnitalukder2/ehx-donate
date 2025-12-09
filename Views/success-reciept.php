@@ -45,7 +45,7 @@ function formatAmount($amount, $symbol, $position)
             <div class="ehxdo_reciept_checkmark"></div>
         </div>
         <div class="ehxdo_reciept_header_right">
-            <div class="ehxdo_reciept_pdf_logo"><?php echo $general_settings['company_name']; ?></div>
+            <div class="ehxdo_reciept_pdf_logo"><?php echo $general_settings['company_name'] ?? 'EHx Donate'; ?></div>
             <div class="ehxdo_reciept_pdf_subtitle">Tax-Deductible Donation Receipt</div>
         </div>
     </div>

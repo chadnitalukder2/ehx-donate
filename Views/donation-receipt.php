@@ -33,11 +33,11 @@ function formatAmount($amount, $symbol, $position)
             <div style="display: table; width: 100%;">
                 <div style="display: table-cell; vertical-align: top; padding-left: 16px;">
                     <h1 style="margin: 0 0 6px 0; font-size: 18px; font-weight: 600; color: #1a1a1a;">
-                        <?php echo htmlspecialchars($general_settings['company_name']); ?>
+                        <?php echo htmlspecialchars($general_settings['company_name']) ?? 'EHx Donate'; ?>
                     </h1>
                     <p style="margin: 0; font-size: 13px; color: #666; line-height: 1.5;">
-                        <?php echo htmlspecialchars($general_settings['address']); ?><br>
-                        <?php echo htmlspecialchars($general_settings['city']); ?>, <?php echo htmlspecialchars($general_settings['postal_code']); ?>
+                        <?php echo htmlspecialchars($general_settings['address']) ?? ' '; ?><br>
+                        <?php echo htmlspecialchars($general_settings['city']) ?? ' '; ?>, <?php echo htmlspecialchars($general_settings['postal_code']) ?? ''; ?>
                     </p>
                 </div>
                 <div style="display: table-cell; vertical-align: top; text-align: right; width: 180px;">

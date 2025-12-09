@@ -340,7 +340,7 @@ function formatAmount($amount, $symbol, $position)
                 <div class="ehxdo_failed_cross"></div>
             </div>
             <div class="ehxdo_failed_header_right">
-                <div class="ehxdo_failed_pdf_logo"><?php echo $general_settings['company_name']; ?></div>
+                <div class="ehxdo_failed_pdf_logo"><?php echo $general_settings['company_name'] ?? 'EHx Donate'; ?></div>
                 <div class="ehxdo_failed_pdf_subtitle">Donation Failed</div>
             </div>
         </div>
