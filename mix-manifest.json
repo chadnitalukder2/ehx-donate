@@ -1,8 +1,6 @@
 {
     "/assets/js/admin.js": "/assets/js/admin.js",
     "/assets/js/campaign/campaign_details.js": "/assets/js/campaign/campaign_details.js",
-    "/assets/js/receipt.js": "/assets/js/receipt.js",
-    "/assets/css/frontend/success-receipt.css": "/assets/css/frontend/success-receipt.css",
     "/assets/css/frontend/campaign_details.css": "/assets/css/frontend/campaign_details.css",
     "/assets/css/frontend/campaign_list.css": "/assets/css/frontend/campaign_list.css",
     "/assets/css/admin.css": "/assets/css/admin.css"

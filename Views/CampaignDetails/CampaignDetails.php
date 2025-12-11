@@ -308,11 +308,19 @@ $stripMode = $integrationsSettings['stripe']['enabled'];
                                 <input type="checkbox" name="gift_aid" id="gift_aid_checkbox" value="1" style="cursor: pointer;">
                                 <span style="font-size: 0.875rem;">Gift Aid</span>
                             </label> -->
-                            <label class="ehxdo-checkbox-container">
+                            <?php if (defined('EHXGA_VERSION')): ?>
+                            <label class="ehxdo-checkbox-container ehxdo-gift-aid-checkbox">
                                 <input type="checkbox" name="gift_aid" id="gift_aid_checkbox" value="1">
                                 <span class="ehxdo-checkmark"></span>
-                                <span class="ehxdo-checkbox-label">Gift Aid</span>
+                                <div class="ehxdo-checkbox-info">
+                                    <span class="ehxdo-checkbox-label">Gift Aid</span>
+                                    <p class="sub-text">
+                                        I am a UK taxpayer and understand that if I pay less Income Tax and/or Capital Gains Tax than the amount of Gift Aid claimed on all my donations in that tax year, it is my responsibility to pay any difference.
+                                    </p>
+                                </div>
                             </label>
+                            <?php endif; ?>
+
                         </div>
 
                         <!-- Gift Aid Address Fields (Initially Hidden) -->

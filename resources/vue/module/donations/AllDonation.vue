@@ -1,6 +1,5 @@
 <template>
     <div class="ehxd_wrapper">
-
         <AppTable :tableData="donations" v-loading="loading">
 
             <template #header>
@@ -29,21 +28,36 @@
             </template>
 
             <template #columns>
-                <el-table-column label="ID" width="80">
-                    <template #default="scope">
-                        {{ scope.$index + 1 }}
+                <el-table-column prop="id" label="ID" width="100">
+                    <template #default="{ row }">
+                        DN{{ row?.id < 100 ? '00' + row?.id : row?.id }}
+                        <p class="recurring-badge" v-if="row.donation_type === 'recurring'">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-refresh-cw w-3 h-3"><path d="M3 12a9 9 0 0 1 9-9 9.75 9.75 0 0 1 6.74 2.74L21 8"></path><path d="M21 3v5h-5"></path><path d="M21 12a9 9 0 0 1-9 9 9.75 9.75 0 0 1-6.74-2.74L3 16"></path><path d="M8 16H3v5"></path></svg>
+                            {{ getIntervalLabel(row.interval, row.interval_count) }}
+                        </p>
                     </template>
                 </el-table-column>
-                <el-table-column prop="donor_name" label="Donor">
+                <el-table-column prop="donor_name" label="Donor" width="200">
                     <template #default="{ row }">
                         <router-link :to="{ name: 'view_donation', params: { id: row.id } }" class="ehxdo-title-link">
                             {{ row.donor_name }}
                         </router-link>
+                        <p class="sub-text">
+                            {{ row.donor_email }}
+                        </p>
                     </template>
                 </el-table-column>
-                <el-table-column prop="amount" label="Amount">
+                <el-table-column prop="amount" label="Amount" width="100">
                     <template #default="{ row }">
                         {{ row.net_amount ? formatCurrency(row.net_amount) : formatCurrency(0) }}
+                    </template>
+                </el-table-column>
+
+                <el-table-column prop="gift_aid" label="Gift Aid" width="100">
+                    <template #default="{ row }">
+                        <span :style="{ color: row.gift_aid == 1 ? 'green' : '#da1a1a' }">
+                            {{ row.gift_aid == 1 ? formatCurrency(row.gift_aid_amount) : '---' }}
+                        </span>
                     </template>
                 </el-table-column>
 
@@ -53,30 +67,7 @@
                     </template>
                 </el-table-column>
 
-                <el-table-column prop="donation_type" label="Recurring">
-                    <template #default="{ row }">
-                        {{ row.donation_type ?? 0 }}
-                    </template>
-                </el-table-column>
-
-                <el-table-column prop="gift_aid" label="Gift Aid">
-                    <template #default="{ row }">
-                        <span :style="{ color: row.gift_aid == 1 ? 'green' : '#da1a1a' }">
-                            {{ row.gift_aid == 1 ? 'True' : 'False' }}
-                        </span>
-                    </template>
-                </el-table-column>
-
-                <el-table-column prop="anonymous_donation" label="Anonymous">
-
-                    <template #default="{ row }">
-                        <span :style="{ color: row.anonymous_donation == 1 ? 'green' : '#da1a1a' }">
-                            {{ row.anonymous_donation == 1 ? 'True' : 'False' }}
-                        </span>
-                    </template>
-                </el-table-column>
-
-                <el-table-column prop="payment" label="Payment" width="120">
+                <el-table-column prop="payment" label="Payment" width="140">
                     <template #default="{ row }">
                         <span :class="[
                             'status-badge',
@@ -212,6 +203,23 @@ export default {
     },
 
     methods: {
+        getIntervalLabel(interval, interval_count) {
+            console.log('interval:', interval, 'interval_count:', interval_count);
+            if (interval === 'month') {
+                return 'Monthly';
+            } else if (interval === 'quarter') {
+                return 'Quarterly';
+            }
+            else if (interval === 'year') {
+                return 'Yearly';
+            } else if (interval === 'week') {
+                return 'Weekly';
+            } else if (interval === 'fortnight') {
+                return 'Fortnightly';
+            } else {
+                return 'One-time';
+            }
+        },
         formatAddedDate(date) {
             if (!date) return '';
             const options = { day: 'numeric', month: 'long', year: 'numeric' };
@@ -366,6 +374,29 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+
+.sub-text {
+    margin: 0 !important;
+    font-size: 12px;
+    color: #666D80;
+}
+
+.recurring-badge {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    color: rgb(30 64 175/1);
+    background: rgb(219 234 254/1);
+    border-radius: 16px;
+    padding: 4px 8px;
+    font-size: 10px;
+    font-weight: 500;
+    width: fit-content;
+    svg {
+        width: 11px;
+        height: 11px;
+    }
+}
 .ehxdo-title-link:hover {
     color: #3366FF;
 }

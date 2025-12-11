@@ -179,6 +179,8 @@ class DonationController extends Controller
             'donation_hash' => $data['donation_hash'],
             'transaction_id' => uniqid('don_', true),
             'donor_name' => trim($data['first_name'] . ' ' . $data['last_name']),
+            'first_name' => $data['first_name'],
+            'last_name' => $data['last_name'],
             'donor_email' => $data['email'],
             'donor_message' => $data['donation_note'] ?? '',
             'anonymous_donation' => $data['anonymous_donation'] ?? 0,
@@ -193,6 +195,13 @@ class DonationController extends Controller
             'payment_mode' => $stipe->getMode(),
 
             'gift_aid' => $data['gift_aid'] ?? 0,
+            'gift_aid_amount' => $data['gift_aid'] ? number_format(floatval($data['net_amount']) * 0.25, 2) : '0.00',
+            'address_line_1' => $data['address_line_1'] ?? '',
+            'address_line_2' => $data['address_line_2'] ?? '',
+            'city' => $data['city'] ?? '',
+            'state' => $data['state'] ?? '',
+            'country' => $data['country'] ?? '',
+            'post_code' => $data['post_code'] ?? '',
             'charge' => ($data['service_fee'] ?? 0),
             'net_amount' => $data['net_amount'],
             'amount' => $data['amount'],
@@ -537,14 +546,26 @@ class DonationController extends Controller
         // CSV headers
         fputcsv($output, [
             'SI',
-            'Donor',
-            'Amount',
-            'Campaign',
-            'Recurring',
-            'Gift Aid',
-            'Anonymous',
-            'Payment Status',
-            'Created at'
+            'Donation ID',
+            'Transaction ID',
+            'Donation Date',
+            'Donation Type',
+            'Status',
+            'First Name',
+            'Last Name',
+            'Email',
+            'Phone',
+            'Address Line 1',
+            'City/Town',
+            'Postcode',
+            'Donation Amount',
+            'Gift Aid', // Gift Aid Eligible
+            'Gift Aid Amount',
+            'Payment Method',
+            'Recurring Frequency',
+            'Recurring Start Date',
+            'Recurring Next Payment Date',
+            'Total Payments Made'
         ]);
 
         // Currency setup
@@ -560,18 +581,31 @@ class DonationController extends Controller
 
             // Get campaign manually
             $campaign = (new Campaign())->find($donation->campaign_id);
+            $transactions = (new Transaction())->where('donation_id', $donation->id)->get();
             $campaignTitle = $campaign ? $campaign->title : '';
-
+            $totalTransactions = count($transactions) > 0 ? count($transactions) : 1;
             fputcsv($output, [
                 $si,
-                $donation->donor_name,
-                $symbol . ' ' . number_format($donation->net_amount ?? 0, 2),
-                $campaignTitle,
+                $donation->id,
+                $donation->transaction_id,
+                $donation->created_at ? date('d/m/Y', strtotime($donation->created_at)) : 'N/A',
                 $donation->donation_type,
-                $donation->gift_aid ? 'True' : 'False',
-                $donation->anonymous_donation ? 'True' : 'False',
                 $donation->payment_status,
-                $donation->created_at ? date('d/m/Y', strtotime($donation->created_at)) : 'N/A'
+                $donation->first_name,
+                $donation->last_name,
+                $donation->donor_email,
+                $donation->phone ?? '---',
+                $donation->address_line_1,
+                $donation->city,
+                $donation->post_code,
+                $symbol . ' ' . number_format($donation->net_amount ?? 0, 2),
+                $donation->gift_aid ? 'Yes' : 'No',
+                $symbol . ' ' . number_format($donation->gift_aid_amount ?? 0, 2) * $totalTransactions,
+                $donation->payment_method,
+                $donation->interval ?? '---',
+                $donation->start_date ? date('d/m/Y', strtotime($donation->start_date)) : 'N/A',
+                $donation->next_payment_date ? date('d/m/Y', strtotime($donation->next_payment_date)) : 'N/A',
+                $totalTransactions
             ]);
             $si++;
         }

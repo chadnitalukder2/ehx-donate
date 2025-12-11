@@ -745,6 +745,25 @@ select.ehxdo-input {
     cursor: not-allowed;
 }
 
+.ehxdo-gift-aid-checkbox {
+    align-items: flex-start !important;
+    background: #e8fbe8;
+    border-radius: 12px;
+    padding: 12px;
+    .ehxdo-checkmark {
+        margin-top: 4px !important;
+    }
+    .ehxdo-checkbox-label {
+        font-size: 14px !important;
+        line-height: 1.5 !important;
+        font-weight: 600 !important;
+    }
+    .sub-text {
+        font-size: 12px !important;
+        color: #253241c2 !important;
+    }
+}
+
 
 /* Responsive Design */
 

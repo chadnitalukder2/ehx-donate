@@ -698,6 +698,25 @@ select.ehxdo-input {
   cursor: not-allowed;
 }
 
+.ehxdo-gift-aid-checkbox {
+  align-items: flex-start !important;
+  background: #e8fbe8;
+  border-radius: 12px;
+  padding: 12px;
+}
+.ehxdo-gift-aid-checkbox .ehxdo-checkmark {
+  margin-top: 4px !important;
+}
+.ehxdo-gift-aid-checkbox .ehxdo-checkbox-label {
+  font-size: 14px !important;
+  line-height: 1.5 !important;
+  font-weight: 600 !important;
+}
+.ehxdo-gift-aid-checkbox .sub-text {
+  font-size: 12px !important;
+  color: rgba(37, 50, 65, 0.7607843137) !important;
+}
+
 /* Responsive Design */
 @media (max-width: 1024px) {
   .ehxdo-campaign_details_container {
