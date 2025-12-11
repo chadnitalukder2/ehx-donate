@@ -250,6 +250,7 @@ class Plugin
             'restUrl' => rest_url('ehx-donate/v1/'),
             'restNonce' => wp_create_nonce('wp_rest'),
             'has_recurring_donation' => defined('EHXRD_VERSION') ? true : false,
+            'has_gift_aid_donation'  => defined('EHXGA_VERSION') ? true : false,
             'stripe_webhook' => rest_url('ehx-donate/v1/payment/stripe/webhook'),
 
             // 'nonce' => wp_create_nonce('exh_donate_nonce'),

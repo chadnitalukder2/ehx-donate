@@ -90,7 +90,35 @@
                                     <el-switch v-model="settings.anonymous" class="ml-2"
                                         style="--el-switch-on-color: #00A63E; --el-switch-off-color: #d1d5db" />
                                     <p style="margin: 0px; color: #6b7280;">
-                                        Enable this option so donors can hide their name if they want to donate anonymously.
+                                        Enable this option so donors can hide their name if they want to donate
+                                        anonymously.
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Gift Aid donation -->
+                        <div class="ehxdo-form-group">
+                            <div class="ehxdo-form-row" style="margin-bottom: 30px;">
+                                <label class="ehxdo-form-label">
+                                    Enable Gift Aid
+                                    <span v-if="!has_gift_aid_donation" class="ml-1" style="padding-left: 3px; color:#f59e0b">
+                                        <el-icon>
+                                            <Lock />
+                                        </el-icon>
+                                    </span>
+                                </label>
+
+                                <div class="ehxdo-input-wrapper">
+                                    <el-switch v-model="settings.gift_aid" :disabled="!has_gift_aid_donation"
+                                        class="ml-2"
+                                        style="--el-switch-on-color: #00A63E; --el-switch-off-color: #d1d5db" />
+                                    <p class="ehxdo-description" v-if="has_gift_aid_donation">
+                                        Enable this option to allow donors to add Gift Aid to their donations.
+                                    </p>
+                                    <p class="ehxdo-description" v-else style="color:#f59e0b;">
+                                        Gift Aid is a Pro feature. Please upgrade or install the EHx Gift Aid plugin to
+                                        enable this option.
                                     </p>
                                 </div>
                             </div>
@@ -197,7 +225,7 @@ export default {
                 service_fee: false,
                 service_fee_percentage: 1,
                 currency: 'GBP',
-                currency_position: 'Before'
+                currency_position: 'Before',
             })
         },
         loading: {
@@ -212,11 +240,18 @@ export default {
             countries: window.EHXDonate.countries,
             nonce: window.EHXDonate?.restNonce || '',
             restUrl: window.EHXDonate?.restUrl || '',
+            has_gift_aid_donation: window.EHXDonate?.has_gift_aid_donation || false,
         };
     },
 
+    mounted() {
+        if (!this.has_gift_aid_donation) {
+            this.settings.gift_aid = false;
+        }
+        console.log('General.vue loaded', this.settings);
+    },
+
     methods: {
-        // Calculate total with service fee
         calculateTotalWithFee(amount) {
             if (!this.settings.service_fee || !this.settings.service_fee_percentage) {
                 return amount;
@@ -225,7 +260,6 @@ export default {
             return (amount + fee).toFixed(2);
         },
 
-        // Format currency display
         formatCurrency(amount) {
             const symbol = this.getCurrencySymbol();
             const formatted = parseFloat(amount).toFixed(2);
@@ -234,7 +268,6 @@ export default {
                 : `${formatted}${symbol}`;
         },
 
-        // Get currency symbol
         getCurrencySymbol() {
             const currencySymbols = {
                 'GBP': '£',
@@ -242,17 +275,15 @@ export default {
                 'EUR': '€',
                 'BDT': '৳'
             };
-            return currencySymbols[this.settings.currency] || '$';
+            return currencySymbols[this.settings.currency] || '£';
         }
-    },
-
-    mounted() {
-        console.log('General.vue loaded', this.settings);
-    },
+    }
 };
 </script>
 
+
 <style scoped lang="scss">
+    
 .ehxdo-form-row {
     display: grid;
     grid-template-columns: 160px 1fr;

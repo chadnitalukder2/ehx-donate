@@ -20,6 +20,7 @@ class SettingsDefault
                 'anonymous' => false,
                 'service_fee' => false,
                 'service_fee_percentage' => 0,
+                'gift_aid' => true,
             ],
             'integration' => [
                 'stripe' => [
