@@ -283,7 +283,7 @@ export default {
 
 
 <style scoped lang="scss">
-    
+
 .ehxdo-form-row {
     display: grid;
     grid-template-columns: 160px 1fr;

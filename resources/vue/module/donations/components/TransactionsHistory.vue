@@ -5,19 +5,19 @@
       <thead>
         <tr>
           <th>
-            Trans. ID <span class="ehxdo-transactions__sort">⇅</span>
+            Trans. ID
           </th>
           <th>
-            Date Paid <span class="ehxdo-transactions__sort">⇅</span>
+            Date Paid 
           </th>
           <th>
-            Payment Method <span class="ehxdo-transactions__sort">⇅</span>
+            Payment Method 
           </th>
           <th>
-            Amount <span class="ehxdo-transactions__sort">⇅</span>
+            Amount
           </th>
           <th>
-            Status <span class="ehxdo-transactions__sort">⇅</span>
+            Status 
           </th>
         </tr>
       </thead>

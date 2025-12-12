@@ -13,13 +13,13 @@
       <router-link to="/donors" class="ehxdo_menu_item">
         Donors
       </router-link>
-      
+
       <router-link to="/transaction" class="ehxdo_menu_item">
         Transaction
       </router-link>
-      <!-- <router-link to="/subscriptions" class="ehxdo_menu_item">
-        Subscriptions
-      </router-link> -->
+        <router-link v-if="has_gift_aid_donation"  to="/gift-aid" class="ehxdo_menu_item">
+          Gift Aid
+        </router-link>
       <router-link to="/reports" class="ehxdo_menu_item">
         Reports
       </router-link>
@@ -35,6 +35,11 @@ import { ref } from 'vue';
 
 export default {
   name: 'EhxdoSidebar',
+   data() {
+        return {
+            has_gift_aid_donation: window.EHXDonate?.has_gift_aid_donation || false,
+        };
+    },
 
 };
 </script>

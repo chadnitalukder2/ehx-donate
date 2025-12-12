@@ -1,11 +1,10 @@
 <template>
     <div class="ehxd_wrapper">
-        
         <AppTable :tableData="donations" v-loading="loading">
 
             <template #header>
                 <div class="ehxd_title">
-                    <h1 class="table-title">All Donations</h1>
+                    <h1 class="table-title">All Gift Aid</h1>
                 </div>
             </template>
 
@@ -20,8 +19,7 @@
                         <el-option label="Pending" value="pending"></el-option>
                         <el-option label="Failed" value="failed"></el-option>
                     </el-select>
-                    <el-button @click="exportCSV()" class="ehxdo_export_btn" :loading="export" size="medium" type="info"
-                        style="">
+                    <el-button @click="exportCSV()" class="ehxdo_export_btn" :loading="export" size="medium" type="info" style="">
                         <!-- <el-icon class="ehxdo_ex_icon"><Bottom /></el-icon> -->
 
                         Export CSV</el-button>
@@ -30,60 +28,42 @@
             </template>
 
             <template #columns>
-                <el-table-column prop="id" label="ID" width="80">
+                <el-table-column prop="id" label="ID" width="100">
                     <template #default="{ row }">
-                        DN{{ row?.id < 100 ? '00' + row?.id : row?.id }} <p class="recurring-badge"
-                            v-if="row.donation_type === 'recurring'">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
-                                fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
-                                stroke-linejoin="round" class="lucide lucide-refresh-cw w-3 h-3">
-                                <path d="M3 12a9 9 0 0 1 9-9 9.75 9.75 0 0 1 6.74 2.74L21 8"></path>
-                                <path d="M21 3v5h-5"></path>
-                                <path d="M21 12a9 9 0 0 1-9 9 9.75 9.75 0 0 1-6.74-2.74L3 16"></path>
-                                <path d="M8 16H3v5"></path>
-                            </svg>
+                        DN{{ row?.id < 100 ? '00' + row?.id : row?.id }}
+                        <p class="recurring-badge" v-if="row.donation_type === 'recurring'">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-refresh-cw w-3 h-3"><path d="M3 12a9 9 0 0 1 9-9 9.75 9.75 0 0 1 6.74 2.74L21 8"></path><path d="M21 3v5h-5"></path><path d="M21 12a9 9 0 0 1-9 9 9.75 9.75 0 0 1-6.74-2.74L3 16"></path><path d="M8 16H3v5"></path></svg>
                             {{ getIntervalLabel(row.interval, row.interval_count) }}
-                            </p>
+                        </p>
                     </template>
                 </el-table-column>
-                <el-table-column prop="donor_name" label="Donor" width="auto">
+                <el-table-column prop="donor_name" label="Donor" width="200">
                     <template #default="{ row }">
                         <router-link :to="{ name: 'view_donation', params: { id: row.id } }" class="ehxdo-title-link">
                             {{ row.donor_name }}
-                            <p class="sub-text ehxdo-title-link">
-                                {{ row.donor_email }}
-                            </p>
                         </router-link>
-
+                        <p class="sub-text">
+                            {{ row.donor_email }}
+                        </p>
                     </template>
                 </el-table-column>
-
-
-                <el-table-column prop="campaign_id" label="Campaign" width="auto">
-                    <template #default="{ row }">
-                        {{ row.campaign.title }}
-                    </template>
-                </el-table-column>
-
                 <el-table-column prop="amount" label="Amount" width="100">
                     <template #default="{ row }">
                         {{ row.net_amount ? formatCurrency(row.net_amount) : formatCurrency(0) }}
                     </template>
                 </el-table-column>
 
-                <el-table-column v-if="has_gift_aid_donation" prop="gift_aid" label="Gift Aid" width="80">
+                <el-table-column prop="gift_aid" label="Gift Aid" width="100">
                     <template #default="{ row }">
                         <span :style="{ color: row.gift_aid == 1 ? 'green' : '#da1a1a' }">
-                              {{ row.gift_aid == 1 ? 'Yes' : 'No' }}
+                            {{ row.gift_aid == 1 ? formatCurrency(row.gift_aid_amount) : '---' }}
                         </span>
                     </template>
                 </el-table-column>
 
-                <el-table-column prop="anonymous_donation" label="Anon" width="60">
+                <el-table-column prop="campaign_id" label="Campaign">
                     <template #default="{ row }">
-                        <span :style="{ color: row.anonymous_donation == 1 ? 'green' : '#da1a1a' }">
-                             {{ row.anonymous_donation == 1 ? 'Yes' : 'No' }}
-                        </span>
+                        {{ row.campaign.title }}
                     </template>
                 </el-table-column>
 
@@ -100,7 +80,7 @@
                     </template>
                 </el-table-column>
 
-                <el-table-column prop="created_at" label="Date" width="auto">
+                <el-table-column prop="created_at" label="Date">
                     <template #default="{ row }">
                         {{ formatAddedDate(row.created_at) }}
                     </template>
@@ -185,7 +165,6 @@ export default {
             generalSettings: {},
             currencies: window.EHXDonate.currencies,
             currencySymbols: window.EHXDonate.currencySymbols,
-            has_gift_aid_donation: window.EHXDonate?.has_gift_aid_donation || false,
             donation: {},
             total_donations: 0,
             loading: false,
@@ -241,19 +220,11 @@ export default {
                 return 'One-time';
             }
         },
-
         formatAddedDate(date) {
             if (!date) return '';
-
-            const d = new Date(date);
-
-            const day = d.getDate();
-            const month = d.getMonth() + 1; // months start at 0
-            const year = d.getFullYear();
-
-            return `${day}-${month}-${year}`;
+            const options = { day: 'numeric', month: 'long', year: 'numeric' };
+            return new Date(date).toLocaleDateString('en-GB', options);
         },
-
         formatCurrency(amount) {
             const currency = this.generalSettings?.currency || 'GBP';
             const position = this.generalSettings?.currency_position || 'Before';
@@ -403,6 +374,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+
 .sub-text {
     margin: 0 !important;
     font-size: 12px;
@@ -420,13 +392,11 @@ export default {
     font-size: 10px;
     font-weight: 500;
     width: fit-content;
-
     svg {
         width: 11px;
         height: 11px;
     }
 }
-
 .ehxdo-title-link:hover {
     color: #3366FF;
 }
