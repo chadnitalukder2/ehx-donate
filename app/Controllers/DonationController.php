@@ -40,8 +40,8 @@ class DonationController extends Controller
             $status = sanitize_text_field($data['status']);
         }
         $res = (new Donation)
-        ->orderBy('created_at', 'desc')
-        ->paginateDonation($limit, $page, $search, $status);
+            ->orderBy('created_at', 'desc')
+            ->paginateDonation($limit, $page, $search, $status);
         $data = array_map(function ($donation) {
             $arr = $donation->toArray();
             $campaign = (new Campaign())->find($arr['campaign_id']);
@@ -82,7 +82,7 @@ class DonationController extends Controller
             'subscription' => $subscription,
         ]);
     }
-    
+
     public function store(): void
     {
         $this->requireAuth();
@@ -236,7 +236,7 @@ class DonationController extends Controller
             'interval'              => $donation->interval ?? 'month',
             'status'                => 'active',
             'start_date'            => current_time('mysql'),
-            'next_payment_date'     => current_time('mysql'), 
+            'next_payment_date'     => current_time('mysql'),
             'created_at'            => current_time('mysql'),
             'updated_at'            => current_time('mysql'),
         ]);
@@ -288,7 +288,7 @@ class DonationController extends Controller
     private function getAdminEmailTemplate($donation, $data)
     {
         ob_start();
-        ?>
+?>
         <!DOCTYPE html>
         <html>
 
@@ -388,7 +388,7 @@ class DonationController extends Controller
         </body>
 
         </html>
-        <?php
+    <?php
         return ob_get_clean();
     }
 
@@ -398,116 +398,116 @@ class DonationController extends Controller
     private function getDonorEmailTemplate($donation, $data)
     {
         ob_start();
-            ?>
-                <!DOCTYPE html>
-                <html>
+    ?>
+        <!DOCTYPE html>
+        <html>
 
-                <head>
-                    <style>
-                        body {
-                            font-family: Arial, sans-serif;
-                            line-height: 1.6;
-                            color: #333;
-                        }
+        <head>
+            <style>
+                body {
+                    font-family: Arial, sans-serif;
+                    line-height: 1.6;
+                    color: #333;
+                }
 
-                        .container {
-                            max-width: 600px;
-                            margin: 0 auto;
-                            padding: 20px;
-                        }
+                .container {
+                    max-width: 600px;
+                    margin: 0 auto;
+                    padding: 20px;
+                }
 
-                        .header {
-                            background: #4CAF50;
-                            color: white;
-                            padding: 20px;
-                            text-align: center;
-                        }
+                .header {
+                    background: #4CAF50;
+                    color: white;
+                    padding: 20px;
+                    text-align: center;
+                }
 
-                        .content {
-                            padding: 20px;
-                            background: #f9f9f9;
-                        }
+                .content {
+                    padding: 20px;
+                    background: #f9f9f9;
+                }
 
-                        .thank-you {
-                            font-size: 24px;
-                            color: #4CAF50;
-                            text-align: center;
-                            margin: 20px 0;
-                        }
+                .thank-you {
+                    font-size: 24px;
+                    color: #4CAF50;
+                    text-align: center;
+                    margin: 20px 0;
+                }
 
-                        .info-box {
-                            background: white;
-                            padding: 20px;
-                            margin: 20px 0;
-                            border-left: 4px solid #4CAF50;
-                        }
+                .info-box {
+                    background: white;
+                    padding: 20px;
+                    margin: 20px 0;
+                    border-left: 4px solid #4CAF50;
+                }
 
-                        .amount {
-                            font-size: 28px;
-                            color: #4CAF50;
-                            font-weight: bold;
-                            text-align: center;
-                            margin: 20px 0;
-                        }
+                .amount {
+                    font-size: 28px;
+                    color: #4CAF50;
+                    font-weight: bold;
+                    text-align: center;
+                    margin: 20px 0;
+                }
 
-                        .footer {
-                            text-align: center;
-                            padding: 20px;
-                            color: #666;
-                            font-size: 14px;
-                        }
-                    </style>
-                </head>
+                .footer {
+                    text-align: center;
+                    padding: 20px;
+                    color: #666;
+                    font-size: 14px;
+                }
+            </style>
+        </head>
 
-                <body>
-                    <div class="container">
-                        <div class="header">
-                            <h1>Thank You for Your Donation!</h1>
-                        </div>
-                        <div class="content">
-                            <p class="thank-you">Dear <?php echo esc_html($data['first_name']); ?>,</p>
+        <body>
+            <div class="container">
+                <div class="header">
+                    <h1>Thank You for Your Donation!</h1>
+                </div>
+                <div class="content">
+                    <p class="thank-you">Dear <?php echo esc_html($data['first_name']); ?>,</p>
 
-                            <p>Thank you for your generous donation! Your support makes a real difference.</p>
+                    <p>Thank you for your generous donation! Your support makes a real difference.</p>
 
-                            <div class="amount">
-                                <?php echo esc_html($donation->currency . ' ' . number_format($donation->amount, 2)); ?>
-                            </div>
-
-                            <div class="info-box">
-                                <h3>Donation Details</h3>
-                                <p><strong>Transaction ID:</strong> <?php echo esc_html($donation->transaction_id); ?></p>
-                                <p><strong>Date:</strong> <?php echo esc_html($donation->created_at); ?></p>
-                                <p><strong>Donation Type:</strong> <?php echo esc_html(ucfirst($donation->donation_type)); ?></p>
-                                <p><strong>Net Amount:</strong> <?php echo esc_html($donation->currency . ' ' . number_format($donation->net_amount, 2)); ?></p>
-                                <?php if ($donation->processing_fee > 0): ?>
-                                    <p><strong>Processing Fee:</strong> <?php echo esc_html($donation->currency . ' ' . number_format($donation->processing_fee, 2)); ?></p>
-                                <?php endif; ?>
-                            </div>
-
-                            <?php if (!empty($donation->donor_message)): ?>
-                                <div class="info-box">
-                                    <h3>Your Message</h3>
-                                    <p><?php echo nl2br(esc_html($donation->donor_message)); ?></p>
-                                </div>
-                            <?php endif; ?>
-
-                            <p>This email serves as a receipt for your donation. Please keep it for your records.</p>
-
-                            <p>If you have any questions, please don't hesitate to contact us.</p>
-
-                            <p>With gratitude,<br>
-                                <strong><?php echo get_bloginfo('name'); ?></strong>
-                            </p>
-                        </div>
-
-                        <div class="footer">
-                            <p>This is an automated message. Please do not reply to this email.</p>
-                        </div>
+                    <div class="amount">
+                        <?php echo esc_html($donation->currency . ' ' . number_format($donation->amount, 2)); ?>
                     </div>
-                </body>
 
-                </html>
-        <?php
+                    <div class="info-box">
+                        <h3>Donation Details</h3>
+                        <p><strong>Transaction ID:</strong> <?php echo esc_html($donation->transaction_id); ?></p>
+                        <p><strong>Date:</strong> <?php echo esc_html($donation->created_at); ?></p>
+                        <p><strong>Donation Type:</strong> <?php echo esc_html(ucfirst($donation->donation_type)); ?></p>
+                        <p><strong>Net Amount:</strong> <?php echo esc_html($donation->currency . ' ' . number_format($donation->net_amount, 2)); ?></p>
+                        <?php if ($donation->processing_fee > 0): ?>
+                            <p><strong>Processing Fee:</strong> <?php echo esc_html($donation->currency . ' ' . number_format($donation->processing_fee, 2)); ?></p>
+                        <?php endif; ?>
+                    </div>
+
+                    <?php if (!empty($donation->donor_message)): ?>
+                        <div class="info-box">
+                            <h3>Your Message</h3>
+                            <p><?php echo nl2br(esc_html($donation->donor_message)); ?></p>
+                        </div>
+                    <?php endif; ?>
+
+                    <p>This email serves as a receipt for your donation. Please keep it for your records.</p>
+
+                    <p>If you have any questions, please don't hesitate to contact us.</p>
+
+                    <p>With gratitude,<br>
+                        <strong><?php echo get_bloginfo('name'); ?></strong>
+                    </p>
+                </div>
+
+                <div class="footer">
+                    <p>This is an automated message. Please do not reply to this email.</p>
+                </div>
+            </div>
+        </body>
+
+        </html>
+<?php
         return ob_get_clean();
     }
 
@@ -533,6 +533,82 @@ class DonationController extends Controller
     }
 
     function export_donation_csv()
+    {
+        // Set CSV headers
+        header('Content-Type: text/csv; charset=utf-8');
+        header('Content-Disposition: attachment; filename=donations-' . date('Y-m-d-H-i-s') . '.csv');
+        header('Pragma: no-cache');
+        header('Expires: 0');
+
+        $output = fopen('php://output', 'w');
+        fprintf($output, chr(0xEF) . chr(0xBB) . chr(0xBF)); // UTF-8 BOM
+
+        // CSV headers
+        fputcsv($output, [
+            'SI',
+            'Donation ID',
+            'Donor',
+            'Email',
+            'Campaign',
+            'Amount',
+            'Gift Aid',
+            'Anonymous',
+            'Donation Type',
+            'Payment Method',
+            'Status',
+            'Transaction ID',
+            'Donation Date',
+        ]);
+
+        // Currency setup
+        $generalSettings = get_option('ehx_donate_settings_general', []);
+        $currency = $generalSettings['currency'] ?? 'GBP';
+        $currencySymbols = Currency::getCurrencySymbol($currency);
+        $symbol = $currencySymbols[$currency] ?? $currency;
+        $si = 1;
+        // Fetch all donations
+        $donations = (new Donation())->orderBy('created_at', 'desc')->get();
+
+        foreach ($donations as $donation) {
+
+            // Get campaign manually
+            $campaign = (new Campaign())->find($donation->campaign_id);
+            $transactions = (new Transaction())->where('donation_id', $donation->id)->get();
+            $campaignTitle = $campaign ? $campaign->title : '';
+            $totalTransactions = count($transactions) > 0 ? count($transactions) : 1;
+            $createdDate = 'N/A';
+
+            if (!empty($donation->created_at) && $donation->created_at !== '0000-00-00 00:00:00') {
+                $timestamp = strtotime($donation->created_at);
+
+                if ($timestamp !== false) {
+                    // Format: 02/12/2024
+                    $createdDate = date('d/m/Y', $timestamp);
+                }
+            }
+            fputcsv($output, [
+                $si,
+                $donation->id,
+                $donation->donor_name,
+                $donation->donor_email,
+                $campaignTitle,
+                $symbol . ' ' . number_format($donation->net_amount ?? 0, 2),
+                $donation->gift_aid ? 'Yes' : 'No',
+                $donation->anonymous_donation ? 'Yes' : 'No',
+                $donation->donation_type,
+                $donation->payment_method,
+                $donation->payment_status,
+                $donation->transaction_id,
+                $createdDate
+            ]);
+            $si++;
+        }
+
+        fclose($output);
+        exit();
+    }
+
+    function export_gift_aid_csv()
     {
         // Set CSV headers
         header('Content-Type: text/csv; charset=utf-8');
