@@ -579,13 +579,13 @@ class DonationController extends Controller
             $createdDate = 'N/A';
 
             if (!empty($donation->created_at) && $donation->created_at !== '0000-00-00 00:00:00') {
-                $timestamp = strtotime($donation->created_at);
+                $timestamp = strtotime($donation->created_at . ' UTC');
 
-                if ($timestamp !== false) {
-                    // Format: 02/12/2024
-                    $createdDate = date('d/m/Y', $timestamp);
+                if ($timestamp) {
+                    $createdDate = wp_date('d/m/Y', $timestamp);
                 }
             }
+
             fputcsv($output, [
                 $si,
                 $donation->id,
