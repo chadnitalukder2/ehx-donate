@@ -88,6 +88,7 @@ class DonationController extends Controller
         $this->requireAuth();
 
         $data = $this->validate([
+            'title' => 'required|max:255',
             'first_name' => 'required|max:255',
             'last_name' => 'max:1000',
             'email' => 'required|max:255',
@@ -195,6 +196,7 @@ class DonationController extends Controller
             'payment_mode' => $stipe->getMode(),
 
             'gift_aid' => $data['gift_aid'] ?? 0,
+            'title' => $data['title'] ?? '',
             'gift_aid_amount' => $data['gift_aid'] ? number_format(floatval($data['net_amount']) * 0.25, 2) : '0.00',
             'address_line_1' => $data['address_line_1'] ?? '',
             'address_line_2' => $data['address_line_2'] ?? '',
@@ -627,6 +629,7 @@ class DonationController extends Controller
             'Donation Date',
             'Donation Type',
             'Status',
+            'Title',
             'First Name',
             'Last Name',
             'Email',
@@ -667,6 +670,7 @@ class DonationController extends Controller
                 $donation->created_at ? date('d/m/Y', strtotime($donation->created_at)) : 'N/A',
                 $donation->donation_type,
                 $donation->payment_status,
+                $donation->title,
                 $donation->first_name,
                 $donation->last_name,
                 $donation->donor_email,

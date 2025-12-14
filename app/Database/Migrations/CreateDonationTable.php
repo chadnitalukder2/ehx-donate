@@ -34,6 +34,7 @@ class CreateDonationTable
         'campaign_id' => 'bigint(20) UNSIGNED DEFAULT NULL',
         'user_id' => 'bigint(20) UNSIGNED DEFAULT NULL',
         'donor_id' => 'bigint(20) UNSIGNED DEFAULT NULL',
+        'title' => 'varchar(255) DEFAULT NULL',
         'donor_name' => 'varchar(255) DEFAULT NULL',
         'first_name' => 'varchar(255) DEFAULT NULL',
         'last_name' => 'varchar(255) DEFAULT NULL',

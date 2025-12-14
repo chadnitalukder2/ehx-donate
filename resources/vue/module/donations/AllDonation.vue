@@ -366,7 +366,7 @@ export default {
 
                 const link = document.createElement('a');
                 link.href = window.URL.createObjectURL(blob);
-                link.download = `campaigns-${new Date().toISOString().split('T')[0]}.csv`;
+                link.download = `donation-${new Date().toISOString().split('T')[0]}.csv`;
 
                 document.body.appendChild(link);
                 link.click();

@@ -29,21 +29,17 @@
             </template>
 
             <template #columns>
-                <el-table-column prop="id" label="ID" width="100">
+                <el-table-column prop="title" label="Title" width="80px">
                     <template #default="{ row }">
-                        DN{{ row?.id < 100 ? '00' + row?.id : row?.id }} </template>
-                </el-table-column>
-                <el-table-column prop="campaign_id" label="Title">
-                    <template #default="{ row }">
-                        <!-- {{ row.campaign.title }} --> title
+                        {{ row.title }}
                     </template>
                 </el-table-column>
-                <el-table-column prop="first_name" label="First Name" width="auto">
+                <el-table-column prop="first_name" label="First Name" width="120px">
                     <template #default="{ row }">
                         {{ row.first_name }}
                     </template>
                 </el-table-column>
-                <el-table-column prop="last_name" label="Last Name" width="auto">
+                <el-table-column prop="last_name" label="Last Name" width="120px">
                     <template #default="{ row }">
                         {{ row.last_name }}
                     </template>
@@ -58,26 +54,18 @@
                         </span>
                     </template>
                 </el-table-column>
-                <el-table-column prop="postal_code" label="Post Code" width="auto">
+                <el-table-column prop="postal_code" label="Post Code" width="100px">
                     <template #default="{ row }">
-                        {{ row.postal_code }}
+                        {{ row.post_code ?? '---' }}
                     </template>
                 </el-table-column>
-                <el-table-column prop="amount" label="Amount" width="100">
+                <el-table-column prop="amount" label="Amount" width="120">
                     <template #default="{ row }">
                         {{ row.net_amount ? formatCurrency(row.net_amount) : formatCurrency(0) }}
                     </template>
                 </el-table-column>
 
-                <el-table-column prop="gift_aid" label="Gift Aid" width="100">
-                    <template #default="{ row }">
-                        <span :style="{ color: row.gift_aid == 1 ? 'green' : '#da1a1a' }">
-                            {{ row.gift_aid == 1 ? formatCurrency(row.gift_aid_amount) : '---' }}
-                        </span>
-                    </template>
-                </el-table-column>
-
-                <el-table-column prop="created_at" label="Date">
+                <el-table-column prop="created_at" label="Date" width="100">
                     <template #default="{ row }">
                         {{ formatAddedDate(row.created_at) }}
                     </template>
@@ -229,7 +217,7 @@ export default {
         async getAllDonations() {
             this.loading = true;
             try {
-                const response = await axios.get(`${this.rest_api}api/getAllDonations`, {
+                const response = await axios.get(`${this.rest_api}api/getAllGiftAid`, {
                     params: {
                         page: this.currentPage,
                         limit: this.pageSize,
@@ -254,50 +242,7 @@ export default {
                 console.error('Error fetching donations:', error);
             }
         },
-
-        openDeleteDonationModal(row) {
-            this.active_id = row.id;
-            this.$refs.delete_donation_modal.openModel();
-        },
-        async deleteDonation() {
-            this.loading = true;
-            const id = this.active_id;
-
-            try {
-                const response = await axios.delete(`${this.rest_api}api/deleteDonation/${id}`, {
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'X-WP-Nonce': this.nonce
-                    }
-                });
-
-                if (response.data.success === true) {
-                    this.$notify({
-                        title: 'Success',
-                        message: 'donation deleted successfully',
-                        type: 'success',
-                    });
-                    this.getAllDonations();
-                    this.$refs.delete_donation_modal.handleClose();
-                } else {
-                    this.$notify({
-                        title: 'Error',
-                        message: 'Failed to delete donation',
-                        type: 'error',
-                    });
-                }
-
-            } catch (error) {
-                console.error('Error deleting donation:', error);
-                this.$notify({
-                    title: 'Error',
-                    message: 'An unexpected error occurred while deleting the donation.',
-                    type: 'error',
-                });
-            } finally {
-                this.loading = false;
-            }
-        },
+  
 
         async exportCSV() {
             try {
@@ -317,7 +262,7 @@ export default {
 
                 const link = document.createElement('a');
                 link.href = window.URL.createObjectURL(blob);
-                link.download = `campaigns-${new Date().toISOString().split('T')[0]}.csv`;
+                link.download = `gift-aid-${new Date().toISOString().split('T')[0]}.csv`;
 
                 document.body.appendChild(link);
                 link.click();

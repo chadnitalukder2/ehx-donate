@@ -266,6 +266,18 @@ $stripMode = $integrationsSettings['stripe']['enabled'];
 
                         <input type="hidden" name="campaign_id" value="<?php echo esc_attr($campaign['id']); ?>">
                         <input type="hidden" name="net_amount" id="ehxdo-net_amount" value="<?php echo $default_amount; ?>">
+
+                        <div class="ehxdo-recurring-interval" style=" padding-top: 15px;">
+                            <label for="title" class="ehxdo-label">Title <span style="color: #e71111;">*</span></label>
+                            <select name="title"  class="ehxdo-custom-amount" >
+                                <option selected value="Mr">Mr</option>
+                                <option value="Ms">Ms</option>
+                                <option value="Mrs">Mrs</option>
+                                <option value="Miss">Miss</option>
+                                <option value="Dr">Dr</option>
+                            </select>
+                        </div>
+
                         <div class="ehxdo-form-row">
                             <div class="ehxdo-form-group">
                                 <label class="ehxdo-label">First Name <span style="color: #e71111;">*</span></label>
@@ -309,16 +321,16 @@ $stripMode = $integrationsSettings['stripe']['enabled'];
                                 <span style="font-size: 0.875rem;">Gift Aid</span>
                             </label> -->
                             <?php if (defined('EHXGA_VERSION')): ?>
-                            <label class="ehxdo-checkbox-container ehxdo-gift-aid-checkbox">
-                                <input type="checkbox" name="gift_aid" id="gift_aid_checkbox" value="1">
-                                <span class="ehxdo-checkmark"></span>
-                                <div class="ehxdo-checkbox-info">
-                                    <span class="ehxdo-checkbox-label">Gift Aid</span>
-                                    <p class="sub-text">
-                                        I am a UK taxpayer and understand that if I pay less Income Tax and/or Capital Gains Tax than the amount of Gift Aid claimed on all my donations in that tax year, it is my responsibility to pay any difference.
-                                    </p>
-                                </div>
-                            </label>
+                                <label class="ehxdo-checkbox-container ehxdo-gift-aid-checkbox">
+                                    <input type="checkbox" name="gift_aid" id="gift_aid_checkbox" value="1">
+                                    <span class="ehxdo-checkmark"></span>
+                                    <div class="ehxdo-checkbox-info">
+                                        <span class="ehxdo-checkbox-label">Gift Aid</span>
+                                        <p class="sub-text">
+                                            I am a UK taxpayer and understand that if I pay less Income Tax and/or Capital Gains Tax than the amount of Gift Aid claimed on all my donations in that tax year, it is my responsibility to pay any difference.
+                                        </p>
+                                    </div>
+                                </label>
                             <?php endif; ?>
 
                         </div>

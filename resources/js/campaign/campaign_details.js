@@ -209,12 +209,14 @@ jQuery(document).ready(function ($) {
         let errors = [];
         const firstName = $(this).find('input[name="first_name"]')[0];
         const lastName = $(this).find('input[name="last_name"]')[0];
+        const title   = $(this).find('select[name="title"]')[0];
         const email = $(this).find('input[name="email"]')[0];
         const isRecurring = $(this).find('input[name="recurring_donation"]')[0];
         const recurringInterval = $(this).find('select[name="recurring_interval"]')[0];
-
+        console.log('title', title);
         $(firstName).css('border', '');
         $(lastName).css('border', '');
+        $(title).css('border', '');
         $(email).css('border', '');
 
         if (!firstName.value.trim()) {
@@ -224,6 +226,10 @@ jQuery(document).ready(function ($) {
         if (!lastName.value.trim()) {
             $(lastName).css('border', '1.5px solid red');
             errors.push('Last name is required');
+        }
+         if (!title.value.trim()) {
+            $(title).css('border', '1.5px solid red');
+            errors.push('Title is required');
         }
 
         const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
@@ -295,6 +301,7 @@ jQuery(document).ready(function ($) {
         const data = {
             first_name: $('input[name="first_name"]').val() || '',
             last_name: $('input[name="last_name"]').val() || '',
+            title: $('select[name="title"]').val() || '',
             email: $('input[name="email"]').val() || '',
             phone: $('input[name="phone"]').val() || '',
             donation_hash: generateDonationHash(),
