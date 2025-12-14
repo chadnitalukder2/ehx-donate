@@ -13,12 +13,7 @@
                     placeholder="Search" prefix-icon="Search" />
 
                 <div>
-                    <el-select v-model="status_filter" size="medium" style="margin-left: 16px; width: 140px;">
-                        <el-option label="All Status" :value="undefined"></el-option>
-                        <el-option label="Completed" value="completed"></el-option>
-                        <el-option label="Pending" value="pending"></el-option>
-                        <el-option label="Failed" value="failed"></el-option>
-                    </el-select>
+                   
                     <el-button @click="exportCSV()" class="ehxdo_export_btn" :loading="export" size="medium" type="info"
                         style="">
                         <!-- <el-icon class="ehxdo_ex_icon"><Bottom /></el-icon> -->
@@ -32,6 +27,17 @@
                 <el-table-column prop="title" label="Title" width="80px">
                     <template #default="{ row }">
                         {{ row.title }}
+                        <p class="recurring-badge" v-if="row.donation_type === 'recurring'">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
+                                fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                stroke-linejoin="round" class="lucide lucide-refresh-cw w-3 h-3">
+                                <path d="M3 12a9 9 0 0 1 9-9 9.75 9.75 0 0 1 6.74 2.74L21 8"></path>
+                                <path d="M21 3v5h-5"></path>
+                                <path d="M21 12a9 9 0 0 1-9 9 9.75 9.75 0 0 1-6.74-2.74L3 16"></path>
+                                <path d="M8 16H3v5"></path>
+                            </svg>
+                            {{ getIntervalLabel(row.interval, row.interval_count) }}
+                        </p>
                     </template>
                 </el-table-column>
                 <el-table-column prop="first_name" label="First Name" width="120px">
@@ -50,7 +56,7 @@
                             {{ row.address_line_1 }} {{ row.city }} {{ row.state }} {{ row.country }}
                         </span>
                         <span v-else>
-                           {{ row.address_line_2 }} {{ row.city }} {{ row.state }} {{ row.country }}
+                            {{ row.address_line_2 }} {{ row.city }} {{ row.state }} {{ row.country }}
                         </span>
                     </template>
                 </el-table-column>
@@ -59,6 +65,13 @@
                         {{ row.post_code ?? '---' }}
                     </template>
                 </el-table-column>
+
+                <el-table-column prop="donation_type" label="Aggregated Donations" width="120">
+                    <template #default="{ row }">
+                        {{ row.donation_type }}
+                    </template>
+                </el-table-column>
+
                 <el-table-column prop="amount" label="Amount" width="120">
                     <template #default="{ row }">
                         {{ row.net_amount ? formatCurrency(row.net_amount) : formatCurrency(0) }}
@@ -242,7 +255,7 @@ export default {
                 console.error('Error fetching donations:', error);
             }
         },
-  
+
 
         async exportCSV() {
             try {
