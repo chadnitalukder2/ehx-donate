@@ -3,10 +3,15 @@
         <Breadcrumb :donation="donation" />
         <UserCard :donor="donor" />
         <DonationDetailsCard :donation="donation" />
-        <div v-if="donation.donation_type !== 'one-time'" >
+        
+        <div v-if="donation.donation_type !== 'one-time'">
             <SubscriptionDetails :subscription="subscription" :currency="donation.currency" />
         </div>
-       
+
+        <div>
+            <GiftAidDetails :donation="donation" />
+        </div>
+
         <TransactionsHistory :transactions="transactions" />
     </div>
 </template>
@@ -17,6 +22,8 @@ import UserCard from './components/UserCard.vue';
 import DonationDetailsCard from './components/DonationDetailsCard.vue';
 import TransactionsHistory from './components/TransactionsHistory.vue';
 import SubscriptionDetails from './components/SubscriptionDetails.vue';
+import GiftAidDetails from './components/GiftAidDetails.vue';
+
 import Breadcrumb from './components/Breadcrumb.vue';
 
 export default {
@@ -26,7 +33,8 @@ export default {
         DonationDetailsCard,
         TransactionsHistory,
         SubscriptionDetails,
-        Breadcrumb
+        Breadcrumb,
+        GiftAidDetails,
     },
     data() {
         return {
@@ -59,7 +67,7 @@ export default {
                 this.loading = false;
                 console.error('Error fetching donation:', error);
             }
-         
+
         }
     },
     mounted() {
