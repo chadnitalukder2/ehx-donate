@@ -19,7 +19,8 @@
                         <el-option label="Pending" value="pending"></el-option>
                         <el-option label="Failed" value="failed"></el-option>
                     </el-select>
-                    <el-button @click="exportCSV()" class="ehxdo_export_btn" :loading="export" size="medium" type="info" style="">
+                    <el-button @click="exportCSV()" class="ehxdo_export_btn" :loading="export" size="medium" type="info"
+                        style="">
                         <!-- <el-icon class="ehxdo_ex_icon"><Bottom /></el-icon> -->
 
                         Export CSV</el-button>
@@ -30,21 +31,36 @@
             <template #columns>
                 <el-table-column prop="id" label="ID" width="100">
                     <template #default="{ row }">
-                        DN{{ row?.id < 100 ? '00' + row?.id : row?.id }}
-                        <p class="recurring-badge" v-if="row.donation_type === 'recurring'">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-refresh-cw w-3 h-3"><path d="M3 12a9 9 0 0 1 9-9 9.75 9.75 0 0 1 6.74 2.74L21 8"></path><path d="M21 3v5h-5"></path><path d="M21 12a9 9 0 0 1-9 9 9.75 9.75 0 0 1-6.74-2.74L3 16"></path><path d="M8 16H3v5"></path></svg>
-                            {{ getIntervalLabel(row.interval, row.interval_count) }}
-                        </p>
+                        DN{{ row?.id < 100 ? '00' + row?.id : row?.id }} </template>
+                </el-table-column>
+                <el-table-column prop="campaign_id" label="Title">
+                    <template #default="{ row }">
+                        <!-- {{ row.campaign.title }} --> title
                     </template>
                 </el-table-column>
-                <el-table-column prop="donor_name" label="Donor" width="200">
+                <el-table-column prop="first_name" label="First Name" width="auto">
                     <template #default="{ row }">
-                        <router-link :to="{ name: 'view_donation', params: { id: row.id } }" class="ehxdo-title-link">
-                            {{ row.donor_name }}
-                        </router-link>
-                        <p class="sub-text">
-                            {{ row.donor_email }}
-                        </p>
+                        {{ row.first_name }}
+                    </template>
+                </el-table-column>
+                <el-table-column prop="last_name" label="Last Name" width="auto">
+                    <template #default="{ row }">
+                        {{ row.last_name }}
+                    </template>
+                </el-table-column>
+                <el-table-column label="House Name or Number" width="auto">
+                    <template #default="{ row }">
+                        <span v-if="row.address_line_1">
+                            {{ row.address_line_1 }} {{ row.city }} {{ row.state }} {{ row.country }}
+                        </span>
+                        <span v-else>
+                           {{ row.address_line_2 }} {{ row.city }} {{ row.state }} {{ row.country }}
+                        </span>
+                    </template>
+                </el-table-column>
+                <el-table-column prop="postal_code" label="Post Code" width="auto">
+                    <template #default="{ row }">
+                        {{ row.postal_code }}
                     </template>
                 </el-table-column>
                 <el-table-column prop="amount" label="Amount" width="100">
@@ -61,54 +77,12 @@
                     </template>
                 </el-table-column>
 
-                <el-table-column prop="campaign_id" label="Campaign">
-                    <template #default="{ row }">
-                        {{ row.campaign.title }}
-                    </template>
-                </el-table-column>
-
-                <el-table-column prop="payment" label="Payment" width="140">
-                    <template #default="{ row }">
-                        <span :class="[
-                            'status-badge',
-                            row.payment_status === 'completed' ? 'ehxdo_status-active' :
-                                row.payment_status === 'pending' ? 'ehxdo_status-pending' :
-                                    row.payment_status === 'failed' ? 'ehxdo_status-failed' : ''
-                        ]">
-                            {{ row.payment_status }}
-                        </span>
-                    </template>
-                </el-table-column>
-
                 <el-table-column prop="created_at" label="Date">
                     <template #default="{ row }">
                         {{ formatAddedDate(row.created_at) }}
                     </template>
                 </el-table-column>
 
-                <el-table-column label="Actions" width="75">
-                    <template #default="{ row }">
-                        <div class="ehxdo_action_section">
-                            <el-popover placement="bottom-end" width="100"
-                                :popper-style="{ minWidth: '100px', borderRadius: '16px' }"
-                                popper-class="ehxdo-action-popover" trigger="click" v-model:visible="row.showActions">
-                                <div class="action-popup">
-
-                                    <el-button type="text" @click="viewDonation(row)" class="ehxdo_view"> <el-icon>
-                                            <View />
-                                        </el-icon> View</el-button>
-                                    <el-button type="text" @click="openDeleteDonationModal(row)" class="ehxdo_delete">
-                                        <el-icon>
-                                            <DeleteFilled />
-                                        </el-icon> Delete</el-button>
-                                </div>
-                                <template #reference>
-                                    <el-button icon="More" circle size="small"></el-button>
-                                </template>
-                            </el-popover>
-                        </div>
-                    </template>
-                </el-table-column>
             </template>
 
             <template #footer>
@@ -222,8 +196,14 @@ export default {
         },
         formatAddedDate(date) {
             if (!date) return '';
-            const options = { day: 'numeric', month: 'long', year: 'numeric' };
-            return new Date(date).toLocaleDateString('en-GB', options);
+
+            const d = new Date(date);
+
+            const day = d.getDate();
+            const month = d.getMonth() + 1;
+            const year = d.getFullYear();
+
+            return `${day}-${month}-${year}`;
         },
         formatCurrency(amount) {
             const currency = this.generalSettings?.currency || 'GBP';
@@ -374,7 +354,6 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-
 .sub-text {
     margin: 0 !important;
     font-size: 12px;
@@ -392,11 +371,13 @@ export default {
     font-size: 10px;
     font-weight: 500;
     width: fit-content;
+
     svg {
         width: 11px;
         height: 11px;
     }
 }
+
 .ehxdo-title-link:hover {
     color: #3366FF;
 }
