@@ -28,7 +28,7 @@ class ApiRoutes
             $router->put('/campaigns/{id}', 'CampaignController@update', ['auth']);
             $router->delete('/deleteCampaign/{id}', 'CampaignController@destroy', ['auth']);
             $router->post('/updateCampaignStatus/{id}', 'CampaignController@updateCampaignStatus', ['auth']);
-             $router->get('/export-campaigns', 'CampaignController@export_campaigns_csv', ['auth']);
+            $router->get('/export-campaigns', 'CampaignController@export_campaigns_csv', ['auth']);
 
             //Donor routes
             $router->get('/getAllDonors', 'DonorController@index', ['auth']);
@@ -45,6 +45,9 @@ class ApiRoutes
             $router->get('/donations/{id}', 'DonationController@show', ['auth']);
             $router->delete('/deleteDonation/{id}', 'DonationController@destroy', ['auth']);
             $router->get('/export-donation', 'DonationController@export_donation_csv', ['auth']);
+
+            //gift aid
+            $router->get('/getAllGiftAid', 'DonationController@getAllGiftAid', ['auth']);
 
             // Settings routes
             $router->get('/settings/{key}', 'SettingsController@getSettings');

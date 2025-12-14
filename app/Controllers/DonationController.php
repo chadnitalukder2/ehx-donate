@@ -610,6 +610,50 @@ class DonationController extends Controller
         exit();
     }
 
+      public function getAllGiftAid(): void
+    {
+        $data = $this->request;
+
+        $page = 1;
+        $limit = 10;
+        $search = null;
+        $status = null;
+        $gift_aid = 1;
+
+        if ($data['page']) {
+            $page = intval($data['page']);
+        }
+        if ($data['limit']) {
+            $limit =  intval($data['limit']);
+        }
+        if ($data['search']) {
+            $search = sanitize_text_field($data['search']);
+        }
+        if ($data['status']) {
+            $status = sanitize_text_field($data['status']);
+        }
+        $res = (new Donation)->where('gift_aid', 1)
+            ->orderBy('created_at', 'desc')
+            ->paginateDonation($limit, $page, $search, $status);
+        $data = array_map(function ($donation) {
+            $arr = $donation->toArray();
+            $campaign = (new Campaign())->find($arr['campaign_id']);
+            $arr['campaign'] = $campaign ? $campaign->toArray() : null;
+            return $arr;
+        }, $res['data']);
+
+        //  $donations = (new Donation())->orderBy('created_at', 'DESC')->get();
+        $generalSettings = get_option('ehx_donate_settings_general', []);
+
+        $this->success([
+            'donations' => $data,
+            'generalSettings' => $generalSettings,
+            'total' => $res['total'],
+            'per_page' => $res['per_page'],
+            'current_page' => $res['current_page'],
+            'last_page' => $res['last_page'],
+        ]);
+    }
     function export_gift_aid_csv()
     {
         // Set CSV headers
