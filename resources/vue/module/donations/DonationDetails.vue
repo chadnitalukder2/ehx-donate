@@ -3,12 +3,12 @@
         <Breadcrumb :donation="donation" />
         <UserCard :donor="donor" />
         <DonationDetailsCard :donation="donation" />
-        
+
         <div v-if="donation.donation_type !== 'one-time'">
             <SubscriptionDetails :subscription="subscription" :currency="donation.currency" />
         </div>
 
-        <div>
+        <div v-if="Number(donation.gift_aid) === 1">
             <GiftAidDetails :donation="donation" />
         </div>
 
