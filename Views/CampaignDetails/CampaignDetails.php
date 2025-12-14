@@ -204,25 +204,7 @@ $stripMode = $integrationsSettings['stripe']['enabled'];
                             </p>
                         <?php endif; ?>
                         <?php if (defined('EHXRD_VERSION') && $campaign['settings']['allow_recurring_amount'] === true): ?>
-                            <div class="ehxdo-recurring-option" style="padding-top: 15px;">
-                                <div class="ehxdo-recurring-option" style="padding-top: 15px;">
-                                    <label class="ehxdo-checkbox-container">
-                                        <input type="checkbox" name="recurring_donation" id="recurring_checkbox" value="1">
-                                        <span class="ehxdo-checkmark"></span>
-                                        <span class="ehxdo-checkbox-label">Make this a recurring donation</span>
-                                    </label>
-                                </div>
-                            </div>
-
-                            <div class="ehxdo-recurring-interval" style="display: none; padding-top: 15px;">
-                                <label for="recurring_interval" class="ehxdo-label">Frequency</label>
-                                <select name="recurring_interval" id="recurring_interval" class="ehxdo-custom-amount" style="margin-top: 10px;">
-                                    <option value="week">Weekly</option>
-                                    <option value="month">Monthly</option>
-                                    <option value="quarter">Quarterly</option>
-                                    <option value="year">Yearly</option>
-                                </select>
-                            </div>
+                            <?php include_once EHXRD_PLUGIN_DIR . 'views/subscription-field.php'; ?>
                         <?php endif; ?>
                     </div>
                     <input type="hidden" id="ehxdo_service_fee_percentage" value="<?php echo $generalSettings['service_fee_percentage'] ?? ''; ?>">
@@ -314,56 +296,10 @@ $stripMode = $integrationsSettings['stripe']['enabled'];
                                 <span id="note-char-count">0</span>/500 characters
                             </div>
                         </div>
-
-                        <div>
-                            <?php if (defined('EHXGA_VERSION')): ?>
-                                <label class="ehxdo-checkbox-container ehxdo-gift-aid-checkbox">
-                                    <input type="checkbox" name="gift_aid" id="gift_aid_checkbox" value="1">
-                                    <span class="ehxdo-checkmark"></span>
-                                    <div class="ehxdo-checkbox-info">
-                                        <span class="ehxdo-checkbox-label">Gift Aid</span>
-                                        <p class="sub-text">
-                                            I am a UK taxpayer and understand that if I pay less Income Tax and/or Capital Gains Tax than the amount of Gift Aid claimed on all my donations in that tax year, it is my responsibility to pay any difference.
-                                        </p>
-                                    </div>
-                                </label>
-                            <?php endif; ?>
-
-                        </div>
-
-                        <!-- Gift Aid Address Fields (Initially Hidden) -->
-                        <div id="gift_aid_fields" style="display: none;">
-                            <div class="ehxdo-form-group">
-                                <label class="ehxdo-label">Address line 1</label>
-                                <input type="text" name="address_line_1" class="ehxdo-input">
-                            </div>
-                            <div class="ehxdo-form-group" style="padding-top: 15px;">
-                                <label class="ehxdo-label">Address line 2</label>
-                                <input type="text" name="address_line_2" class="ehxdo-input">
-                            </div>
-
-                            <div class="ehxdo-form-row" style="padding-top: 15px;">
-                                <div class="ehxdo-form-group">
-                                    <label class="ehxdo-label">City</label>
-                                    <input type="text" name="city" class="ehxdo-input">
-                                </div>
-                                <div class="ehxdo-form-group">
-                                    <label class="ehxdo-label">State</label>
-                                    <input type="text" name="state" class="ehxdo-input">
-                                </div>
-                            </div>
-
-                            <div class="ehxdo-form-row" style="padding-top: 15px;">
-                                <div class="ehxdo-form-group">
-                                    <label class="ehxdo-label">Country</label>
-                                    <input type="text" name="country" class="ehxdo-input">
-                                </div>
-                                <div class="ehxdo-form-group">
-                                    <label class="ehxdo-label">Post Code</label>
-                                    <input type="text" name="post_code" class="ehxdo-input">
-                                </div>
-                            </div>
-                        </div>
+                        
+                        <?php if (defined('EHXGA_VERSION')): ?>
+                            <?php include_once EHXGA_PLUGIN_DIR . 'views/gift-aid-form-field.php'; ?>
+                        <?php endif; ?>
 
 
                         <?php if ($generalSettings['anonymous'] ?? false): ?>

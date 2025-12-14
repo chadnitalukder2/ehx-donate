@@ -11,6 +11,7 @@ use EHXDonate\Models\Transaction;
 use EHXDonate\Models\Subscription;
 use EHXDonate\Models\Campaign;
 use EHXDonate\Helpers\Currency;
+use EHxGiftAid\Classes\GiftAidHandler;
 
 /**
  * Donation Controller
@@ -60,6 +61,19 @@ class DonationController extends Controller
             'current_page' => $res['current_page'],
             'last_page' => $res['last_page'],
         ]);
+    }
+
+    public function getAllGiftAidDonations()
+    {
+        if(!defined('EHXGA_VERSION')){
+            return;
+        }
+        if(!class_exists('EHxGiftAid\Classes\GiftAidHandler')){
+            return;
+        }
+        $giftAidHandler = new GiftAidHandler();
+
+        return $giftAidHandler->getAllGiftAidDonations($this->request);
     }
 
     public function show($id)
@@ -656,95 +670,13 @@ class DonationController extends Controller
     }
     function export_gift_aid_csv()
     {
-        // Set CSV headers
-        header('Content-Type: text/csv; charset=utf-8');
-        header('Content-Disposition: attachment; filename=donations-' . date('Y-m-d-H-i-s') . '.csv');
-        header('Pragma: no-cache');
-        header('Expires: 0');
-
-        $output = fopen('php://output', 'w');
-        fprintf($output, chr(0xEF) . chr(0xBB) . chr(0xBF)); // UTF-8 BOM
-
-        // CSV headers
-        fputcsv($output, [
-            'SI',
-            'Title',
-            'First Name',
-            'Last Name',
-
-            'Address',
-            'Postcode',
-            'Aggregated Donations',
-            'Sponsored Event',
-            'Donation Date',
-            'Amount',
-
-            'Transaction ID',
-            'Donation Date',
-            'Donation Type',
-            'Status',
-            'Title',
-
-            'Email',
-            'Phone',
-            'Address Line 1',
-            'City/Town',
-            'Postcode',
-            'Donation Amount',
-            'Gift Aid', // Gift Aid Eligible
-            'Gift Aid Amount',
-            'Payment Method',
-            'Recurring Frequency',
-            'Recurring Start Date',
-            'Recurring Next Payment Date',
-            'Total Payments Made'
-        ]);
-
-        // Currency setup
-        $generalSettings = get_option('ehx_donate_settings_general', []);
-        $currency = $generalSettings['currency'] ?? 'GBP';
-        $currencySymbols = Currency::getCurrencySymbol($currency);
-        $symbol = $currencySymbols[$currency] ?? $currency;
-        $si = 1;
-        // Fetch all donations
-        $donations = (new Donation())->where('gift_aid', 1)->orderBy('created_at', 'desc')->get();
-
-        foreach ($donations as $donation) {
-
-            // Get campaign manually
-            $transactions = (new Transaction())->where('donation_id', $donation->id)->get();
-            $totalTransactions = count($transactions) > 0 ? count($transactions) : 1;
-            fputcsv($output, [
-                $si,
-                $donation->title,
-                $donation->first_name,
-                $donation->last_name,
-
-
-                $donation->transaction_id,
-                $donation->created_at ? date('d/m/Y', strtotime($donation->created_at)) : 'N/A',
-                $donation->donation_type,
-                $donation->payment_status,
-                $donation->title,
-
-                $donation->donor_email,
-                $donation->phone ?? '---',
-                $donation->address_line_1,
-                $donation->city,
-                $donation->post_code,
-                $symbol . ' ' . number_format($donation->net_amount ?? 0, 2),
-                $donation->gift_aid ? 'Yes' : 'No',
-                $symbol . ' ' . number_format($donation->gift_aid_amount ?? 0, 2) * $totalTransactions,
-                $donation->payment_method,
-                $donation->interval ?? '---',
-                $donation->start_date ? date('d/m/Y', strtotime($donation->start_date)) : 'N/A',
-                $donation->next_payment_date ? date('d/m/Y', strtotime($donation->next_payment_date)) : 'N/A',
-                $totalTransactions
-            ]);
-            $si++;
+        if(!defined('EHXGA_VERSION')){
+            return;
         }
-
-        fclose($output);
-        exit();
+        if(!class_exists('EHxGiftAid\Classes\GiftAidHandler')){
+            return;
+        }
+        $giftAidHandler = new GiftAidHandler();
+        $giftAidHandler->exportCSV();
     }
 }

@@ -229,7 +229,7 @@ export default {
         async getAllDonations() {
             this.loading = true;
             try {
-                const response = await axios.get(`${this.rest_api}api/getAllGiftAid`, {
+                const response = await axios.get(`${this.rest_api}api/get-all-gift-aid-donations`, {
                     params: {
                         page: this.currentPage,
                         limit: this.pageSize,
@@ -260,7 +260,7 @@ export default {
                 this.export = true;
 
                 const response = await axios.get(
-                    `${this.rest_api}api/export-gift_aid`,
+                    `${this.rest_api}api/export-gift-aid`,
                     {
                         headers: {
                             'X-WP-Nonce': this.nonce
