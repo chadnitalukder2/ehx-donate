@@ -46,6 +46,47 @@ jQuery(document).ready(function ($) {
         return amount + serviceFee;
     }
 
+    // Helper function to calculate Gift Aid bonus (25%)
+    function calculateGiftAidBonus(amount) {
+        return amount * 0.25;
+    }
+
+    // Function to update Gift Aid display (calculated on net_amount including service fee)
+    function updateGiftAidDisplay(donationAmount, isGiftAidChecked) {
+        const $summaryTotal = $('#ehxdo-summary-total');
+        const $giftAidSummary = $('#ehxdo-gift-aid-summary');
+        const $giftAidBonus = $('#ehxdo-gift-aid-bonus');
+        
+        // Calculate net amount (donation + service fee)
+        const netAmount = calculateTotalWithFee(donationAmount);
+        
+        if (isGiftAidChecked && donationAmount > 0) {
+            // Calculate the 25% Gift Aid bonus on net_amount (including service fee)
+            const giftAidBonus = calculateGiftAidBonus(netAmount);
+            const totalWithGiftAid = netAmount + giftAidBonus;
+            
+            // Update the total with Gift Aid
+            $summaryTotal.text(formatCurrency(totalWithGiftAid));
+            
+            // Update the bonus amount if element exists
+            if ($giftAidBonus.length) {
+                $giftAidBonus.text(formatCurrency(giftAidBonus));
+            }
+            
+            $giftAidSummary.show();
+        } else {
+            $summaryTotal.text(formatCurrency(netAmount));
+            $giftAidSummary.hide();
+        }
+    }
+
+    // Gift Aid checkbox handler
+    $('#gift_aid_checkbox').on('change', function() {
+        const donationAmount = parseFloat($('#ehxdo-selected-amount').val()) || 0;
+        const isGiftAidChecked = $(this).is(':checked');
+        updateGiftAidDisplay(donationAmount, isGiftAidChecked);
+    });
+
     // Section Navigation
     const $sections = $('.ehxdo-donation-card');
     let currentSection = 0;
@@ -117,6 +158,10 @@ jQuery(document).ready(function ($) {
         if ($netAmount.length) {
             $netAmount.val(numericAmount.toFixed(2));
         }
+
+        // Update Gift Aid display when amount changes
+        const isGiftAidChecked = $('#gift_aid_checkbox').is(':checked');
+        updateGiftAidDisplay(donationAmount, isGiftAidChecked);
     }
 
     $('.ehxdo-amount-btn').on('click', function () {

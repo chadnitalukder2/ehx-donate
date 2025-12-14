@@ -316,10 +316,6 @@ $stripMode = $integrationsSettings['stripe']['enabled'];
                         </div>
 
                         <div>
-                            <!-- <label style="display: flex; align-items: center; gap: 0.5rem; cursor: pointer;">
-                                <input type="checkbox" name="gift_aid" id="gift_aid_checkbox" value="1" style="cursor: pointer;">
-                                <span style="font-size: 0.875rem;">Gift Aid</span>
-                            </label> -->
                             <?php if (defined('EHXGA_VERSION')): ?>
                                 <label class="ehxdo-checkbox-container ehxdo-gift-aid-checkbox">
                                     <input type="checkbox" name="gift_aid" id="gift_aid_checkbox" value="1">
@@ -390,12 +386,14 @@ $stripMode = $integrationsSettings['stripe']['enabled'];
                                     <?php echo formatAmount($default_amount, $currencySymbol, $position); ?>
                                 </span>
                             </div>
-                            <!-- <div class="ehxdo-summary-row ehxdo-highlight">
+                            <?php if (defined('EHXGA_VERSION')): ?>
+                            <div  id="gift_aid_amount" style="display: none;" class="ehxdo-summary-row ehxdo-highlight">
                                 <span>Your Contribution with Gift Aid:</span>
                                 <span class="ehxdo-amount" id="ehxdo-summary-total">
                                     <?php echo formatAmount($default_amount, $currencySymbol, $position); ?>
                                 </span>
-                            </div> -->
+                            </div>
+                            <?php endif ?>
                         </div>
 
                         <?php if ($recaptchaMode === 'visible' && !empty($recaptchaSiteKey)): ?>
@@ -716,10 +714,12 @@ $stripMode = $integrationsSettings['stripe']['enabled'];
         // Gift Aid Toggle
         const giftAidCheckbox = document.getElementById('gift_aid_checkbox');
         const giftAidFields = document.getElementById('gift_aid_fields');
+        const giftAidAmount = document.getElementById('gift_aid_amount') ;
 
-        if (giftAidCheckbox && giftAidFields) {
+        if (giftAidCheckbox && giftAidFields && giftAidAmount) {
             giftAidCheckbox.addEventListener('change', function() {
                 giftAidFields.style.display = this.checked ? 'block' : 'none';
+                giftAidAmount.style.display = this.checked ? 'flex' : 'none';
             });
         }
 
