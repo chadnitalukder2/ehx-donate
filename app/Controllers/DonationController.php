@@ -610,7 +610,7 @@ class DonationController extends Controller
         exit();
     }
 
-      public function getAllGiftAid(): void
+    public function getAllGiftAid(): void
     {
         $data = $this->request;
 
@@ -668,14 +668,23 @@ class DonationController extends Controller
         // CSV headers
         fputcsv($output, [
             'SI',
-            'Donation ID',
+            'Title',
+            'First Name',
+            'Last Name',
+
+            'Address',
+            'Postcode',
+            'Aggregated Donations',
+            'Sponsored Event',
+            'Donation Date',
+            'Amount',
+
             'Transaction ID',
             'Donation Date',
             'Donation Type',
             'Status',
             'Title',
-            'First Name',
-            'Last Name',
+
             'Email',
             'Phone',
             'Address Line 1',
@@ -698,25 +707,26 @@ class DonationController extends Controller
         $symbol = $currencySymbols[$currency] ?? $currency;
         $si = 1;
         // Fetch all donations
-        $donations = (new Donation())->orderBy('created_at', 'desc')->get();
+        $donations = (new Donation())->where('gift_aid', 1)->orderBy('created_at', 'desc')->get();
 
         foreach ($donations as $donation) {
 
             // Get campaign manually
-            $campaign = (new Campaign())->find($donation->campaign_id);
             $transactions = (new Transaction())->where('donation_id', $donation->id)->get();
-            $campaignTitle = $campaign ? $campaign->title : '';
             $totalTransactions = count($transactions) > 0 ? count($transactions) : 1;
             fputcsv($output, [
                 $si,
-                $donation->id,
+                $donation->title,
+                $donation->first_name,
+                $donation->last_name,
+
+
                 $donation->transaction_id,
                 $donation->created_at ? date('d/m/Y', strtotime($donation->created_at)) : 'N/A',
                 $donation->donation_type,
                 $donation->payment_status,
                 $donation->title,
-                $donation->first_name,
-                $donation->last_name,
+
                 $donation->donor_email,
                 $donation->phone ?? '---',
                 $donation->address_line_1,

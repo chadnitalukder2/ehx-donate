@@ -226,7 +226,6 @@ export default {
             this.$router.push({ name: 'view_donation', params: { id: row.id } });
         },
 
-
         async getAllDonations() {
             this.loading = true;
             try {
@@ -256,13 +255,12 @@ export default {
             }
         },
 
-
         async exportCSV() {
             try {
                 this.export = true;
 
                 const response = await axios.get(
-                    `${this.rest_api}api/export-donation`,
+                    `${this.rest_api}api/export-gift_aid`,
                     {
                         headers: {
                             'X-WP-Nonce': this.nonce

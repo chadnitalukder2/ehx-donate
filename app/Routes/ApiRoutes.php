@@ -48,6 +48,7 @@ class ApiRoutes
 
             //gift aid
             $router->get('/getAllGiftAid', 'DonationController@getAllGiftAid', ['auth']);
+            $router->get('/export-gift-aid', 'DonationController@export_gift_aid_csv', ['auth']);
 
             // Settings routes
             $router->get('/settings/{key}', 'SettingsController@getSettings');
