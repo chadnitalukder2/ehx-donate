@@ -297,7 +297,7 @@ $stripMode = $integrationsSettings['stripe']['enabled'];
                             </div>
                         </div>
                         
-                        <?php if (defined('EHXGA_VERSION')): ?>
+                        <?php if (defined('EHXGA_VERSION') && $generalSettings['gift_aid'] === true): ?>
                             <?php include_once EHXGA_PLUGIN_DIR . 'views/gift-aid-form-field.php'; ?>
                         <?php endif; ?>
 
